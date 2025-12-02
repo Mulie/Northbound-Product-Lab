@@ -5,21 +5,38 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 5000;
+const HOST = '0.0.0.0';
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Serve static files (HTML, CSS, JS)
-app.use(express.static(__dirname));
+// Block access to submissions folder (security)
+app.use('/submissions', (req, res) => {
+    res.status(403).json({ error: 'Access to submissions folder is forbidden' });
+});
+
+// Serve static files (HTML, CSS, JS) with Cache-Control headers
+app.use(express.static(__dirname, {
+    setHeaders: (res) => {
+        res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    }
+}));
 
 // Create submissions directory if it doesn't exist
 const submissionsDir = path.join(__dirname, 'submissions');
 if (!fs.existsSync(submissionsDir)) {
     fs.mkdirSync(submissionsDir, { recursive: true });
     console.log('✅ Created submissions directory');
+}
+
+// Security helper: Validate submission ID to prevent path traversal
+function validateSubmissionId(id) {
+    // Only allow alphanumeric, hyphens, and underscores
+    const validIdPattern = /^[a-zA-Z0-9_-]+$/;
+    return validIdPattern.test(id);
 }
 
 // Endpoint to handle form submissions
@@ -111,8 +128,26 @@ app.get('/api/submissions', (req, res) => {
 // Get single submission by ID
 app.get('/api/submissions/:id', (req, res) => {
     try {
+        // Validate ID to prevent path traversal
+        if (!validateSubmissionId(req.params.id)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid submission ID format'
+            });
+        }
+
         const fileName = req.params.id + '.json';
         const filePath = path.join(submissionsDir, fileName);
+
+        // Additional security check: ensure resolved path is within submissions directory
+        const resolvedPath = path.resolve(filePath);
+        const resolvedSubmissionsDir = path.resolve(submissionsDir);
+        if (!resolvedPath.startsWith(resolvedSubmissionsDir)) {
+            return res.status(403).json({
+                success: false,
+                message: 'Access denied'
+            });
+        }
 
         if (!fs.existsSync(filePath)) {
             return res.status(404).json({
@@ -145,8 +180,26 @@ app.get('/api/submissions/:id', (req, res) => {
 // Delete submission (optional)
 app.delete('/api/submissions/:id', (req, res) => {
     try {
+        // Validate ID to prevent path traversal
+        if (!validateSubmissionId(req.params.id)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid submission ID format'
+            });
+        }
+
         const fileName = req.params.id + '.json';
         const filePath = path.join(submissionsDir, fileName);
+
+        // Additional security check: ensure resolved path is within submissions directory
+        const resolvedPath = path.resolve(filePath);
+        const resolvedSubmissionsDir = path.resolve(submissionsDir);
+        if (!resolvedPath.startsWith(resolvedSubmissionsDir)) {
+            return res.status(403).json({
+                success: false,
+                message: 'Access denied'
+            });
+        }
 
         if (!fs.existsSync(filePath)) {
             return res.status(404).json({
@@ -178,12 +231,12 @@ app.get('/api/health', (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, HOST, () => {
     console.log(`
 ╔════════════════════════════════════════════════╗
 ║   Product Review Studio - Server Running       ║
 ╠════════════════════════════════════════════════╣
-║   Server: http://localhost:${PORT}                 ║
+║   Server: http://${HOST}:${PORT}                    ║
 ║   Submissions saved to: ./submissions/         ║
 ╚════════════════════════════════════════════════╝
     `);
