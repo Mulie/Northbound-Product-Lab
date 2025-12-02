@@ -15,7 +15,7 @@ npm start
 You should see:
 ```
 ╔════════════════════════════════════════════════╗
-║   Product Review Studio - Server Running       ║
+║   Northbound Product Lab - Server Running       ║
 ╠════════════════════════════════════════════════╣
 ║   Server: http://localhost:3000                 ║
 ║   Submissions saved to: ./submissions/         ║

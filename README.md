@@ -1,4 +1,4 @@
-# Product Review Studio - Website Setup
+# Northbound Product Lab - Website Setup
 
 This website includes a form submission system that saves application data both via email (EmailJS) and locally to the server.
 

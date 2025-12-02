@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Product Review Studio - Easy Starter Script
+# Northbound Product Lab - Easy Starter Script
 
 echo "╔════════════════════════════════════════════════╗"
-echo "║   Product Review Studio - Starting...          ║"
+echo "║   Northbound Product Lab - Starting...          ║"
 echo "╚════════════════════════════════════════════════╝"
 echo ""
 

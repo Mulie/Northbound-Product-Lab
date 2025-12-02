@@ -1,7 +1,7 @@
-# Product Review Studio - Replit Environment
+# Northbound Product Lab - Replit Environment
 
 ## Overview
-Product Review Studio is a design audit service website with form submission functionality. It allows users to apply for design review services, with submissions saved to local JSON files and CSV summaries.
+Northbound Product Lab is a design audit service website with form submission functionality. It allows users to apply for design review services, with submissions saved to local JSON files and CSV summaries.
 
 ## Project Architecture
 

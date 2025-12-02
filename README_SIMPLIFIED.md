@@ -1,4 +1,4 @@
-# Product Review Studio - Simplified Submission System
+# Northbound Product Lab - Simplified Submission System
 
 ## ✅ What Changed
 

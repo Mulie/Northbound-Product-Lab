@@ -239,7 +239,7 @@ app.get('/api/health', (req, res) => {
 app.listen(PORT, HOST, () => {
     console.log(`
 ╔════════════════════════════════════════════════╗
-║   Product Review Studio - Server Running       ║
+║   Northbound Product Lab - Server Running       ║
 ╠════════════════════════════════════════════════╣
 ║   Server: http://${HOST}:${PORT}                    ║
 ║   Submissions saved to: ./submissions/         ║

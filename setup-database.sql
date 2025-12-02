@@ -1,4 +1,4 @@
--- Product Review Studio Database Schema
+-- Northbound Product Lab Database Schema
 -- For InfinityFree MySQL Database
 
 -- Create submissions table

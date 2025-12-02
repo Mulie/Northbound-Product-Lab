@@ -1,7 +1,7 @@
 {
   "name": "product-review-studio",
   "version": "1.0.0",
-  "description": "Product Review Studio Website with Form Submission Handler",
+  "description": "Northbound Product Lab Website with Form Submission Handler",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
