@@ -984,8 +984,7 @@
             <div class="section-number" style="color: rgba(255,255,255,0.8);">05</div>
             <h2 class="section-title">Apply for review</h2>
             <p class="section-description">
-                We work with 3-4 companies per month to ensure quality and focus. Complete our comprehensive application
-                to get started.
+                We work with 3-4 companies per month. Takes about 5 minutes.
             </p>
 
             <button class="form-toggle" id="formToggle">
@@ -995,32 +994,8 @@
 
             <div class="form-container" id="formContainer">
                 <div class="form-intro">
-                    <h3>Northbound Product Lab – Design Audit Application 2025</h3>
-                    <p>A <strong>design audit</strong> is a structured evaluation of your website, app, product, or
-                        service—examined from the perspective of your customers and end-users. At <strong>Product Review
-                            Studio</strong>, our network of design and innovation experts uses human-centred design
-                        methods to provide a <strong>360° evaluation</strong> that strengthens usability, clarifies your
-                        value proposition, and improves your market position.</p>
-
-                    <div class="audit-focus">
-                        <h4>Our audits can focus on areas such as:</h4>
-                        <ul>
-                            <li>Customer & User Experience</li>
-                            <li>Interaction & Interface Design</li>
-                            <li>Value Proposition & Product-Market Fit</li>
-                            <li>Service & Journey Design</li>
-                            <li>Accessibility & Inclusion</li>
-                        </ul>
-                    </div>
-
-                    <p>Whether you're developing a digital platform, a physical product, or a service, the audit is
-                        designed for <strong>working products, prototypes, or high-fidelity mockups.</strong> If you're
-                        earlier in development, we recommend applying once your product is further along.</p>
-
-                    <p>This application helps us understand your product, your goals, and how our evaluation can deliver
-                        the most value. Completing the form will take approximately <strong>15–20 minutes</strong>.</p>
-
-                    <p><em>All submissions are kept confidential.</em></p>
+                    <h3>Design Audit Application</h3>
+                    <p>Tell us about your product and goals. We'll review your application and reach out within 48 hours if we're a good fit. <em>All submissions are confidential.</em></p>
                 </div>
 
                 <form id="applicationForm">
@@ -1056,71 +1031,28 @@
                         </div>
                     </div>
 
-                    <!-- Additional Participants -->
-                    <div class="form-section">
-                        <h4>Additional Participants (Optional)</h4>
-                        <p class="section-note">If other team members will attend, please provide:</p>
-
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="participant2Name">First & Last Name</label>
-                                <input type="text" id="participant2Name" name="participant2Name">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="participant2Title">Job Title</label>
-                                <input type="text" id="participant2Title" name="participant2Title">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="participant2Email">Contact Email</label>
-                                <input type="email" id="participant2Email" name="participant2Email">
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Business Information -->
                     <div class="form-section">
-                        <h4>Business Information</h4>
+                        <h4>Your Company</h4>
 
                         <div class="form-grid">
                             <div class="form-group">
-                                <label for="businessName">Legal Business Name *</label>
+                                <label for="businessName">Company Name *</label>
                                 <input type="text" id="businessName" name="businessName" required>
                             </div>
 
                             <div class="form-group">
-                                <label for="operatingName">Operating Name (if different)</label>
-                                <input type="text" id="operatingName" name="operatingName">
+                                <label for="website">Website *</label>
+                                <input type="url" id="website" name="website" required placeholder="https://">
                             </div>
 
                             <div class="form-group">
-                                <label for="yearFounded">Year Founded *</label>
-                                <input type="number" id="yearFounded" name="yearFounded" min="1900" max="2025" required>
+                                <label for="industry">Industry *</label>
+                                <input type="text" id="industry" name="industry" required placeholder="e.g., SaaS, E-commerce">
                             </div>
 
                             <div class="form-group">
-                                <label for="website">Company Website *</label>
-                                <input type="url" id="website" name="website" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="industry">Industry / Sector *</label>
-                                <input type="text" id="industry" name="industry" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="city">City *</label>
-                                <input type="text" id="city" name="city" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="province">Province/State *</label>
-                                <input type="text" id="province" name="province" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="employeeCount">Number of employees (full-time + part-time) *</label>
+                                <label for="employeeCount">Team Size *</label>
                                 <select id="employeeCount" name="employeeCount" required>
                                     <option value="">Select range</option>
                                     <option value="1-5">1-5</option>
@@ -1130,156 +1062,88 @@
                                     <option value="200+">200+</option>
                                 </select>
                             </div>
+                        </div>
 
+                        <div class="form-group full-width">
+                            <label for="companyDescription">What does your company do? * (300 chars max)</label>
+                            <textarea id="companyDescription" name="companyDescription" maxlength="300" rows="3"
+                                placeholder="Brief description of your product or service..."
+                                required></textarea>
+                            <div class="char-count">0/300</div>
+                        </div>
+                    </div>
+
+                    <!-- Audit Goals Section -->
+                    <div class="form-section">
+                        <h4>About the Audit</h4>
+
+                        <div class="form-group full-width">
+                            <label for="auditGoals">What do you want to improve? * (300 chars max)</label>
+                            <textarea id="auditGoals" name="auditGoals" maxlength="300" rows="3"
+                                placeholder="e.g., Increase sign-up conversion, improve onboarding, reduce churn..."
+                                required></textarea>
+                            <div class="char-count">0/300</div>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="focusArea">Which part of your product should we focus on? (optional)</label>
+                            <textarea id="focusArea" name="focusArea" maxlength="200" rows="2"
+                                placeholder="e.g., Checkout flow, pricing page, onboarding..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productStatus">Do you have a working product or prototype? *</label>
+                            <select id="productStatus" name="productStatus" required>
+                                <option value="">Select option</option>
+                                <option value="yes">Yes, it's live</option>
+                                <option value="prototype">We have a prototype</option>
+                                <option value="no">Not yet</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Final Details -->
+                    <div class="form-section">
+                        <h4>Final Details</h4>
+
+                        <div class="form-grid">
                             <div class="form-group">
-                                <label for="contractorCount">Number of contractors</label>
-                                <input type="number" id="contractorCount" name="contractorCount" min="0">
+                                <label for="preferredTiming">When would you like to start?</label>
+                                <select id="preferredTiming" name="preferredTiming">
+                                    <option value="">Select timing</option>
+                                    <option value="asap">As soon as possible</option>
+                                    <option value="1-month">Within 1 month</option>
+                                    <option value="2-3-months">2-3 months</option>
+                                    <option value="flexible">Flexible</option>
+                                </select>
                             </div>
 
                             <div class="form-group">
-                                <label for="revenue">Annual revenue range (optional)</label>
-                                <select id="revenue" name="revenue">
-                                    <option value="">Select range</option>
-                                    <option value="<100k">Less than $100K</option>
-                                    <option value="100k-500k">$100K - $500K</option>
-                                    <option value="500k-1m">$500K - $1M</option>
-                                    <option value="1m-5m">$1M - $5M</option>
-                                    <option value="5m-25m">$5M - $25M</option>
-                                    <option value="25m+">$25M+</option>
+                                <label for="referralSource">How did you hear about us?</label>
+                                <select id="referralSource" name="referralSource">
+                                    <option value="">Select option</option>
+                                    <option value="google">Google search</option>
+                                    <option value="linkedin">LinkedIn</option>
+                                    <option value="referral">Referral</option>
+                                    <option value="other">Other</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="form-group full-width">
-                            <label for="companyDescription">Tell us about your company * (300 words max)</label>
-                            <textarea id="companyDescription" name="companyDescription" maxlength="300" rows="4"
-                                placeholder="Briefly describe your company and your product, platform, or service. Include whether your product involves hardware, software, or both."
-                                required></textarea>
-                            <div class="char-count">0/300</div>
+                            <label for="additionalInfo">Anything else we should know? (optional)</label>
+                            <textarea id="additionalInfo" name="additionalInfo" maxlength="300" rows="2"
+                                placeholder="Links to your product, additional context, etc."></textarea>
                         </div>
-                    </div>
-
-                    <!-- Product/Service Section -->
-                    <div class="form-section">
-                        <h4>Your Product / Service</h4>
-
-                        <div class="form-group full-width">
-                            <label for="targetCustomer">Target Customer or End-User * (300 words max)</label>
-                            <textarea id="targetCustomer" name="targetCustomer" maxlength="300" rows="4"
-                                placeholder="Who is your product designed for? Do you have defined personas, profiles, or insights into their needs, goals, or frustrations?"
-                                required></textarea>
-                            <div class="char-count">0/300</div>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label for="focusArea">Focus Area for the Audit * (300 words max)</label>
-                            <textarea id="focusArea" name="focusArea" maxlength="300" rows="4"
-                                placeholder="Which part of your product, service, or experience do you want evaluated? (e.g., a user flow, a feature, or a customer interaction.)"
-                                required></textarea>
-                            <div class="char-count">0/300</div>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label for="valueProposition">Value Proposition * (300 words max)</label>
-                            <textarea id="valueProposition" name="valueProposition" maxlength="300" rows="4"
-                                placeholder="What problem are you solving for your end-users? What value does your product deliver?"
-                                required></textarea>
-                            <div class="char-count">0/300</div>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label for="auditGoals">Your Goals for the Audit * (300 words max)</label>
-                            <textarea id="auditGoals" name="auditGoals" maxlength="300" rows="4"
-                                placeholder="Why do you need a design audit right now? What challenges are you facing, and what outcomes would be most valuable? Please share any specific research or design questions you'd like us to focus on."
-                                required></textarea>
-                            <div class="char-count">0/300</div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="productStatus">Will you have a working product, prototype, or mockup by the time
-                                of the audit? *</label>
-                            <select id="productStatus" name="productStatus" required>
-                                <option value="">Select option</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                                <option value="maybe">Maybe</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Participation -->
-                    <div class="form-section">
-                        <h4>Participation</h4>
-                        <p class="section-note">To foster an engaging, collaborative session, we ask all participants to
-                            join with cameras on.</p>
-
-                        <div class="form-group">
-                            <label for="videoParticipation">Will your team be able to participate with video on?
-                                *</label>
-                            <select id="videoParticipation" name="videoParticipation" required>
-                                <option value="">Select option</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group full-width" id="exceptionGroup" style="display: none;">
-                            <label for="videoException">If you require an exception, please explain:</label>
-                            <textarea id="videoException" name="videoException" rows="3"></textarea>
-                        </div>
-                    </div>
-
-                    <!-- Scheduling -->
-                    <div class="form-section">
-                        <h4>Scheduling</h4>
-                        <p class="section-note">We are currently accepting applications for upcoming audit sessions.
-                            Please select your preferred timing:</p>
-
-                        <div class="form-group">
-                            <label for="preferredTiming">Preferred Timing</label>
-                            <select id="preferredTiming" name="preferredTiming">
-                                <option value="">Select timing</option>
-                                <option value="may-2025">May 2025</option>
-                                <option value="july-2025">July 2025</option>
-                                <option value="september-2025">September 2025</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group full-width" id="otherTimingGroup" style="display: none;">
-                            <label for="otherTiming">Please specify other timing:</label>
-                            <input type="text" id="otherTiming" name="otherTiming">
-                        </div>
-                    </div>
-
-                    <!-- Supporting Materials -->
-                    <div class="form-section">
-                        <h4>Supporting Materials</h4>
-                        <p class="section-note">Please provide links or descriptions of materials that will help us
-                            understand your product. These may include photos, screenshots, mockups, wireframes, user
-                            flows, or website/product links.</p>
-
-                        <div class="form-group full-width">
-                            <label for="supportingMaterials">Links and descriptions of supporting materials:</label>
-                            <textarea id="supportingMaterials" name="supportingMaterials" rows="4"
-                                placeholder="Please provide URLs, descriptions, or details about materials that will help us understand your product..."></textarea>
-                        </div>
-                    </div>
-
-                    <!-- Acknowledgement -->
-                    <div class="form-section">
-                        <h4>Acknowledgement</h4>
 
                         <div class="form-group checkbox-group">
                             <label class="checkbox-label">
                                 <input type="checkbox" id="acknowledgement" name="acknowledgement" required>
                                 <span class="checkmark"></span>
-                                By applying, I acknowledge that our company will be responsible for the audit session
-                                fee if selected. *
+                                I understand there is a fee for the audit if selected. *
                             </label>
                         </div>
 
-                        <!-- Submit Button Inside Form -->
                         <div class="submit-container">
                             <button type="submit" class="submit-btn" id="submitButton">Submit Application</button>
                         </div>
