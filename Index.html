@@ -26,11 +26,39 @@
             padding: 0 24px;
         }
 
-        /* Header */
+        /* Header with Beams Background */
         header {
-            background: #ffffff;
-            padding: 2rem 0 4rem;
+            background: #0a0a0a;
+            padding: 2rem 0 6rem;
             position: relative;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .beams-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            filter: blur(15px);
+            pointer-events: none;
+        }
+
+        .beams-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.3);
+            backdrop-filter: blur(50px);
+            pointer-events: none;
+        }
+
+        header .container {
+            position: relative;
+            z-index: 10;
         }
 
         .nav {
@@ -43,15 +71,15 @@
         .logo {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #1a1a1a;
+            color: #ffffff;
         }
 
         .admin-link {
             font-size: 0.875rem;
-            color: #999;
+            color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
             padding: 0.5rem 1rem;
-            border: 1px solid #ddd;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 4px;
             transition: all 0.3s ease;
         }
@@ -65,11 +93,15 @@
         .hero {
             text-align: left;
             max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: calc(100vh - 200px);
         }
 
         .hero-subtitle {
             font-size: 1rem;
-            color: #666;
+            color: rgba(255, 255, 255, 0.6);
             margin-bottom: 1rem;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -81,7 +113,7 @@
             font-weight: 300;
             line-height: 0.9;
             margin-bottom: 2rem;
-            color: #1a1a1a;
+            color: #ffffff;
         }
 
         .hero-title .accent {
@@ -92,29 +124,32 @@
         .hero-description {
             font-size: 1.5rem;
             line-height: 1.4;
-            color: #666;
+            color: rgba(255, 255, 255, 0.7);
             margin-bottom: 3rem;
             max-width: 600px;
         }
 
         .hero-cta {
-            background: #1a1a1a;
-            color: white;
+            background: #ffffff;
+            color: #0a0a0a;
             padding: 18px 40px;
             border: none;
             border-radius: 0;
             font-size: 1rem;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
             text-transform: uppercase;
             letter-spacing: 1px;
+            width: auto;
+            max-width: fit-content;
         }
 
         .hero-cta:hover {
             background: #ff6b35;
+            color: #ffffff;
             transform: translateY(-2px);
         }
 
@@ -760,8 +795,11 @@
         properly.
     </div>
 
-    <!-- Header -->
+    <!-- Header with Animated Beams Background -->
     <header>
+        <canvas id="beamsCanvas" class="beams-canvas"></canvas>
+        <div class="beams-overlay"></div>
+        
         <div class="container">
             <nav class="nav">
                 <a href="#" class="logo">Northbound Product Lab</a>
@@ -1175,6 +1213,101 @@
     </footer>
 
     <script>
+        // Animated Beams Background
+        (function initBeamsBackground() {
+            const canvas = document.getElementById('beamsCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+            
+            const BEAM_COUNT = 25;
+            let beams = [];
+            let animationFrame;
+            
+            function createBeam() {
+                const angle = -35 + Math.random() * 10;
+                return {
+                    x: Math.random() * canvas.width * 1.5 - canvas.width * 0.25,
+                    y: Math.random() * canvas.height * 1.5 - canvas.height * 0.25,
+                    width: 30 + Math.random() * 60,
+                    length: canvas.height * 2.5,
+                    angle: angle,
+                    speed: 0.4 + Math.random() * 0.8,
+                    opacity: 0.08 + Math.random() * 0.12,
+                    hue: 15 + Math.random() * 25,
+                    pulse: Math.random() * Math.PI * 2,
+                    pulseSpeed: 0.015 + Math.random() * 0.02
+                };
+            }
+            
+            function resetBeam(beam, index) {
+                const column = index % 3;
+                const spacing = canvas.width / 3;
+                beam.y = canvas.height + 100;
+                beam.x = column * spacing + spacing / 2 + (Math.random() - 0.5) * spacing * 0.5;
+                beam.width = 80 + Math.random() * 80;
+                beam.speed = 0.3 + Math.random() * 0.3;
+                beam.hue = 15 + (index * 25) / BEAM_COUNT;
+                beam.opacity = 0.1 + Math.random() * 0.08;
+                return beam;
+            }
+            
+            function drawBeam(beam) {
+                ctx.save();
+                ctx.translate(beam.x, beam.y);
+                ctx.rotate((beam.angle * Math.PI) / 180);
+                
+                const pulsingOpacity = beam.opacity * (0.8 + Math.sin(beam.pulse) * 0.2);
+                const gradient = ctx.createLinearGradient(0, 0, 0, beam.length);
+                
+                gradient.addColorStop(0, `hsla(${beam.hue}, 85%, 55%, 0)`);
+                gradient.addColorStop(0.1, `hsla(${beam.hue}, 85%, 55%, ${pulsingOpacity * 0.5})`);
+                gradient.addColorStop(0.4, `hsla(${beam.hue}, 85%, 55%, ${pulsingOpacity})`);
+                gradient.addColorStop(0.6, `hsla(${beam.hue}, 85%, 55%, ${pulsingOpacity})`);
+                gradient.addColorStop(0.9, `hsla(${beam.hue}, 85%, 55%, ${pulsingOpacity * 0.5})`);
+                gradient.addColorStop(1, `hsla(${beam.hue}, 85%, 55%, 0)`);
+                
+                ctx.fillStyle = gradient;
+                ctx.fillRect(-beam.width / 2, 0, beam.width, beam.length);
+                ctx.restore();
+            }
+            
+            function updateCanvasSize() {
+                const dpr = window.devicePixelRatio || 1;
+                const header = canvas.parentElement;
+                canvas.width = header.offsetWidth * dpr;
+                canvas.height = header.offsetHeight * dpr;
+                canvas.style.width = `${header.offsetWidth}px`;
+                canvas.style.height = `${header.offsetHeight}px`;
+                ctx.scale(dpr, dpr);
+                
+                beams = Array.from({ length: BEAM_COUNT }, () => createBeam());
+            }
+            
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.filter = 'blur(35px)';
+                
+                beams.forEach((beam, index) => {
+                    beam.y -= beam.speed;
+                    beam.pulse += beam.pulseSpeed;
+                    
+                    if (beam.y + beam.length < -100) {
+                        resetBeam(beam, index);
+                    }
+                    
+                    drawBeam(beam);
+                });
+                
+                animationFrame = requestAnimationFrame(animate);
+            }
+            
+            updateCanvasSize();
+            window.addEventListener('resize', updateCanvasSize);
+            animate();
+        })();
+
         // Toggle Who Card expansion
         function toggleWhoCard(card) {
             const wasExpanded = card.classList.contains('expanded');
