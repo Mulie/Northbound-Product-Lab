@@ -25,6 +25,11 @@ app.use(express.static(__dirname, {
     }
 }));
 
+// Redirect root to Index.html
+app.get('/', (req, res) => {
+    res.redirect('/Index.html');
+});
+
 // Create submissions directory if it doesn't exist
 const submissionsDir = path.join(__dirname, 'submissions');
 if (!fs.existsSync(submissionsDir)) {
