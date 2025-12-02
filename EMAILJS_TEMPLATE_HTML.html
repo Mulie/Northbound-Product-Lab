@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            background: linear-gradient(135deg, #ff6b35 0%, #f44336 100%);
+            color: white;
+            padding: 20px;
+            margin: -30px -30px 30px -30px;
+            border-radius: 8px 8px 0 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        h2 {
+            color: #ff6b35;
+            border-bottom: 2px solid #ff6b35;
+            padding-bottom: 8px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .field {
+            margin-bottom: 12px;
+            padding: 8px 0;
+        }
+        .label {
+            font-weight: 600;
+            color: #666;
+            display: inline-block;
+            min-width: 150px;
+        }
+        .value {
+            color: #1a1a1a;
+        }
+        .section {
+            margin-bottom: 25px;
+        }
+        .description {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-left: 4px solid #ff6b35;
+            margin: 10px 0;
+            white-space: pre-wrap;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+            color: #999;
+            font-size: 12px;
+        }
+        .highlight {
+            background-color: #fff3e0;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 New Design Audit Application</h1>
+
+        <div class="section">
+            <h2>Contact Information</h2>
+            <div class="field">
+                <span class="label">Name:</span>
+                <span class="value">{{fullName}}</span>
+            </div>
+            <div class="field">
+                <span class="label">Title:</span>
+                <span class="value">{{jobTitle}}</span>
+            </div>
+            <div class="field">
+                <span class="label">Email:</span>
+                <span class="value"><a href="mailto:{{email}}">{{email}}</a></span>
+            </div>
+            <div class="field">
+                <span class="label">Phone:</span>
+                <span class="value">{{phone}}</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Company Details</h2>
+            <div class="field">
+                <span class="label">Business Name:</span>
+                <span class="value">{{businessName}}</span>
+            </div>
+            <div class="field">
+                <span class="label">Operating Name:</span>
+                <span class="value">{{operatingName}}</span>
+            </div>
+            <div class="field">
+                <span class="label">Website:</span>
+                <span class="value"><a href="{{website}}" target="_blank">{{website}}</a></span>
+            </div>
+            <div class="field">
+                <span class="label">Industry:</span>
+                <span class="value">{{industry}}</span>
+            </div>
+            <div class="field">
+                <span class="label">Location:</span>
+                <span class="value">{{city}}, {{province}}</span>
+            </div>
+            <div class="field">
+                <span class="label">Founded:</span>
+                <span class="value">{{yearFounded}}</span>
+            </div>
+            <div class="field">
+                <span class="label">Employees:</span>
+                <span class="value">{{employeeCount}}</span>
+            </div>
+            <div class="field">
+                <span class="label">Contractors:</span>
+                <span class="value">{{contractorCount}}</span>
+            </div>
+            <div class="field">
+                <span class="label">Annual Revenue:</span>
+                <span class="value">{{revenue}}</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Company Description</h2>
+            <div class="description">{{companyDescription}}</div>
+        </div>
+
+        <div class="section">
+            <h2>Product & Goals</h2>
+
+            <h3 style="color: #666; margin-top: 20px;">Target Customer:</h3>
+            <div class="description">{{targetCustomer}}</div>
+
+            <h3 style="color: #666; margin-top: 20px;">Focus Area:</h3>
+            <div class="description">{{focusArea}}</div>
+
+            <h3 style="color: #666; margin-top: 20px;">Value Proposition:</h3>
+            <div class="description">{{valueProposition}}</div>
+
+            <h3 style="color: #666; margin-top: 20px;">Audit Goals:</h3>
+            <div class="description">{{auditGoals}}</div>
+
+            <div class="field" style="margin-top: 15px;">
+                <span class="label">Product Status:</span>
+                <span class="value">{{productStatus}}</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Logistics</h2>
+            <div class="field">
+                <span class="label">Video Participation:</span>
+                <span class="value">{{videoParticipation}}</span>
+            </div>
+            <div class="field">
+                <span class="label">Video Exception:</span>
+                <span class="value">{{videoException}}</span>
+            </div>
+            <div class="field">
+                <span class="label">Preferred Timing:</span>
+                <span class="value">{{preferredTiming}}</span>
+            </div>
+            <div class="field">
+                <span class="label">Other Timing:</span>
+                <span class="value">{{otherTiming}}</span>
+            </div>
+            <h3 style="color: #666; margin-top: 15px;">Supporting Materials:</h3>
+            <div class="description">{{supportingMaterials}}</div>
+        </div>
+
+        <div class="section">
+            <h2>Additional Participants</h2>
+            <div class="field">
+                <span class="label">Name:</span>
+                <span class="value">{{participant2Name}}</span>
+            </div>
+            <div class="field">
+                <span class="label">Title:</span>
+                <span class="value">{{participant2Title}}</span>
+            </div>
+            <div class="field">
+                <span class="label">Email:</span>
+                <span class="value">{{participant2Email}}</span>
+            </div>
+        </div>
+
+        <div class="highlight">
+            <strong>✅ Fee Acknowledged:</strong> {{acknowledgement}}
+        </div>
+
+        <div class="footer">
+            Product Review Studio | Design Audits<br>
+            Application received via website form
+        </div>
+    </div>
+</body>
+</html>

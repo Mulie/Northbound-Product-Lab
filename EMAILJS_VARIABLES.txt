@@ -1,0 +1,77 @@
+EmailJS Template Variables - Quick Reference
+==============================================
+
+COPY AND PASTE THESE INTO YOUR EMAILJS TEMPLATE:
+
+Basic Info:
+-----------
+{{fullName}}
+{{jobTitle}}
+{{email}}
+{{phone}}
+
+Additional Participants:
+------------------------
+{{participant2Name}}
+{{participant2Title}}
+{{participant2Email}}
+
+Business Info:
+--------------
+{{businessName}}
+{{operatingName}}
+{{yearFounded}}
+{{website}}
+{{industry}}
+{{city}}
+{{province}}
+{{employeeCount}}
+{{contractorCount}}
+{{revenue}}
+
+Descriptions (Long Text):
+-------------------------
+{{companyDescription}}
+{{targetCustomer}}
+{{focusArea}}
+{{valueProposition}}
+{{auditGoals}}
+
+Other Details:
+--------------
+{{productStatus}}
+{{videoParticipation}}
+{{videoException}}
+{{preferredTiming}}
+{{otherTiming}}
+{{supportingMaterials}}
+{{acknowledgement}}
+
+Pre-Formatted Option:
+---------------------
+{{message}}  <-- Contains ALL data already formatted!
+
+
+USAGE IN TEMPLATE:
+==================
+
+Example 1 (Individual fields):
+------------------------------
+<h2>Contact Information</h2>
+<p>Name: {{fullName}}</p>
+<p>Email: {{email}}</p>
+<p>Company: {{businessName}}</p>
+
+
+Example 2 (Simple, all data):
+------------------------------
+<p>{{message}}</p>
+
+
+IMPORTANT:
+==========
+- Use EXACT variable names (case-sensitive)
+- Wrap in double curly braces: {{variable}}
+- Save template in EmailJS dashboard
+- Wait 1-2 minutes after saving
+- Refresh website and test again

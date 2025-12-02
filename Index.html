@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Review Studio - Design Audits That Drive Growth</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            background: #ffffff;
+            padding: 2rem 0 4rem;
+            position: relative;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+
+        .hero {
+            text-align: left;
+            max-width: 800px;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 300;
+            line-height: 0.9;
+            margin-bottom: 2rem;
+            color: #1a1a1a;
+        }
+
+        .hero-title .accent {
+            font-weight: 700;
+            color: #ff6b35;
+        }
+
+        .hero-description {
+            font-size: 1.5rem;
+            line-height: 1.4;
+            color: #666;
+            margin-bottom: 3rem;
+            max-width: 600px;
+        }
+
+        .hero-cta {
+            background: #1a1a1a;
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 0;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-cta:hover {
+            background: #ff6b35;
+            transform: translateY(-2px);
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 6rem 0;
+        }
+
+        .section-number {
+            font-size: 1rem;
+            color: #ff6b35;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            margin-bottom: 2rem;
+            color: #1a1a1a;
+            line-height: 1.1;
+        }
+
+        .section-description {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 4rem;
+            max-width: 700px;
+        }
+
+        /* What We Do */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 4rem;
+            margin-top: 4rem;
+        }
+
+        .service-card {
+            background: #fafafa;
+            padding: 3rem 2rem;
+            transition: all 0.4s ease;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #ff6b35;
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            background: #ffffff;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-number {
+            font-size: 3rem;
+            font-weight: 100;
+            color: #ff6b35;
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .service-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Who Section */
+        .who-section {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .who-section .section-title {
+            color: white;
+        }
+
+        .who-section .section-description {
+            color: #ccc;
+        }
+
+        .who-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .who-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .who-card:hover {
+            background: rgba(255, 107, 53, 0.1);
+            border-color: #ff6b35;
+        }
+
+        .who-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .who-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .who-card p {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        /* Process */
+        .process-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .process-step {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+            align-items: center;
+        }
+
+        .process-step:nth-child(even) {
+            direction: rtl;
+        }
+
+        .process-step:nth-child(even)>* {
+            direction: ltr;
+        }
+
+        .step-visual {
+            background: #fafafa;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #ff6b35;
+            position: relative;
+        }
+
+        .step-number {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .step-content h3 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .step-content p {
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Testimonials */
+        .testimonials-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .testimonial {
+            background: #fafafa;
+            padding: 3rem;
+            position: relative;
+            border-left: 4px solid #ff6b35;
+        }
+
+        .quote {
+            font-size: 1.4rem;
+            line-height: 1.5;
+            margin-bottom: 2rem;
+            color: #1a1a1a;
+            font-weight: 300;
+        }
+
+        .author {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+        }
+
+        .role {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Application */
+        .application {
+            background: #ff6b35;
+            color: white;
+            padding: 6rem 0;
+        }
+
+        .application .section-title {
+            color: white;
+        }
+
+        .application .section-description {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0;
+            margin-top: 3rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.5s ease;
+            transform: translateY(-10px);
+        }
+
+        .form-container.expanded {
+            max-height: 5000px;
+            opacity: 1;
+            transform: translateY(0);
+            padding: 3rem;
+        }
+
+        .form-intro {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-intro h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        .form-intro p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .audit-focus {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 3px solid white;
+        }
+
+        .audit-focus h4 {
+            color: white;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .audit-focus ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .audit-focus li {
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+            position: relative;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .audit-focus li::before {
+            content: "•";
+            color: white;
+            position: absolute;
+            left: 0;
+        }
+
+        .form-section {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-section:last-of-type {
+            border-bottom: none;
+        }
+
+        .form-section h4 {
+            font-size: 1.3rem;
+            color: white;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-note {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .char-count {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: right;
+            margin-top: 0.25rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.4;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .checkmark {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            background: transparent;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .form-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 18px 40px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-width: 250px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .form-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: white;
+            transform: translateY(-2px);
+        }
+
+        .toggle-icon {
+            font-size: 1.5rem;
+            font-weight: 300;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-icon.rotated {
+            transform: rotate(45deg);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            background: white;
+            color: #1a1a1a;
+            font-size: 1rem;
+            border: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #1a1a1a;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .submit-container {
+            text-align: center;
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .submit-btn {
+            background: #1a1a1a !important;
+            color: white !important;
+            padding: 20px 50px !important;
+            border: none !important;
+            font-size: 1.1rem !important;
+            font-weight: 600 !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            text-transform: uppercase !important;
+            letter-spacing: 2px !important;
+            border-radius: 0 !important;
+            min-width: 250px !important;
+            display: block !important;
+            margin: 0 auto !important;
+        }
+
+        .submit-btn:hover {
+            background: white !important;
+            color: #ff6b35 !important;
+            transform: translateY(-3px) !important;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6 !important;
+            cursor: not-allowed !important;
+            transform: none !important;
+        }
+
+        .status-message {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .status-success {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+            border: 1px solid #4caf50;
+        }
+
+        .status-error {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+            border: 1px solid #f44336;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .process-step {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .process-step:nth-child(even) {
+                direction: ltr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Warning Banner (shown only when accessed via file://) -->
+    <div id="fileWarningBanner"
+        style="display: none; background: #f44336; color: white; padding: 1rem; text-align: center; font-weight: 600;">
+        ⚠️ WARNING: You opened this file directly! Please access it at <a href="http://localhost:3000/Index.html"
+            style="color: #fff; text-decoration: underline;">http://localhost:3000/Index.html</a> for the form to work
+        properly.
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="nav">
+                <a href="#" class="logo">Product Review Studio</a>
+            </nav>
+
+            <div class="hero">
+                <div class="hero-subtitle">Design Audits</div>
+                <h1 class="hero-title">
+                    Unlock <span class="accent">growth</span><br>
+                    through design
+                </h1>
+                <p class="hero-description">
+                    We help growth-stage companies identify the specific design changes that unlock $500K+ ARR in 90
+                    days.
+                </p>
+                <a href="#apply" class="hero-cta">Start Your Review</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- What We Do -->
+    <section class="section">
+        <div class="container">
+            <div class="section-number">01</div>
+            <h2 class="section-title">What we deliver</h2>
+            <p class="section-description">
+                Revenue-focused design audits that identify exactly where your product is losing money and how to fix
+                it.
+            </p>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-number">01</div>
+                    <h3>Revenue Leak Detection</h3>
+                    <p>Identify the specific design elements costing you money through comprehensive conversion analysis
+                        and user behavior assessment.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-number">02</div>
+                    <h3>Data-Driven Insights</h3>
+                    <p>Analytics-backed recommendations with projected ROI impact, A/B testing strategies, and
+                        measurable success metrics.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-number">03</div>
+                    <h3>Implementation Roadmap</h3>
+                    <p>Detailed specifications, developer handoffs, and prioritized action plans you can execute
+                        immediately for maximum impact.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who It's For -->
+    <section class="section who-section">
+        <div class="container">
+            <div class="section-number">02</div>
+            <h2 class="section-title">Who we work with</h2>
+            <p class="section-description">
+                Growth-focused teams ready to accelerate revenue through strategic design optimization.
+            </p>
+
+            <div class="who-grid">
+                <div class="who-card">
+                    <span class="who-icon">🚀</span>
+                    <h3>Startup Founders</h3>
+                    <p>Pre-Series A companies needing to hit revenue milestones and prove product-market fit through
+                        better conversion.</p>
+                </div>
+                <div class="who-card">
+                    <span class="who-icon">📊</span>
+                    <h3>Product Teams</h3>
+                    <p>Teams struggling with user activation, feature adoption, and converting free users to paying
+                        customers.</p>
+                </div>
+                <div class="who-card">
+                    <span class="who-icon">📈</span>
+                    <h3>Growth Leaders</h3>
+                    <p>Companies with existing traction wanting to scale efficiently and optimize their customer
+                        acquisition funnel.</p>
+                </div>
+                <div class="who-card">
+                    <span class="who-icon">💼</span>
+                    <h3>SaaS Companies</h3>
+                    <p>B2B and B2C SaaS platforms looking to improve trial-to-paid conversion and reduce customer
+                        acquisition costs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section">
+        <div class="container">
+            <div class="section-number">03</div>
+            <h2 class="section-title">How we work</h2>
+            <p class="section-description">
+                A simple 4-step process designed to deliver maximum impact in just 14 days.
+            </p>
+
+            <div class="process-container">
+                <div class="process-step">
+                    <div class="step-visual">
+                        <span class="step-number">01</span>
+                        📅
+                    </div>
+                    <div class="step-content">
+                        <h3>Discovery Call</h3>
+                        <p>A focused 15-minute conversation to understand your goals, challenges, and determine if we're
+                            the right fit for your growth objectives.</p>
+                    </div>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-visual">
+                        <span class="step-number">02</span>
+                        🔍
+                    </div>
+                    <div class="step-content">
+                        <h3>Deep Dive Session</h3>
+                        <p>60-minute strategic session diving deep into your product, users, business metrics, and
+                            competitive landscape to plan our audit approach.</p>
+                    </div>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-visual">
+                        <span class="step-number">03</span>
+                        ⚡
+                    </div>
+                    <div class="step-content">
+                        <h3>Audit & Analysis</h3>
+                        <p>Comprehensive 10-day audit analyzing user flows, conversion funnels, design patterns, and
+                            identifying revenue optimization opportunities.</p>
+                    </div>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-visual">
+                        <span class="step-number">04</span>
+                        📋
+                    </div>
+                    <div class="step-content">
+                        <h3>Results Presentation</h3>
+                        <p>Detailed handoff meeting presenting actionable insights, prioritized recommendations, and
+                            implementation roadmap with projected ROI.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section">
+        <div class="container">
+            <div class="section-number">04</div>
+            <h2 class="section-title">What clients say</h2>
+            <p class="section-description">
+                Real results from companies that trusted us with their growth.
+            </p>
+
+            <div class="testimonials-container">
+                <div class="testimonial">
+                    <p class="quote">"They identified three simple changes that increased our trial-to-paid conversion
+                        by 34% in just six weeks. The ROI was immediate and measurable."</p>
+                    <div class="author">Sarah Chen</div>
+                    <div class="role">Head of Growth, TechFlow SaaS</div>
+                </div>
+                <div class="testimonial">
+                    <p class="quote">"Product Review Studio found $200K in lost revenue from our checkout flow that we
+                        never would have caught. The investment paid for itself in the first month."</p>
+                    <div class="author">Marcus Rodriguez</div>
+                    <div class="role">Founder, EcomPlus</div>
+                </div>
+                <div class="testimonial">
+                    <p class="quote">"Finally, actionable insights instead of vague recommendations. Their
+                        implementation roadmap integrated perfectly with our development sprint planning."</p>
+                    <div class="author">Jessica Park</div>
+                    <div class="role">Product Manager, DataSync</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application -->
+    <section class="application" id="apply">
+        <div class="container">
+            <div class="section-number" style="color: rgba(255,255,255,0.8);">05</div>
+            <h2 class="section-title">Apply for review</h2>
+            <p class="section-description">
+                We work with 3-4 companies per month to ensure quality and focus. Complete our comprehensive application
+                to get started.
+            </p>
+
+            <button class="form-toggle" id="formToggle">
+                <span class="toggle-text">Start Application</span>
+                <span class="toggle-icon">+</span>
+            </button>
+
+            <div class="form-container" id="formContainer">
+                <div class="form-intro">
+                    <h3>Product Review Studio – Design Audit Application 2025</h3>
+                    <p>A <strong>design audit</strong> is a structured evaluation of your website, app, product, or
+                        service—examined from the perspective of your customers and end-users. At <strong>Product Review
+                            Studio</strong>, our network of design and innovation experts uses human-centred design
+                        methods to provide a <strong>360° evaluation</strong> that strengthens usability, clarifies your
+                        value proposition, and improves your market position.</p>
+
+                    <div class="audit-focus">
+                        <h4>Our audits can focus on areas such as:</h4>
+                        <ul>
+                            <li>Customer & User Experience</li>
+                            <li>Interaction & Interface Design</li>
+                            <li>Value Proposition & Product-Market Fit</li>
+                            <li>Service & Journey Design</li>
+                            <li>Accessibility & Inclusion</li>
+                        </ul>
+                    </div>
+
+                    <p>Whether you're developing a digital platform, a physical product, or a service, the audit is
+                        designed for <strong>working products, prototypes, or high-fidelity mockups.</strong> If you're
+                        earlier in development, we recommend applying once your product is further along.</p>
+
+                    <p>This application helps us understand your product, your goals, and how our evaluation can deliver
+                        the most value. Completing the form will take approximately <strong>15–20 minutes</strong>.</p>
+
+                    <p><em>All submissions are kept confidential.</em></p>
+                </div>
+
+                <form id="applicationForm">
+                    <!-- Status Message Container -->
+                    <div id="statusMessage" style="display: none;"></div>
+
+                    <!-- Primary Contact -->
+                    <div class="form-section">
+                        <h4>Primary Contact</h4>
+                        <p class="section-note">This is the person we'll coordinate with and deliver the final report
+                            to.</p>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="fullName">First & Last Name *</label>
+                                <input type="text" id="fullName" name="fullName" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="jobTitle">Job Title *</label>
+                                <input type="text" id="jobTitle" name="jobTitle" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Contact Email *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Participants -->
+                    <div class="form-section">
+                        <h4>Additional Participants (Optional)</h4>
+                        <p class="section-note">If other team members will attend, please provide:</p>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="participant2Name">First & Last Name</label>
+                                <input type="text" id="participant2Name" name="participant2Name">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="participant2Title">Job Title</label>
+                                <input type="text" id="participant2Title" name="participant2Title">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="participant2Email">Contact Email</label>
+                                <input type="email" id="participant2Email" name="participant2Email">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Business Information -->
+                    <div class="form-section">
+                        <h4>Business Information</h4>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="businessName">Legal Business Name *</label>
+                                <input type="text" id="businessName" name="businessName" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="operatingName">Operating Name (if different)</label>
+                                <input type="text" id="operatingName" name="operatingName">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="yearFounded">Year Founded *</label>
+                                <input type="number" id="yearFounded" name="yearFounded" min="1900" max="2025" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="website">Company Website *</label>
+                                <input type="url" id="website" name="website" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="industry">Industry / Sector *</label>
+                                <input type="text" id="industry" name="industry" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="city">City *</label>
+                                <input type="text" id="city" name="city" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="province">Province/State *</label>
+                                <input type="text" id="province" name="province" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="employeeCount">Number of employees (full-time + part-time) *</label>
+                                <select id="employeeCount" name="employeeCount" required>
+                                    <option value="">Select range</option>
+                                    <option value="1-5">1-5</option>
+                                    <option value="6-15">6-15</option>
+                                    <option value="16-50">16-50</option>
+                                    <option value="51-200">51-200</option>
+                                    <option value="200+">200+</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contractorCount">Number of contractors</label>
+                                <input type="number" id="contractorCount" name="contractorCount" min="0">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="revenue">Annual revenue range (optional)</label>
+                                <select id="revenue" name="revenue">
+                                    <option value="">Select range</option>
+                                    <option value="<100k">Less than $100K</option>
+                                    <option value="100k-500k">$100K - $500K</option>
+                                    <option value="500k-1m">$500K - $1M</option>
+                                    <option value="1m-5m">$1M - $5M</option>
+                                    <option value="5m-25m">$5M - $25M</option>
+                                    <option value="25m+">$25M+</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="companyDescription">Tell us about your company * (300 words max)</label>
+                            <textarea id="companyDescription" name="companyDescription" maxlength="300" rows="4"
+                                placeholder="Briefly describe your company and your product, platform, or service. Include whether your product involves hardware, software, or both."
+                                required></textarea>
+                            <div class="char-count">0/300</div>
+                        </div>
+                    </div>
+
+                    <!-- Product/Service Section -->
+                    <div class="form-section">
+                        <h4>Your Product / Service</h4>
+
+                        <div class="form-group full-width">
+                            <label for="targetCustomer">Target Customer or End-User * (300 words max)</label>
+                            <textarea id="targetCustomer" name="targetCustomer" maxlength="300" rows="4"
+                                placeholder="Who is your product designed for? Do you have defined personas, profiles, or insights into their needs, goals, or frustrations?"
+                                required></textarea>
+                            <div class="char-count">0/300</div>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="focusArea">Focus Area for the Audit * (300 words max)</label>
+                            <textarea id="focusArea" name="focusArea" maxlength="300" rows="4"
+                                placeholder="Which part of your product, service, or experience do you want evaluated? (e.g., a user flow, a feature, or a customer interaction.)"
+                                required></textarea>
+                            <div class="char-count">0/300</div>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="valueProposition">Value Proposition * (300 words max)</label>
+                            <textarea id="valueProposition" name="valueProposition" maxlength="300" rows="4"
+                                placeholder="What problem are you solving for your end-users? What value does your product deliver?"
+                                required></textarea>
+                            <div class="char-count">0/300</div>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="auditGoals">Your Goals for the Audit * (300 words max)</label>
+                            <textarea id="auditGoals" name="auditGoals" maxlength="300" rows="4"
+                                placeholder="Why do you need a design audit right now? What challenges are you facing, and what outcomes would be most valuable? Please share any specific research or design questions you'd like us to focus on."
+                                required></textarea>
+                            <div class="char-count">0/300</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productStatus">Will you have a working product, prototype, or mockup by the time
+                                of the audit? *</label>
+                            <select id="productStatus" name="productStatus" required>
+                                <option value="">Select option</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                                <option value="maybe">Maybe</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Participation -->
+                    <div class="form-section">
+                        <h4>Participation</h4>
+                        <p class="section-note">To foster an engaging, collaborative session, we ask all participants to
+                            join with cameras on.</p>
+
+                        <div class="form-group">
+                            <label for="videoParticipation">Will your team be able to participate with video on?
+                                *</label>
+                            <select id="videoParticipation" name="videoParticipation" required>
+                                <option value="">Select option</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width" id="exceptionGroup" style="display: none;">
+                            <label for="videoException">If you require an exception, please explain:</label>
+                            <textarea id="videoException" name="videoException" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Scheduling -->
+                    <div class="form-section">
+                        <h4>Scheduling</h4>
+                        <p class="section-note">We are currently accepting applications for upcoming audit sessions.
+                            Please select your preferred timing:</p>
+
+                        <div class="form-group">
+                            <label for="preferredTiming">Preferred Timing</label>
+                            <select id="preferredTiming" name="preferredTiming">
+                                <option value="">Select timing</option>
+                                <option value="may-2025">May 2025</option>
+                                <option value="july-2025">July 2025</option>
+                                <option value="september-2025">September 2025</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width" id="otherTimingGroup" style="display: none;">
+                            <label for="otherTiming">Please specify other timing:</label>
+                            <input type="text" id="otherTiming" name="otherTiming">
+                        </div>
+                    </div>
+
+                    <!-- Supporting Materials -->
+                    <div class="form-section">
+                        <h4>Supporting Materials</h4>
+                        <p class="section-note">Please provide links or descriptions of materials that will help us
+                            understand your product. These may include photos, screenshots, mockups, wireframes, user
+                            flows, or website/product links.</p>
+
+                        <div class="form-group full-width">
+                            <label for="supportingMaterials">Links and descriptions of supporting materials:</label>
+                            <textarea id="supportingMaterials" name="supportingMaterials" rows="4"
+                                placeholder="Please provide URLs, descriptions, or details about materials that will help us understand your product..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Acknowledgement -->
+                    <div class="form-section">
+                        <h4>Acknowledgement</h4>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="acknowledgement" name="acknowledgement" required>
+                                <span class="checkmark"></span>
+                                By applying, I acknowledge that our company will be responsible for the audit session
+                                fee if selected. *
+                            </label>
+                        </div>
+
+                        <!-- Submit Button Inside Form -->
+                        <div class="submit-container">
+                            <button type="submit" class="submit-btn" id="submitButton">Submit Application</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: #1a1a1a; color: white; padding: 3rem 0 2rem;">
+        <div class="container">
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                <div>
+                    <h3 style="font-size: 1.2rem; margin-bottom: 1rem; font-weight: 600;">Product Review Studio</h3>
+                    <p style="color: #ccc; line-height: 1.6;">Design audits that unlock growth through human-centered
+                        innovation.</p>
+                </div>
+                <div>
+                    <h4 style="font-size: 1rem; margin-bottom: 1rem; font-weight: 600;">Services</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 0.5rem;"><a href="#"
+                                style="color: #ccc; text-decoration: none;">Revenue Impact Audits</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="#" style="color: #ccc; text-decoration: none;">UX/UI
+                                Evaluation</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="#"
+                                style="color: #ccc; text-decoration: none;">Conversion Optimization</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="font-size: 1rem; margin-bottom: 1rem; font-weight: 600;">Contact</h4>
+                    <p style="color: #ccc; line-height: 1.6;">
+                        Ready to unlock your product's potential?<br>
+                        <a href="#apply" style="color: #ff6b35; text-decoration: none;">Start your application →</a>
+                    </p>
+                </div>
+            </div>
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; text-align: center;">
+                <p style="color: #666; margin: 0;">&copy; 2025 Product Review Studio. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Check if user accessed via file:// and show warning
+        if (window.location.protocol === 'file:') {
+            document.getElementById('fileWarningBanner').style.display = 'block';
+            console.error('⚠️ WARNING: You are accessing this page via file:// protocol. Please open http://localhost:3000/Index.html instead!');
+        }
+
+        // Debug function to log all steps
+        function debugLog(message, data = null) {
+            console.log(`[DEBUG] ${message}`, data || '');
+        }
+
+
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            debugLog('DOM loaded, initializing form functionality...');
+
+            // Form toggle functionality
+            const formToggle = document.getElementById('formToggle');
+            const formContainer = document.getElementById('formContainer');
+            const toggleText = formToggle ? formToggle.querySelector('.toggle-text') : null;
+            const toggleIcon = formToggle ? formToggle.querySelector('.toggle-icon') : null;
+
+            debugLog('Form elements found:', {
+                formToggle: !!formToggle,
+                formContainer: !!formContainer,
+                toggleText: !!toggleText,
+                toggleIcon: !!toggleIcon
+            });
+
+            if (formToggle && formContainer && toggleText && toggleIcon) {
+                formToggle.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    debugLog('Toggle clicked!');
+
+                    const isExpanded = formContainer.classList.contains('expanded');
+
+                    if (isExpanded) {
+                        formContainer.classList.remove('expanded');
+                        toggleText.textContent = 'Start Application';
+                        toggleIcon.classList.remove('rotated');
+                    } else {
+                        formContainer.classList.add('expanded');
+                        toggleText.textContent = 'Close Application';
+                        toggleIcon.classList.add('rotated');
+
+                        // Scroll to form after animation
+                        setTimeout(() => {
+                            formContainer.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }, 500);
+                    }
+                });
+                debugLog('Form toggle event listener attached');
+            } else {
+                debugLog('ERROR: Form toggle elements not found');
+            }
+
+            // Character counting for textareas
+            document.querySelectorAll('textarea[maxlength]').forEach(textarea => {
+                const charCount = textarea.nextElementSibling;
+                if (charCount && charCount.classList.contains('char-count')) {
+                    // Initialize counter
+                    const max = textarea.getAttribute('maxlength');
+                    charCount.textContent = `0/${max}`;
+
+                    textarea.addEventListener('input', function () {
+                        const current = this.value.length;
+                        charCount.textContent = `${current}/${max}`;
+
+                        if (current >= max * 0.9) {
+                            charCount.style.color = '#ff6b35';
+                        } else {
+                            charCount.style.color = 'rgba(255, 255, 255, 0.6)';
+                        }
+                    });
+                }
+            });
+
+            // Show/hide conditional fields
+            const videoParticipation = document.getElementById('videoParticipation');
+            if (videoParticipation) {
+                videoParticipation.addEventListener('change', function () {
+                    const exceptionGroup = document.getElementById('exceptionGroup');
+                    if (exceptionGroup) {
+                        if (this.value === 'no') {
+                            exceptionGroup.style.display = 'block';
+                        } else {
+                            exceptionGroup.style.display = 'none';
+                        }
+                    }
+                });
+            }
+
+            const preferredTiming = document.getElementById('preferredTiming');
+            if (preferredTiming) {
+                preferredTiming.addEventListener('change', function () {
+                    const otherTimingGroup = document.getElementById('otherTimingGroup');
+                    if (otherTimingGroup) {
+                        if (this.value === 'other') {
+                            otherTimingGroup.style.display = 'block';
+                        } else {
+                            otherTimingGroup.style.display = 'none';
+                        }
+                    }
+                });
+            }
+
+            // Status message helper function
+            function showStatusMessage(message, type) {
+                debugLog(`Showing ${type} message: ${message}`);
+                const statusMessage = document.getElementById('statusMessage');
+                if (!statusMessage) {
+                    debugLog('ERROR: Status message element not found');
+                    alert(message); // Fallback to alert
+                    return;
+                }
+                statusMessage.textContent = message;
+                statusMessage.className = `status-message status-${type}`;
+                statusMessage.style.display = 'block';
+
+                // Auto-hide success messages after 5 seconds
+                if (type === 'success') {
+                    setTimeout(() => {
+                        statusMessage.style.display = 'none';
+                    }, 5000);
+                }
+
+                // Scroll to message
+                statusMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            // Form submission with EmailJS
+            const applicationForm = document.getElementById('applicationForm');
+            const submitButton = document.getElementById('submitButton');
+
+            debugLog('Form submission elements found:', {
+                applicationForm: !!applicationForm,
+                submitButton: !!submitButton
+            });
+
+            if (!applicationForm) {
+                debugLog('ERROR: Application form not found!');
+                return;
+            }
+
+            if (!submitButton) {
+                debugLog('ERROR: Submit button not found!');
+                return;
+            }
+
+            // Add click handler to submit button as backup
+            submitButton.addEventListener('click', function (e) {
+                debugLog('Submit button clicked directly');
+                if (e.target.type === 'submit') {
+                    debugLog('Button type is submit, form should handle this');
+                }
+            });
+
+            applicationForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                debugLog('=== FORM SUBMISSION STARTED ===');
+
+                const form = this;
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData);
+
+                debugLog('Form data collected:', data);
+                console.log('📋 RAW FORM DATA CAPTURED:');
+                console.log('fullName:', data.fullName);
+                console.log('email:', data.email);
+                console.log('phone:', data.phone);
+                console.log('businessName:', data.businessName);
+                console.log('All form fields:', Object.keys(data));
+                console.log('Full data object:', JSON.stringify(data, null, 2));
+
+                // Basic validation for required fields
+                const requiredFields = form.querySelectorAll('[required]');
+                let isValid = true;
+                let firstInvalidField = null;
+                let invalidFields = [];
+
+                requiredFields.forEach(field => {
+                    const isFieldValid = field.value.trim() !== '' && !(field.type === 'checkbox' && !field.checked);
+
+                    if (!isFieldValid) {
+                        isValid = false;
+                        field.style.borderColor = '#ff6b35';
+                        invalidFields.push(field.name || field.id);
+                        if (!firstInvalidField) {
+                            firstInvalidField = field;
+                        }
+                    } else {
+                        field.style.borderColor = 'transparent';
+                    }
+                });
+
+                debugLog('Validation result:', {
+                    isValid: isValid,
+                    invalidFields: invalidFields
+                });
+
+                if (!isValid) {
+                    showStatusMessage(`Please fill in all required fields: ${invalidFields.join(', ')}`, 'error');
+                    if (firstInvalidField) {
+                        firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        firstInvalidField.focus();
+                    }
+                    return;
+                }
+
+                const submitBtn = document.getElementById('submitButton');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Submitting...';
+                submitBtn.disabled = true;
+
+                debugLog('Submitting form data to server...');
+
+                // Check if user is accessing via file:// instead of http://
+                if (window.location.protocol === 'file:') {
+                    showStatusMessage('⚠️ ERROR: You opened this file directly! Please access it through the server at http://localhost:3000/Index.html instead. See START_HERE.md for instructions.', 'error');
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                    return;
+                }
+
+                // Save to server (simple and direct)
+                fetch('/api/submit-application', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Server error: ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(serverResponse => {
+                        debugLog('✅ SERVER SAVE SUCCESS!', serverResponse);
+                        showStatusMessage('Thank you for your application! Your information has been saved successfully. We will review it and contact you within 48 hours to schedule your discovery call.', 'success');
+
+                        // Reset form
+                        form.reset();
+                        document.querySelectorAll('.char-count').forEach(counter => {
+                            const max = counter.textContent.split('/')[1];
+                            counter.textContent = `0/${max}`;
+                            counter.style.color = 'rgba(255, 255, 255, 0.6)';
+                        });
+
+                        // Close the form after success
+                        setTimeout(() => {
+                            if (formContainer) {
+                                formContainer.classList.remove('expanded');
+                                if (toggleText) toggleText.textContent = 'Start Application';
+                                if (toggleIcon) toggleIcon.classList.remove('rotated');
+                            }
+                        }, 4000);
+
+                    })
+                    .catch(error => {
+                        debugLog('❌ SUBMISSION FAILED:', error);
+                        showStatusMessage(`Sorry, there was an error submitting your application: ${error.message}. Please make sure the server is running and try again.`, 'error');
+                    })
+                    .finally(() => {
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                        debugLog('=== FORM SUBMISSION COMPLETED ===');
+                    });
+            });
+
+            debugLog('Form submission handler attached successfully');
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.service-card, .who-card, .process-step, .testimonial').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+
+</html>

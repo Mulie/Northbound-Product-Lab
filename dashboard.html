@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Product Review Studio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            color: #1a1a1a;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+            color: white;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #ff6b35;
+        }
+
+        .stat-card h3 {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .controls {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: #ff6b35;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .submissions-table {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: #f9f9f9;
+            padding: 1rem 1.5rem;
+            border-bottom: 2px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .submission-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .submission-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .submission-item:hover {
+            background: #f9f9f9;
+        }
+
+        .submission-item:last-child {
+            border-bottom: none;
+        }
+
+        .submission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .submission-header h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 0.25rem;
+        }
+
+        .submission-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .meta-item strong {
+            color: #1a1a1a;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-new {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .badge-today {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .submission-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d32f2f;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #ff6b35 0%, #f44336 100%);
+            color: white;
+            padding: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .detail-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .detail-section:last-child {
+            border-bottom: none;
+        }
+
+        .detail-section h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #ff6b35;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .detail-item {
+            padding: 0.75rem;
+            background: #f9f9f9;
+            border-radius: 6px;
+        }
+
+        .detail-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-value {
+            font-size: 1rem;
+            color: #1a1a1a;
+            word-break: break-word;
+        }
+
+        .detail-value.empty {
+            color: #999;
+            font-style: italic;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .search-box {
+                min-width: 100%;
+            }
+
+            .submission-header {
+                flex-direction: column;
+            }
+
+            .submission-actions {
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>📊 Admin Dashboard</h1>
+            <p>Product Review Studio - Application Submissions</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Submissions</h3>
+                <div class="value" id="totalCount">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Today</h3>
+                <div class="value" id="todayCount">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>This Week</h3>
+                <div class="value" id="weekCount">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>This Month</h3>
+                <div class="value" id="monthCount">0</div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search by name, email, company, industry...">
+            </div>
+            <div class="filter-buttons">
+                <button class="btn btn-primary" onclick="refreshData()">🔄 Refresh</button>
+                <button class="btn btn-secondary" onclick="exportToCSV()">📥 Export CSV</button>
+            </div>
+        </div>
+
+        <!-- Submissions Table -->
+        <div class="submissions-table">
+            <div class="table-header">
+                <h2>Recent Applications</h2>
+                <span id="displayCount">Showing 0 submissions</span>
+            </div>
+            <div class="submission-list" id="submissionList">
+                <div class="loading">Loading submissions...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="detailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+                <h2 id="modalTitle">Application Details</h2>
+                <p id="modalSubtitle"></p>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Details will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allSubmissions = [];
+        let filteredSubmissions = [];
+
+        // Load submissions on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSubmissions();
+
+            // Set up search
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                filterSubmissions(e.target.value);
+            });
+        });
+
+        async function loadSubmissions() {
+            try {
+                const response = await fetch('/api/get-submissions.php');
+                const data = await response.json();
+
+                if (data.success) {
+                    allSubmissions = data.submissions;
+                    filteredSubmissions = allSubmissions;
+                    updateStats();
+                    displaySubmissions(filteredSubmissions);
+                } else {
+                    showError('Failed to load submissions');
+                }
+            } catch (error) {
+                console.error('Error loading submissions:', error);
+                showError('Error loading submissions: ' + error.message);
+            }
+        }
+
+        function updateStats() {
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+            const monthAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+
+            const todaySubmissions = allSubmissions.filter(s => new Date(s.submittedAt) >= today);
+            const weekSubmissions = allSubmissions.filter(s => new Date(s.submittedAt) >= weekAgo);
+            const monthSubmissions = allSubmissions.filter(s => new Date(s.submittedAt) >= monthAgo);
+
+            document.getElementById('totalCount').textContent = allSubmissions.length;
+            document.getElementById('todayCount').textContent = todaySubmissions.length;
+            document.getElementById('weekCount').textContent = weekSubmissions.length;
+            document.getElementById('monthCount').textContent = monthSubmissions.length;
+        }
+
+        function displaySubmissions(submissions) {
+            const listEl = document.getElementById('submissionList');
+            const countEl = document.getElementById('displayCount');
+
+            countEl.textContent = `Showing ${submissions.length} submission${submissions.length !== 1 ? 's' : ''}`;
+
+            if (submissions.length === 0) {
+                listEl.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No submissions found</h3>
+                        <p>Try adjusting your search criteria</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listEl.innerHTML = submissions.map(submission => {
+                const date = new Date(submission.submittedAt);
+                const isToday = date.toDateString() === new Date().toDateString();
+                const badge = isToday ? '<span class="badge badge-today">Today</span>' : '';
+
+                return `
+                    <div class="submission-item" onclick="viewDetails('${submission.id}')">
+                        <div class="submission-header">
+                            <div>
+                                <h3>${submission.fullName || 'N/A'} ${badge}</h3>
+                                <div class="submission-meta">
+                                    <div class="meta-item">
+                                        <strong>Company:</strong> ${submission.businessName || 'N/A'}
+                                    </div>
+                                    <div class="meta-item">
+                                        <strong>Email:</strong> ${submission.email || 'N/A'}
+                                    </div>
+                                    <div class="meta-item">
+                                        <strong>Phone:</strong> ${submission.phone || 'N/A'}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="submission-actions" onclick="event.stopPropagation()">
+                                <button class="btn btn-primary btn-small" onclick="viewDetails('${submission.id}')">View</button>
+                                <button class="btn btn-danger btn-small" onclick="deleteSubmission('${submission.id}')">Delete</button>
+                            </div>
+                        </div>
+                        <div class="submission-meta">
+                            <div class="meta-item">
+                                <strong>Industry:</strong> ${submission.industry || 'N/A'}
+                            </div>
+                            <div class="meta-item">
+                                <strong>Employees:</strong> ${submission.employeeCount || 'N/A'}
+                            </div>
+                            <div class="meta-item">
+                                <strong>Submitted:</strong> ${date.toLocaleString()}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterSubmissions(query) {
+            if (!query) {
+                filteredSubmissions = allSubmissions;
+            } else {
+                const lowerQuery = query.toLowerCase();
+                filteredSubmissions = allSubmissions.filter(s => {
+                    return (
+                        (s.fullName || '').toLowerCase().includes(lowerQuery) ||
+                        (s.email || '').toLowerCase().includes(lowerQuery) ||
+                        (s.businessName || '').toLowerCase().includes(lowerQuery) ||
+                        (s.industry || '').toLowerCase().includes(lowerQuery) ||
+                        (s.phone || '').toLowerCase().includes(lowerQuery)
+                    );
+                });
+            }
+            displaySubmissions(filteredSubmissions);
+        }
+
+        async function viewDetails(id) {
+            try {
+                const response = await fetch(`/api/submissions/${id}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    showModal(data.submission);
+                } else {
+                    alert('Failed to load submission details');
+                }
+            } catch (error) {
+                console.error('Error loading details:', error);
+                alert('Error loading details: ' + error.message);
+            }
+        }
+
+        function showModal(submission) {
+            document.getElementById('modalTitle').textContent = submission.fullName || 'Application Details';
+            document.getElementById('modalSubtitle').textContent = `${submission.businessName || 'N/A'} • Submitted: ${new Date(submission.submittedAt).toLocaleString()}`;
+
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = `
+                <div class="detail-section">
+                    <h3>Contact Information</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Full Name</div>
+                            <div class="detail-value">${submission.fullName || '<span class="empty">Not provided</span>'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Job Title</div>
+                            <div class="detail-value">${submission.jobTitle || '<span class="empty">Not provided</span>'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Email</div>
+                            <div class="detail-value"><a href="mailto:${submission.email}">${submission.email || '<span class="empty">Not provided</span>'}</a></div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Phone</div>
+                            <div class="detail-value"><a href="tel:${submission.phone}">${submission.phone || '<span class="empty">Not provided</span>'}</a></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h3>Business Information</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Business Name</div>
+                            <div class="detail-value">${submission.businessName || '<span class="empty">Not provided</span>'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Operating Name</div>
+                            <div class="detail-value">${submission.operatingName || '<span class="empty">Not provided</span>'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Website</div>
+                            <div class="detail-value"><a href="${submission.website}" target="_blank">${submission.website || '<span class="empty">Not provided</span>'}</a></div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Year Founded</div>
+                            <div class="detail-value">${submission.yearFounded || '<span class="empty">Not provided</span>'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Industry</div>
+                            <div class="detail-value">${submission.industry || '<span class="empty">Not provided</span>'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Location</div>
+                            <div class="detail-value">${submission.city || ''}, ${submission.province || ''}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Employees</div>
+                            <div class="detail-value">${submission.employeeCount || '<span class="empty">Not provided</span>'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Contractors</div>
+                            <div class="detail-value">${submission.contractorCount || '<span class="empty">Not provided</span>'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Revenue</div>
+                            <div class="detail-value">${submission.revenue || '<span class="empty">Not provided</span>'}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h3>Company Description</h3>
+                    <div class="detail-item">
+                        <div class="detail-value">${submission.companyDescription || '<span class="empty">Not provided</span>'}</div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h3>Product & Goals</h3>
+                    <div class="detail-item" style="margin-bottom: 1rem;">
+                        <div class="detail-label">Target Customer</div>
+                        <div class="detail-value">${submission.targetCustomer || '<span class="empty">Not provided</span>'}</div>
+                    </div>
+                    <div class="detail-item" style="margin-bottom: 1rem;">
+                        <div class="detail-label">Focus Area</div>
+                        <div class="detail-value">${submission.focusArea || '<span class="empty">Not provided</span>'}</div>
+                    </div>
+                    <div class="detail-item" style="margin-bottom: 1rem;">
+                        <div class="detail-label">Value Proposition</div>
+                        <div class="detail-value">${submission.valueProposition || '<span class="empty">Not provided</span>'}</div>
+                    </div>
+                    <div class="detail-item" style="margin-bottom: 1rem;">
+                        <div class="detail-label">Audit Goals</div>
+                        <div class="detail-value">${submission.auditGoals || '<span class="empty">Not provided</span>'}</div>
+                    </div>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Product Status</div>
+                            <div class="detail-value">${submission.productStatus || '<span class="empty">Not provided</span>'}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h3>Logistics</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Video Participation</div>
+                            <div class="detail-value">${submission.videoParticipation || '<span class="empty">Not provided</span>'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Preferred Timing</div>
+                            <div class="detail-value">${submission.preferredTiming || '<span class="empty">Not provided</span>'}</div>
+                        </div>
+                    </div>
+                    ${submission.supportingMaterials ? `
+                        <div class="detail-item" style="margin-top: 1rem;">
+                            <div class="detail-label">Supporting Materials</div>
+                            <div class="detail-value">${submission.supportingMaterials}</div>
+                        </div>
+                    ` : ''}
+                </div>
+
+                ${submission.participant2Name ? `
+                    <div class="detail-section">
+                        <h3>Additional Participants</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <div class="detail-label">Name</div>
+                                <div class="detail-value">${submission.participant2Name}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Title</div>
+                                <div class="detail-value">${submission.participant2Title || '<span class="empty">Not provided</span>'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Email</div>
+                                <div class="detail-value"><a href="mailto:${submission.participant2Email}">${submission.participant2Email || '<span class="empty">Not provided</span>'}</a></div>
+                            </div>
+                        </div>
+                    </div>
+                ` : ''}
+            `;
+
+            document.getElementById('detailModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').classList.remove('active');
+        }
+
+        async function deleteSubmission(id) {
+            if (!confirm('Are you sure you want to delete this submission? This action cannot be undone.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/submissions/${id}`, {
+                    method: 'DELETE'
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Submission deleted successfully');
+                    refreshData();
+                } else {
+                    alert('Failed to delete submission');
+                }
+            } catch (error) {
+                console.error('Error deleting submission:', error);
+                alert('Error deleting submission: ' + error.message);
+            }
+        }
+
+        function refreshData() {
+            document.getElementById('searchInput').value = '';
+            loadSubmissions();
+        }
+
+        function exportToCSV() {
+            window.open('/submissions/applications_summary.csv', '_blank');
+        }
+
+        function showError(message) {
+            document.getElementById('submissionList').innerHTML = `
+                <div class="empty-state">
+                    <h3>Error</h3>
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('detailModal').addEventListener('click', (e) => {
+            if (e.target.id === 'detailModal') {
+                closeModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
