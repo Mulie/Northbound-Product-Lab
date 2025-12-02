@@ -1204,40 +1204,18 @@
             }
         }
 
-        // Check if user accessed via file:// and show warning
-        if (window.location.protocol === 'file:') {
-            document.getElementById('fileWarningBanner').style.display = 'block';
-            console.error('⚠️ WARNING: You are accessing this page via file:// protocol. Please open http://localhost:3000/Index.html instead!');
-        }
-
-        // Debug function to log all steps
-        function debugLog(message, data = null) {
-            console.log(`[DEBUG] ${message}`, data || '');
-        }
-
-
         // Wait for DOM to be fully loaded
         document.addEventListener('DOMContentLoaded', function () {
-            debugLog('DOM loaded, initializing form functionality...');
-
             // Form toggle functionality
             const formToggle = document.getElementById('formToggle');
             const formContainer = document.getElementById('formContainer');
             const toggleText = formToggle ? formToggle.querySelector('.toggle-text') : null;
             const toggleIcon = formToggle ? formToggle.querySelector('.toggle-icon') : null;
 
-            debugLog('Form elements found:', {
-                formToggle: !!formToggle,
-                formContainer: !!formContainer,
-                toggleText: !!toggleText,
-                toggleIcon: !!toggleIcon
-            });
-
             if (formToggle && formContainer && toggleText && toggleIcon) {
                 formToggle.addEventListener('click', function (e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    debugLog('Toggle clicked!');
 
                     const isExpanded = formContainer.classList.contains('expanded');
 
@@ -1250,7 +1228,6 @@
                         toggleText.textContent = 'Close Application';
                         toggleIcon.classList.add('rotated');
 
-                        // Scroll to form after animation
                         setTimeout(() => {
                             formContainer.scrollIntoView({
                                 behavior: 'smooth',
@@ -1259,9 +1236,6 @@
                         }, 500);
                     }
                 });
-                debugLog('Form toggle event listener attached');
-            } else {
-                debugLog('ERROR: Form toggle elements not found');
             }
 
             // Character counting for textareas
@@ -1314,76 +1288,41 @@
                 });
             }
 
-            // Status message helper function
+            // Status message helper
             function showStatusMessage(message, type) {
-                debugLog(`Showing ${type} message: ${message}`);
                 const statusMessage = document.getElementById('statusMessage');
                 if (!statusMessage) {
-                    debugLog('ERROR: Status message element not found');
-                    alert(message); // Fallback to alert
+                    alert(message);
                     return;
                 }
                 statusMessage.textContent = message;
                 statusMessage.className = `status-message status-${type}`;
                 statusMessage.style.display = 'block';
 
-                // Auto-hide success messages after 5 seconds
                 if (type === 'success') {
                     setTimeout(() => {
                         statusMessage.style.display = 'none';
                     }, 5000);
                 }
 
-                // Scroll to message
                 statusMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
 
-            // Form submission with EmailJS
+            // Form submission
             const applicationForm = document.getElementById('applicationForm');
             const submitButton = document.getElementById('submitButton');
 
-            debugLog('Form submission elements found:', {
-                applicationForm: !!applicationForm,
-                submitButton: !!submitButton
-            });
-
-            if (!applicationForm) {
-                debugLog('ERROR: Application form not found!');
-                return;
-            }
-
-            if (!submitButton) {
-                debugLog('ERROR: Submit button not found!');
-                return;
-            }
-
-            // Add click handler to submit button as backup
-            submitButton.addEventListener('click', function (e) {
-                debugLog('Submit button clicked directly');
-                if (e.target.type === 'submit') {
-                    debugLog('Button type is submit, form should handle this');
-                }
-            });
+            if (!applicationForm || !submitButton) return;
 
             applicationForm.addEventListener('submit', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                debugLog('=== FORM SUBMISSION STARTED ===');
 
                 const form = this;
                 const formData = new FormData(form);
                 const data = Object.fromEntries(formData);
 
-                debugLog('Form data collected:', data);
-                console.log('📋 RAW FORM DATA CAPTURED:');
-                console.log('fullName:', data.fullName);
-                console.log('email:', data.email);
-                console.log('phone:', data.phone);
-                console.log('businessName:', data.businessName);
-                console.log('All form fields:', Object.keys(data));
-                console.log('Full data object:', JSON.stringify(data, null, 2));
-
-                // Basic validation for required fields
+                // Validate required fields
                 const requiredFields = form.querySelectorAll('[required]');
                 let isValid = true;
                 let firstInvalidField = null;
@@ -1396,17 +1335,10 @@
                         isValid = false;
                         field.style.borderColor = '#ff6b35';
                         invalidFields.push(field.name || field.id);
-                        if (!firstInvalidField) {
-                            firstInvalidField = field;
-                        }
+                        if (!firstInvalidField) firstInvalidField = field;
                     } else {
                         field.style.borderColor = 'transparent';
                     }
-                });
-
-                debugLog('Validation result:', {
-                    isValid: isValid,
-                    invalidFields: invalidFields
                 });
 
                 if (!isValid) {
@@ -1423,64 +1355,41 @@
                 submitBtn.textContent = 'Submitting...';
                 submitBtn.disabled = true;
 
-                debugLog('Submitting form data to server...');
-
-                // Check if user is accessing via file:// instead of http://
-                if (window.location.protocol === 'file:') {
-                    showStatusMessage('⚠️ ERROR: You opened this file directly! Please access it through the server at http://localhost:3000/Index.html instead. See START_HERE.md for instructions.', 'error');
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                    return;
-                }
-
-                // Save to server (simple and direct)
                 fetch('/api/submit-application', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Server error: ' + response.status);
-                        }
-                        return response.json();
-                    })
-                    .then(serverResponse => {
-                        debugLog('✅ SERVER SAVE SUCCESS!', serverResponse);
-                        showStatusMessage('Thank you for your application! Your information has been saved successfully. We will review it and contact you within 48 hours to schedule your discovery call.', 'success');
+                .then(response => {
+                    if (!response.ok) throw new Error('Server error: ' + response.status);
+                    return response.json();
+                })
+                .then(serverResponse => {
+                    showStatusMessage('Thank you! We\'ll review your application and contact you within 48 hours.', 'success');
 
-                        // Reset form
-                        form.reset();
-                        document.querySelectorAll('.char-count').forEach(counter => {
-                            const max = counter.textContent.split('/')[1];
-                            counter.textContent = `0/${max}`;
-                            counter.style.color = 'rgba(255, 255, 255, 0.6)';
-                        });
-
-                        // Close the form after success
-                        setTimeout(() => {
-                            if (formContainer) {
-                                formContainer.classList.remove('expanded');
-                                if (toggleText) toggleText.textContent = 'Start Application';
-                                if (toggleIcon) toggleIcon.classList.remove('rotated');
-                            }
-                        }, 4000);
-
-                    })
-                    .catch(error => {
-                        debugLog('❌ SUBMISSION FAILED:', error);
-                        showStatusMessage(`Sorry, there was an error submitting your application: ${error.message}. Please make sure the server is running and try again.`, 'error');
-                    })
-                    .finally(() => {
-                        submitBtn.textContent = originalText;
-                        submitBtn.disabled = false;
-                        debugLog('=== FORM SUBMISSION COMPLETED ===');
+                    form.reset();
+                    document.querySelectorAll('.char-count').forEach(counter => {
+                        const max = counter.textContent.split('/')[1];
+                        counter.textContent = `0/${max}`;
+                        counter.style.color = 'rgba(255, 255, 255, 0.6)';
                     });
-            });
 
-            debugLog('Form submission handler attached successfully');
+                    setTimeout(() => {
+                        if (formContainer) {
+                            formContainer.classList.remove('expanded');
+                            if (toggleText) toggleText.textContent = 'Start Application';
+                            if (toggleIcon) toggleIcon.classList.remove('rotated');
+                        }
+                    }, 4000);
+                })
+                .catch(error => {
+                    showStatusMessage(`Error: ${error.message}. Please try again.`, 'error');
+                })
+                .finally(() => {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                });
+            });
         });
 
         // Smooth scrolling
