@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 const fs = require('fs');
 const path = require('path');
 
@@ -8,14 +9,70 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const HOST = '0.0.0.0';
 
+// Dashboard password from environment variable
+const DASHBOARD_PASSWORD = process.env.DASHBOARD_PASSWORD || 'admin123';
+
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Session middleware for dashboard authentication
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'northbound-secret-key-change-in-production',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { 
+        secure: false,
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
+}));
+
 // Block access to submissions folder (security)
 app.use('/submissions', (req, res) => {
     res.status(403).json({ error: 'Access to submissions folder is forbidden' });
+});
+
+// Dashboard authentication middleware
+function requireDashboardAuth(req, res, next) {
+    if (req.session && req.session.dashboardAuthenticated) {
+        return next();
+    }
+    res.redirect('/dashboard-login.html');
+}
+
+// Protect dashboard.html
+app.get('/dashboard.html', requireDashboardAuth, (req, res) => {
+    res.sendFile(path.join(__dirname, 'dashboard.html'));
+});
+
+// Dashboard login endpoint
+app.post('/api/dashboard-login', (req, res) => {
+    const { password } = req.body;
+    
+    if (password === DASHBOARD_PASSWORD) {
+        req.session.dashboardAuthenticated = true;
+        res.json({ success: true, message: 'Login successful' });
+    } else {
+        res.status(401).json({ success: false, message: 'Invalid password' });
+    }
+});
+
+// Dashboard logout endpoint
+app.post('/api/dashboard-logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Logout failed' });
+        }
+        res.json({ success: true, message: 'Logged out successfully' });
+    });
+});
+
+// Check if dashboard is authenticated
+app.get('/api/dashboard-auth-status', (req, res) => {
+    res.json({ 
+        authenticated: !!(req.session && req.session.dashboardAuthenticated) 
+    });
 });
 
 // Serve static files (HTML, CSS, JS) with Cache-Control headers
@@ -98,8 +155,8 @@ app.post('/api/submit-application', (req, res) => {
     }
 });
 
-// Get all submissions (for dashboard)
-app.get('/api/submissions', (req, res) => {
+// Get all submissions (for dashboard) - protected
+app.get('/api/submissions', requireDashboardAuth, (req, res) => {
     try {
         const files = fs.readdirSync(submissionsDir)
             .filter(file => file.endsWith('.json'))
@@ -130,8 +187,8 @@ app.get('/api/submissions', (req, res) => {
     }
 });
 
-// Get single submission by ID
-app.get('/api/submissions/:id', (req, res) => {
+// Get single submission by ID - protected
+app.get('/api/submissions/:id', requireDashboardAuth, (req, res) => {
     try {
         // Validate ID to prevent path traversal
         if (!validateSubmissionId(req.params.id)) {
@@ -182,8 +239,8 @@ app.get('/api/submissions/:id', (req, res) => {
     }
 });
 
-// Delete submission (optional)
-app.delete('/api/submissions/:id', (req, res) => {
+// Delete submission (optional) - protected
+app.delete('/api/submissions/:id', requireDashboardAuth, (req, res) => {
     try {
         // Validate ID to prevent path traversal
         if (!validateSubmissionId(req.params.id)) {
