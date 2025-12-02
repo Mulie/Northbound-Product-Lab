@@ -28,6 +28,8 @@ Product Review Studio is a design audit service website with form submission fun
 - **Host Binding**: Changed to 0.0.0.0 to work with Replit's proxy
 - **Cache Control**: Added no-cache headers to prevent iframe caching issues
 - **Security**: Added middleware to block public access to /submissions folder
+- **Security**: Added path traversal protection for submission ID parameters
+- **Dashboard Fix**: Updated API endpoint from PHP to Node.js (/api/submissions)
 - **Environment Setup**: Configured for Replit deployment with autoscale
 
 ## Features

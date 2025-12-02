@@ -489,7 +489,7 @@
 
         async function loadSubmissions() {
             try {
-                const response = await fetch('/api/get-submissions.php');
+                const response = await fetch('/api/submissions');
                 const data = await response.json();
 
                 if (data.success) {
