@@ -80,9 +80,13 @@ None recorded yet.
 
 ## Security
 - **Submissions Protection**: Direct HTTP access to `/submissions/*` is blocked via middleware (returns 403)
-- **Data Access**: Submission data is only accessible through API endpoints (`/api/submissions`)
+- **Data Access**: Submission data is only accessible through authenticated API endpoints (`/api/submissions`)
 - **Git Exclusion**: The submissions folder is gitignored to prevent committing user data
-- **Authentication**: Dashboard access is currently open (no authentication implemented)
+- **Dashboard Authentication**: Password-protected access using session-based authentication
+  - Login page: `/dashboard-login.html`
+  - Password stored securely as `DASHBOARD_PASSWORD` environment secret
+  - Session expires after 24 hours
+  - Logout button available in dashboard header
 
 ## Notes
 - The server automatically creates the submissions directory if it doesn't exist
