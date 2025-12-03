@@ -417,6 +417,26 @@
             font-size: 4rem;
             color: #ff6b35;
             position: relative;
+            overflow: hidden;
+        }
+
+        .step-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .step-visual .step-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.15) 0%, rgba(0, 0, 0, 0.3) 100%);
+            z-index: 1;
         }
 
         .step-number {
@@ -425,7 +445,11 @@
             left: 1rem;
             font-size: 1rem;
             font-weight: 600;
-            color: #1a1a1a;
+            color: #ffffff;
+            z-index: 2;
+            background: rgba(255, 107, 53, 0.9);
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
         }
 
         .step-content h3 {
@@ -1036,8 +1060,9 @@
             <div class="process-container">
                 <div class="process-step">
                     <div class="step-visual">
+                        <img src="/attached_assets/stock_images/business_people_in_m_8e3dcddb.jpg" alt="Discovery call meeting">
+                        <div class="step-overlay"></div>
                         <span class="step-number">01</span>
-                        📅
                     </div>
                     <div class="step-content">
                         <h3>Discovery Call</h3>
@@ -1047,8 +1072,9 @@
 
                 <div class="process-step">
                     <div class="step-visual">
+                        <img src="/attached_assets/stock_images/business_people_in_m_4769454b.jpg" alt="Deep dive session">
+                        <div class="step-overlay"></div>
                         <span class="step-number">02</span>
-                        🔍
                     </div>
                     <div class="step-content">
                         <h3>Deep Dive</h3>
@@ -1058,8 +1084,9 @@
 
                 <div class="process-step">
                     <div class="step-visual">
+                        <img src="/attached_assets/stock_images/business_people_in_m_e60a55ca.jpg" alt="Audit and analysis">
+                        <div class="step-overlay"></div>
                         <span class="step-number">03</span>
-                        ⚡
                     </div>
                     <div class="step-content">
                         <h3>Audit & Analysis</h3>
@@ -1069,8 +1096,9 @@
 
                 <div class="process-step">
                     <div class="step-visual">
+                        <img src="/attached_assets/stock_images/business_presentatio_8def9ed8.jpg" alt="Results delivery presentation">
+                        <div class="step-overlay"></div>
                         <span class="step-number">04</span>
-                        📋
                     </div>
                     <div class="step-content">
                         <h3>Results Delivery</h3>
