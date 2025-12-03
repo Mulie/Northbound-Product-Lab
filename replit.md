@@ -53,6 +53,8 @@ Northbound Product Lab is a design audit service website with form submission fu
    - Dual storage: JSON files + CSV summary
    - Timestamp-based file naming
    - Automatic folder creation
+   - **File Upload Support**: Users can upload up to 5 files (PDF, PNG, JPG) up to 10MB each
+   - Files stored in `/uploads/` folder with metadata in submission JSON
 
 2. **API Endpoints**
    - `POST /api/submit-application` - Submit form data

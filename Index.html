@@ -621,6 +621,90 @@
             margin-top: 2px;
         }
 
+        .file-upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .file-upload-area:hover {
+            border-color: #ff6b35;
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        .file-upload-area.dragover {
+            border-color: #ff6b35;
+            background: rgba(255, 107, 53, 0.15);
+        }
+
+        .file-upload-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .file-upload-text {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 0.5rem;
+        }
+
+        .file-upload-hint {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-list {
+            margin-top: 1rem;
+            text-align: left;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 0.5rem;
+            border-radius: 4px;
+        }
+
+        .file-item-name {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+            margin-right: 1rem;
+        }
+
+        .file-item-size {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            margin-right: 1rem;
+        }
+
+        .file-remove {
+            background: none;
+            border: none;
+            color: #ff6b35;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .file-remove:hover {
+            color: #ff4500;
+        }
+
         .form-toggle {
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid rgba(255, 255, 255, 0.3);
@@ -1184,6 +1268,17 @@
                                 placeholder="Links to your product, additional context, etc."></textarea>
                         </div>
 
+                        <div class="form-group full-width">
+                            <label>Supporting Files (optional)</label>
+                            <div class="file-upload-area" id="fileUploadArea">
+                                <div class="file-upload-icon">📎</div>
+                                <div class="file-upload-text">Click to upload or drag and drop</div>
+                                <div class="file-upload-hint">PDF, PNG, JPG up to 10MB each (max 5 files)</div>
+                                <input type="file" id="fileInput" class="file-input" multiple accept=".pdf,.png,.jpg,.jpeg">
+                            </div>
+                            <div class="file-list" id="fileList"></div>
+                        </div>
+
                         <div class="form-group checkbox-group">
                             <label class="checkbox-label">
                                 <input type="checkbox" id="acknowledgement" name="acknowledgement" required>
@@ -1450,6 +1545,89 @@
                 });
             }
 
+            // File upload handling
+            const fileUploadArea = document.getElementById('fileUploadArea');
+            const fileInput = document.getElementById('fileInput');
+            const fileList = document.getElementById('fileList');
+            let uploadedFiles = [];
+
+            if (fileUploadArea && fileInput) {
+                fileUploadArea.addEventListener('click', () => fileInput.click());
+
+                fileUploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    fileUploadArea.classList.add('dragover');
+                });
+
+                fileUploadArea.addEventListener('dragleave', () => {
+                    fileUploadArea.classList.remove('dragover');
+                });
+
+                fileUploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    fileUploadArea.classList.remove('dragover');
+                    handleFiles(e.dataTransfer.files);
+                });
+
+                fileInput.addEventListener('change', () => {
+                    handleFiles(fileInput.files);
+                });
+            }
+
+            function handleFiles(files) {
+                const maxFiles = 5;
+                const maxSize = 10 * 1024 * 1024; // 10MB
+                const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg'];
+
+                Array.from(files).forEach(file => {
+                    if (uploadedFiles.length >= maxFiles) {
+                        alert('Maximum 5 files allowed');
+                        return;
+                    }
+                    if (file.size > maxSize) {
+                        alert(`File "${file.name}" exceeds 10MB limit`);
+                        return;
+                    }
+                    if (!allowedTypes.includes(file.type)) {
+                        alert(`File "${file.name}" is not a supported format (PDF, PNG, JPG only)`);
+                        return;
+                    }
+                    uploadedFiles.push(file);
+                });
+
+                updateFileList();
+            }
+
+            function updateFileList() {
+                if (!fileList) return;
+                fileList.innerHTML = '';
+                
+                uploadedFiles.forEach((file, index) => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    fileItem.innerHTML = `
+                        <span class="file-item-name">${file.name}</span>
+                        <span class="file-item-size">${formatFileSize(file.size)}</span>
+                        <button type="button" class="file-remove" data-index="${index}">&times;</button>
+                    `;
+                    fileList.appendChild(fileItem);
+                });
+
+                fileList.querySelectorAll('.file-remove').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const index = parseInt(e.target.dataset.index);
+                        uploadedFiles.splice(index, 1);
+                        updateFileList();
+                    });
+                });
+            }
+
+            function formatFileSize(bytes) {
+                if (bytes < 1024) return bytes + ' B';
+                if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+                return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+            }
+
             // Status message helper
             function showStatusMessage(message, type) {
                 const statusMessage = document.getElementById('statusMessage');
@@ -1517,10 +1695,20 @@
                 submitBtn.textContent = 'Submitting...';
                 submitBtn.disabled = true;
 
+                // Use FormData to include files
+                const submitData = new FormData();
+                Object.keys(data).forEach(key => {
+                    submitData.append(key, data[key]);
+                });
+                
+                // Add uploaded files
+                uploadedFiles.forEach(file => {
+                    submitData.append('files', file);
+                });
+
                 fetch('/api/submit-application', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
+                    body: submitData
                 })
                 .then(response => {
                     if (!response.ok) throw new Error('Server error: ' + response.status);
@@ -1530,6 +1718,8 @@
                     showStatusMessage('Thank you! We\'ll review your application and contact you within 48 hours.', 'success');
 
                     form.reset();
+                    uploadedFiles = [];
+                    updateFileList();
                     document.querySelectorAll('.char-count').forEach(counter => {
                         const max = counter.textContent.split('/')[1];
                         counter.textContent = `0/${max}`;

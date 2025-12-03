@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 
@@ -11,6 +12,40 @@ const HOST = '0.0.0.0';
 
 // Dashboard password from environment variable
 const DASHBOARD_PASSWORD = process.env.DASHBOARD_PASSWORD || 'admin123';
+
+// Create uploads directory if it doesn't exist
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, uploadsDir);
+    },
+    filename: (req, file, cb) => {
+        const timestamp = Date.now();
+        const sanitizedName = file.originalname.replace(/[^a-z0-9.-]/gi, '_');
+        cb(null, `${timestamp}_${sanitizedName}`);
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 10 * 1024 * 1024, // 10MB max
+        files: 5 // Max 5 files
+    },
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg'];
+        if (allowedTypes.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error('Invalid file type. Only PDF, PNG, and JPG are allowed.'), false);
+        }
+    }
+});
 
 // Middleware
 app.use(cors());
@@ -31,6 +66,11 @@ app.use(session({
 // Block access to submissions folder (security)
 app.use('/submissions', (req, res) => {
     res.status(403).json({ error: 'Access to submissions folder is forbidden' });
+});
+
+// Block access to uploads folder (security)
+app.use('/uploads', (req, res) => {
+    res.status(403).json({ error: 'Access to uploads folder is forbidden' });
 });
 
 // Dashboard authentication middleware
@@ -101,11 +141,10 @@ function validateSubmissionId(id) {
     return validIdPattern.test(id);
 }
 
-// Endpoint to handle form submissions
-app.post('/api/submit-application', (req, res) => {
+// Endpoint to handle form submissions with file uploads
+app.post('/api/submit-application', upload.array('files', 5), (req, res) => {
     try {
         const formData = req.body;
-        console.log('📩 Received application submission');
 
         // Generate timestamp and filename
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
@@ -114,20 +153,34 @@ app.post('/api/submit-application', (req, res) => {
         const fileName = `${timestamp}_${sanitizedBusinessName}.json`;
         const filePath = path.join(submissionsDir, fileName);
 
+        // Process uploaded files
+        const uploadedFiles = [];
+        if (req.files && req.files.length > 0) {
+            req.files.forEach(file => {
+                uploadedFiles.push({
+                    originalName: file.originalname,
+                    savedName: file.filename,
+                    size: file.size,
+                    mimetype: file.mimetype,
+                    path: file.path
+                });
+            });
+        }
+
         // Add metadata to submission
         const submission = {
             submittedAt: new Date().toISOString(),
             submittedDate: new Date().toLocaleString(),
-            ...formData
+            ...formData,
+            files: uploadedFiles
         };
 
         // Save to file
         fs.writeFileSync(filePath, JSON.stringify(submission, null, 2));
-        console.log(`✅ Saved submission to: ${fileName}`);
 
         // Also create a summary CSV file (append mode)
         const csvPath = path.join(submissionsDir, 'applications_summary.csv');
-        const csvHeaders = 'Timestamp,Name,Email,Phone,Business Name,Industry,Website,Employee Count\n';
+        const csvHeaders = 'Timestamp,Name,Email,Phone,Business Name,Industry,Website,Employee Count,Files\n';
 
         // Create CSV header if file doesn't exist
         if (!fs.existsSync(csvPath)) {
@@ -135,24 +188,54 @@ app.post('/api/submit-application', (req, res) => {
         }
 
         // Append data to CSV
-        const csvRow = `"${submission.submittedDate}","${formData.fullName || ''}","${formData.email || ''}","${formData.phone || ''}","${formData.businessName || ''}","${formData.industry || ''}","${formData.website || ''}","${formData.employeeCount || ''}"\n`;
+        const fileNames = uploadedFiles.map(f => f.originalName).join('; ');
+        const csvRow = `"${submission.submittedDate}","${formData.fullName || ''}","${formData.email || ''}","${formData.phone || ''}","${formData.businessName || ''}","${formData.industry || ''}","${formData.website || ''}","${formData.employeeCount || ''}","${fileNames}"\n`;
         fs.appendFileSync(csvPath, csvRow);
 
         // Send success response
         res.status(200).json({
             success: true,
             message: 'Application submitted successfully!',
-            fileName: fileName
+            fileName: fileName,
+            filesUploaded: uploadedFiles.length
         });
 
     } catch (error) {
-        console.error('❌ Error saving submission:', error);
         res.status(500).json({
             success: false,
             message: 'Error saving submission',
             error: error.message
         });
     }
+});
+
+// Handle multer errors
+app.use((err, req, res, next) => {
+    if (err instanceof multer.MulterError) {
+        if (err.code === 'LIMIT_FILE_SIZE') {
+            return res.status(400).json({
+                success: false,
+                message: 'File too large. Maximum size is 10MB.'
+            });
+        }
+        if (err.code === 'LIMIT_FILE_COUNT') {
+            return res.status(400).json({
+                success: false,
+                message: 'Too many files. Maximum is 5 files.'
+            });
+        }
+        return res.status(400).json({
+            success: false,
+            message: err.message
+        });
+    }
+    if (err) {
+        return res.status(400).json({
+            success: false,
+            message: err.message
+        });
+    }
+    next();
 });
 
 // Get all submissions (for dashboard) - protected

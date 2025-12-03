@@ -7,6 +7,9 @@ yarn-error.log*
 # Submissions (user data)
 submissions/
 
+# Uploaded files
+uploads/
+
 # Environment variables
 .env
 .env.local
