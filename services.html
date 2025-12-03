@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - Northbound Product Lab</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            background: #0a0a0a;
+            padding: 2rem 0 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .beams-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .beams-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.1);
+            pointer-events: none;
+        }
+
+        header .container {
+            position: relative;
+            z-index: 10;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #ff6b35;
+        }
+
+        .nav-link.active {
+            color: #ff6b35;
+        }
+
+        .admin-link {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .admin-link:hover {
+            color: #ff6b35;
+            border-color: #ff6b35;
+        }
+
+        .hero {
+            text-align: left;
+            max-width: 800px;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            color: #ffffff;
+        }
+
+        .hero-title .accent {
+            font-weight: 700;
+            color: #ff6b35;
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+        }
+
+        /* Services Section */
+        .services-section {
+            padding: 6rem 0;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 3rem;
+        }
+
+        .service-card {
+            background: #fafafa;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            border: none;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #ff6b35;
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-3px);
+            background: #ffffff;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .service-number {
+            font-size: 3.5rem;
+            font-weight: 100;
+            color: #ff6b35;
+            margin-bottom: 1rem;
+            line-height: 1;
+        }
+
+        .service-card h3 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .service-description {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .service-includes {
+            background: rgba(255, 107, 53, 0.05);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .service-includes h4 {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #ff6b35;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .service-includes ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .service-includes li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .service-includes li::before {
+            content: '→';
+            color: #ff6b35;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: #ff6b35;
+            padding: 6rem 0;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 300;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            background: #ffffff;
+            color: #0a0a0a;
+            padding: 18px 40px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-button:hover {
+            background: #0a0a0a;
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background: #0a0a0a;
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .service-card {
+                padding: 2rem;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <canvas class="beams-canvas" id="beamsCanvas"></canvas>
+        <div class="beams-overlay"></div>
+        <div class="container">
+            <nav class="nav">
+                <a href="/" class="logo">Northbound Product Lab</a>
+                <div class="nav-links">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/services.html" class="nav-link active">Services</a>
+                    <a href="dashboard-login.html" class="admin-link">Log in</a>
+                </div>
+            </nav>
+
+            <div class="hero">
+                <p class="hero-subtitle animate-in">Our Services</p>
+                <h1 class="hero-title animate-in delay-1">Practical services built to expose <span class="accent">revenue leaks</span></h1>
+                <p class="hero-description animate-in delay-2">Strengthen product experience and turn UX into measurable growth.</p>
+            </div>
+        </div>
+    </header>
+
+    <section class="services-section">
+        <div class="container">
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-number">01</div>
+                    <h3>Revenue Impact Audit</h3>
+                    <p class="service-description">A deep diagnostic of your product's flows, funnels, and UI patterns. We identify the fastest path to unlocking new ARR through design.</p>
+                    <div class="service-includes">
+                        <h4>Includes</h4>
+                        <ul>
+                            <li>Full funnel review (acquisition to activation)</li>
+                            <li>Conversion loss analysis</li>
+                            <li>ROI-ranked recommendations</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-number">02</div>
+                    <h3>UX/UI Performance Evaluation</h3>
+                    <p class="service-description">A comprehensive evaluation of usability, visual hierarchy, interaction patterns, and design consistency across your product.</p>
+                    <div class="service-includes">
+                        <h4>Includes</h4>
+                        <ul>
+                            <li>Heuristic evaluation</li>
+                            <li>Accessibility review</li>
+                            <li>Interaction pattern improvements</li>
+                            <li>Visual clarity and hierarchy fixes</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-number">03</div>
+                    <h3>Conversion Optimization Sprint</h3>
+                    <p class="service-description">A fast, 2-week engagement focused on improving a single critical path. You get rapid tests, design improvements, and decision-ready data.</p>
+                    <div class="service-includes">
+                        <h4>Common Targets</h4>
+                        <ul>
+                            <li>Onboarding</li>
+                            <li>Checkout</li>
+                            <li>Pricing pages</li>
+                            <li>Upgrade prompts</li>
+                            <li>Trial-to-paid pathways</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-number">04</div>
+                    <h3>Product Experience Redesign</h3>
+                    <p class="service-description">For teams that need more than an audit, but not a full agency engagement. We redesign the experiences that matter most for growth.</p>
+                    <div class="service-includes">
+                        <h4>Includes</h4>
+                        <ul>
+                            <li>Critical flow redesigns</li>
+                            <li>Wireframes + UI recommendations</li>
+                            <li>Interaction patterns that reduce friction</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-number">05</div>
+                    <h3>Experimentation & A/B Testing Support</h3>
+                    <p class="service-description">You get a clear testing plan, statistically sound experiment design, and insight into what drives the biggest lift.</p>
+                    <div class="service-includes">
+                        <h4>Includes</h4>
+                        <ul>
+                            <li>Hypothesis creation</li>
+                            <li>Experiment frameworks</li>
+                            <li>Test-ready design variations</li>
+                            <li>Impact reporting</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-number">06</div>
+                    <h3>Founder & Product Team Advisory</h3>
+                    <p class="service-description">Ongoing monthly support for leaders who want strategic product guidance without hiring full-time.</p>
+                    <div class="service-includes">
+                        <h4>You Get</h4>
+                        <ul>
+                            <li>Weekly async feedback</li>
+                            <li>Monthly product review sessions</li>
+                            <li>Priority access to audits and experiments</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to unlock your product's growth potential?</h2>
+            <p>Start with a conversation about your product challenges and goals.</p>
+            <a href="/#apply" class="cta-button">Start Your Review</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-logo">Northbound Product Lab</div>
+            <p>&copy; 2025 Northbound Product Lab. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('beamsCanvas');
+        const ctx = canvas.getContext('2d');
+        const BEAM_COUNT = 12;
+        let beams = [];
+        let width, height;
+        
+        function createBeam(w, h) {
+            const angle = -30 + Math.random() * 15;
+            return {
+                x: Math.random() * w,
+                y: Math.random() * h,
+                width: 120 + Math.random() * 180,
+                length: h * 1.8,
+                angle: angle,
+                speed: 1 + Math.random() * 1.5,
+                opacity: 0.4 + Math.random() * 0.3,
+                hue: 15 + Math.random() * 20,
+                pulse: Math.random() * Math.PI * 2,
+                pulseSpeed: 0.02 + Math.random() * 0.02
+            };
+        }
+        
+        function resetBeam(beam, index, w, h) {
+            const column = index % 4;
+            const spacing = w / 4;
+            beam.y = h + 200;
+            beam.x = column * spacing + spacing / 2 + (Math.random() - 0.5) * spacing;
+            beam.width = 120 + Math.random() * 180;
+            beam.speed = 1 + Math.random() * 1.5;
+            beam.hue = 15 + Math.random() * 20;
+            beam.opacity = 0.4 + Math.random() * 0.3;
+            return beam;
+        }
+        
+        function drawBeam(beam) {
+            ctx.save();
+            ctx.translate(beam.x, beam.y);
+            ctx.rotate((beam.angle * Math.PI) / 180);
+            
+            const pulsingOpacity = beam.opacity * (0.85 + Math.sin(beam.pulse) * 0.15);
+            const gradient = ctx.createLinearGradient(0, 0, 0, beam.length);
+            
+            gradient.addColorStop(0, `hsla(${beam.hue}, 90%, 55%, 0)`);
+            gradient.addColorStop(0.2, `hsla(${beam.hue}, 90%, 55%, ${pulsingOpacity * 0.6})`);
+            gradient.addColorStop(0.5, `hsla(${beam.hue}, 90%, 55%, ${pulsingOpacity})`);
+            gradient.addColorStop(0.8, `hsla(${beam.hue}, 90%, 55%, ${pulsingOpacity * 0.6})`);
+            gradient.addColorStop(1, `hsla(${beam.hue}, 90%, 55%, 0)`);
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(-beam.width / 2, 0, beam.width, beam.length);
+            ctx.restore();
+        }
+        
+        function updateCanvasSize() {
+            const dpr = window.devicePixelRatio || 1;
+            const header = canvas.parentElement;
+            width = header.offsetWidth;
+            height = header.offsetHeight;
+            
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            
+            beams = [];
+            for (let i = 0; i < BEAM_COUNT; i++) {
+                beams.push(createBeam(width, height));
+            }
+        }
+        
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.filter = 'blur(30px)';
+            
+            for (let i = 0; i < beams.length; i++) {
+                const beam = beams[i];
+                beam.y -= beam.speed;
+                beam.pulse += beam.pulseSpeed;
+                
+                if (beam.y + beam.length < -100) {
+                    resetBeam(beam, i, width, height);
+                }
+                
+                drawBeam(beam);
+            }
+            
+            requestAnimationFrame(animate);
+        }
+        
+        updateCanvasSize();
+        window.addEventListener('resize', updateCanvasSize);
+        animate();
+    </script>
+</body>
+
+</html>

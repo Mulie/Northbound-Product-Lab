@@ -15,7 +15,9 @@ Northbound Product Lab is a design audit service website with form submission fu
 ```
 /
 ├── Index.html              # Main landing page
+├── services.html           # Services page showcasing 6 core offerings
 ├── dashboard.html          # Admin dashboard for viewing submissions
+├── dashboard-login.html    # Login page for dashboard access
 ├── server.js              # Express server handling API and static files
 ├── submissions/           # Auto-generated folder for form submissions
 │   ├── *.json            # Individual submission files
@@ -24,6 +26,16 @@ Northbound Product Lab is a design audit service website with form submission fu
 ```
 
 ## Recent Changes (December 2025)
+- **Services Page**: Added dedicated services.html page with 6 core service offerings:
+  1. Revenue Impact Audit
+  2. UX/UI Performance Evaluation
+  3. Conversion Optimization Sprint
+  4. Product Experience Redesign
+  5. Experimentation & A/B Testing Support
+  6. Founder & Product Team Advisory
+- **Navigation**: Added site-wide navigation with Home, Services, and Log in links
+- **Animated Beams Background**: Added canvas-based animated beams to hero sections
+- **Animation Refinements**: Subtle, settled animations (2-3px movements, reduced timing)
 - **Content Streamlining**: Shortened all section copy for better readability
 - **Form Simplification**: Reduced form from 20+ fields to 10 essential fields
   - Removed: Additional Participants, Supporting Materials sections
@@ -99,4 +111,4 @@ None recorded yet.
 - Deployment uses autoscale mode (suitable for this stateless website)
 
 ## Last Updated
-December 2, 2025 - Initial Replit setup
+December 3, 2025 - Added services page and site-wide navigation

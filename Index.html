@@ -70,6 +70,28 @@
             font-size: 1.5rem;
             font-weight: 700;
             color: #ffffff;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #ff6b35;
+        }
+
+        .nav-link.active {
+            color: #ff6b35;
         }
 
         .admin-link {
@@ -800,8 +822,12 @@
         
         <div class="container">
             <nav class="nav">
-                <a href="#" class="logo">Northbound Product Lab</a>
-                <a href="/dashboard-login.html" class="admin-link">Log in</a>
+                <a href="/" class="logo">Northbound Product Lab</a>
+                <div class="nav-links">
+                    <a href="/" class="nav-link active">Home</a>
+                    <a href="/services.html" class="nav-link">Services</a>
+                    <a href="/dashboard-login.html" class="admin-link">Log in</a>
+                </div>
             </nav>
 
             <div class="hero">
