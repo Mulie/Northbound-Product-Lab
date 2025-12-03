@@ -1210,6 +1210,20 @@
                         <h4>About the Audit</h4>
 
                         <div class="form-group full-width">
+                            <label for="serviceInterest">Which service are you interested in? *</label>
+                            <select id="serviceInterest" name="serviceInterest" required>
+                                <option value="">Select a service</option>
+                                <option value="revenue-impact-audit">Revenue Impact Audit</option>
+                                <option value="ux-ui-evaluation">UX/UI Performance Evaluation</option>
+                                <option value="conversion-optimization">Conversion Optimization Sprint</option>
+                                <option value="product-redesign">Product Experience Redesign</option>
+                                <option value="ab-testing">Experimentation & A/B Testing Support</option>
+                                <option value="advisory">Founder & Product Team Advisory</option>
+                                <option value="not-sure">Not sure yet - help me decide</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width">
                             <label for="auditGoals">What do you want to improve? * (300 chars max)</label>
                             <textarea id="auditGoals" name="auditGoals" maxlength="300" rows="3"
                                 placeholder="e.g., Increase sign-up conversion, improve onboarding, reduce churn..."

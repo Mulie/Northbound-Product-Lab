@@ -180,7 +180,7 @@ app.post('/api/submit-application', upload.array('files', 5), (req, res) => {
 
         // Also create a summary CSV file (append mode)
         const csvPath = path.join(submissionsDir, 'applications_summary.csv');
-        const csvHeaders = 'Timestamp,Name,Email,Phone,Business Name,Industry,Website,Employee Count,Files\n';
+        const csvHeaders = 'Timestamp,Name,Email,Phone,Business Name,Industry,Website,Employee Count,Service Interest,Files\n';
 
         // Create CSV header if file doesn't exist
         if (!fs.existsSync(csvPath)) {
@@ -189,7 +189,7 @@ app.post('/api/submit-application', upload.array('files', 5), (req, res) => {
 
         // Append data to CSV
         const fileNames = uploadedFiles.map(f => f.originalName).join('; ');
-        const csvRow = `"${submission.submittedDate}","${formData.fullName || ''}","${formData.email || ''}","${formData.phone || ''}","${formData.businessName || ''}","${formData.industry || ''}","${formData.website || ''}","${formData.employeeCount || ''}","${fileNames}"\n`;
+        const csvRow = `"${submission.submittedDate}","${formData.fullName || ''}","${formData.email || ''}","${formData.phone || ''}","${formData.businessName || ''}","${formData.industry || ''}","${formData.website || ''}","${formData.employeeCount || ''}","${formData.serviceInterest || ''}","${fileNames}"\n`;
         fs.appendFileSync(csvPath, csvRow);
 
         // Send success response
