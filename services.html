@@ -69,16 +69,19 @@
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #ffffff;
+            display: flex;
+            align-items: center;
             text-decoration: none;
-            background: rgba(10, 10, 10, 0.6);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            padding: 0.5rem 1rem;
+            padding: 0.4rem 0.8rem;
             border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
         }
 
         .nav-links {
@@ -375,7 +378,7 @@
         <div class="beams-overlay"></div>
         <div class="container">
             <nav class="nav">
-                <a href="/" class="logo">Northbound Product Lab</a>
+                <a href="/" class="logo"><img src="/attached_assets/NPL_Logo_1764869715338.png" alt="Northbound Product Lab"></a>
                 <div class="nav-links">
                     <a href="/" class="nav-link">Home</a>
                     <a href="/services.html" class="nav-link active">Services</a>
