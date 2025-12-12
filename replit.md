@@ -26,6 +26,27 @@ Northbound Product Lab is a design audit service website with form submission fu
 ```
 
 ## Recent Changes (December 2025)
+
+### UX/UI Audit Improvements (December 12, 2025)
+Based on professional UX/UI audit recommendations:
+- **Color Contrast**: Changed application section from bright orange (#ff6b35) to dark (#1a1a1a) for WCAG-compliant text contrast
+- **Multi-Step Form Wizard**: Converted long application form to 4-step wizard with progress indicator:
+  - Step 1: Primary Contact
+  - Step 2: Your Company
+  - Step 3: About the Audit  
+  - Step 4: Final Details
+- **Who We Work With Cards**: Changed '+' icons to arrow indicators (▼/▲) that clearly show expandable content
+- **Sticky Navigation**: Fixed nav bar with blur effect, logo shrinks on scroll
+- **Expanded Footer**: Added contact email, LinkedIn social link, Quick Links section across all pages
+- **Accessibility Improvements**:
+  - Skip to main content link
+  - ARIA attributes throughout (role, aria-label, aria-expanded, etc.)
+  - Keyboard support for interactive cards (Enter/Space to toggle)
+  - Progress bar with proper ARIA roles
+- **CTA Standardization**: Removed '+' symbols from buttons, consistent styling throughout
+- **Branding**: Added Northbound Product Lab logo and favicon across all pages
+
+### Previous Changes
 - **Services Page**: Added dedicated services.html page with 6 core service offerings:
   1. Revenue Impact Audit
   2. UX/UI Performance Evaluation
@@ -113,4 +134,4 @@ None recorded yet.
 - Deployment uses autoscale mode (suitable for this stateless website)
 
 ## Last Updated
-December 3, 2025 - Added services page and site-wide navigation
+December 12, 2025 - Implemented UX/UI audit recommendations (color contrast, multi-step form, sticky nav, accessibility)

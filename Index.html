@@ -27,6 +27,24 @@
             padding: 0 24px;
         }
 
+        /* Skip to Main Content Link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #ff6b35;
+            color: white;
+            padding: 8px 16px;
+            z-index: 10000;
+            text-decoration: none;
+            font-weight: 600;
+            transition: top 0.3s ease;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
         /* Header with Beams Background */
         header {
             background: #0a0a0a;
@@ -60,11 +78,31 @@
             z-index: 10;
         }
 
+        /* Sticky Navigation */
+        .nav-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .nav-wrapper.scrolled {
+            background: rgba(10, 10, 10, 0.98);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
         .nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 4rem;
+            padding: 0.5rem 24px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .logo {
@@ -74,8 +112,13 @@
         }
         
         .logo-img {
-            height: 220px;
+            height: 80px;
             width: auto;
+            transition: height 0.3s ease;
+        }
+
+        .nav-wrapper.scrolled .logo-img {
+            height: 60px;
         }
 
         .nav-links {
@@ -122,6 +165,7 @@
             flex-direction: column;
             justify-content: center;
             min-height: calc(100vh - 200px);
+            padding-top: 100px;
         }
 
         .hero-subtitle {
@@ -326,16 +370,15 @@
             align-items: center;
         }
 
-        .who-card h3::after {
-            content: '+';
-            font-size: 1.5rem;
-            font-weight: 300;
+        .who-card-toggle {
+            font-size: 0.875rem;
             color: #ff6b35;
             transition: transform 0.3s ease;
+            display: inline-block;
         }
 
-        .who-card.expanded h3::after {
-            transform: rotate(45deg);
+        .who-card.expanded .who-card-toggle {
+            transform: rotate(180deg);
         }
 
         .who-card p {
@@ -504,11 +547,15 @@
             font-size: 0.9rem;
         }
 
-        /* Application */
+        /* Application - Dark Theme for Better Contrast */
         .application {
-            background: #ff6b35;
+            background: #1a1a1a;
             color: white;
             padding: 6rem 0;
+        }
+
+        .application .section-number {
+            color: #ff6b35;
         }
 
         .application .section-title {
@@ -516,11 +563,11 @@
         }
 
         .application .section-description {
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255, 255, 255, 0.8);
         }
 
         .form-container {
-            background: rgba(255, 255, 255, 0.1);
+            background: #252525;
             padding: 0;
             margin-top: 3rem;
             max-width: 900px;
@@ -531,6 +578,7 @@
             opacity: 0;
             transition: all 0.4s ease-out;
             transform: translateY(-5px);
+            border-radius: 8px;
         }
 
         .form-container.expanded {
@@ -541,14 +589,14 @@
         }
 
         .form-intro {
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
             padding-bottom: 2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .form-intro h3 {
             font-size: 1.5rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             color: white;
             font-weight: 600;
         }
@@ -556,49 +604,93 @@
         .form-intro p {
             margin-bottom: 1rem;
             line-height: 1.6;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255, 255, 255, 0.8);
         }
 
-        .audit-focus {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border-left: 3px solid white;
-        }
-
-        .audit-focus h4 {
-            color: white;
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-
-        .audit-focus ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .audit-focus li {
-            margin-bottom: 0.5rem;
-            padding-left: 1rem;
+        /* Multi-Step Form Progress */
+        .form-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
             position: relative;
-            color: rgba(255, 255, 255, 0.9);
         }
 
-        .audit-focus li::before {
-            content: "•";
-            color: white;
+        .form-progress::before {
+            content: '';
             position: absolute;
+            top: 50%;
             left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .progress-step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #333;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .progress-step-number {
+            background: #ff6b35;
+            border-color: #ff6b35;
+            color: white;
+        }
+
+        .progress-step.completed .progress-step-number {
+            background: #4caf50;
+            border-color: #4caf50;
+            color: white;
+        }
+
+        .progress-step-label {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 0.5rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-step.active .progress-step-label {
+            color: #ff6b35;
+        }
+
+        .progress-step.completed .progress-step-label {
+            color: #4caf50;
+        }
+
+        /* Form Steps */
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
         }
 
         .form-section {
-            margin-bottom: 3rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .form-section:last-of-type {
-            border-bottom: none;
+            margin-bottom: 2rem;
         }
 
         .form-section h4 {
@@ -609,14 +701,14 @@
         }
 
         .section-note {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.7);
             margin-bottom: 1.5rem;
             font-size: 0.95rem;
         }
 
         .char-count {
             font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.5);
             text-align: right;
             margin-top: 0.25rem;
         }
@@ -657,6 +749,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
         }
 
         .file-upload-area:hover {
@@ -735,39 +828,26 @@
         }
 
         .form-toggle {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: #ff6b35;
+            border: none;
             color: white;
             padding: 18px 40px;
             font-size: 1rem;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-top: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            min-width: 250px;
+            display: inline-block;
             margin-left: auto;
             margin-right: auto;
         }
 
         .form-toggle:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: white;
+            background: #ff8555;
             transform: translateY(-2px);
-        }
-
-        .toggle-icon {
-            font-size: 1.5rem;
-            font-weight: 300;
-            transition: transform 0.3s ease;
-        }
-
-        .toggle-icon.rotated {
-            transform: rotate(45deg);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
         }
 
         .form-grid {
@@ -777,7 +857,7 @@
         }
 
         .form-group {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .form-group.full-width {
@@ -790,7 +870,8 @@
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 1px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .form-group input,
@@ -804,13 +885,14 @@
             font-size: 1rem;
             border: 2px solid transparent;
             transition: border-color 0.3s ease;
+            border-radius: 4px;
         }
 
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #1a1a1a;
+            border-color: #ff6b35;
         }
 
         .form-group textarea {
@@ -818,16 +900,61 @@
             resize: vertical;
         }
 
+        /* Form Navigation Buttons */
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-nav-btn {
+            padding: 14px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 4px;
+        }
+
+        .form-nav-btn.prev {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .form-nav-btn.prev:hover {
+            border-color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .form-nav-btn.next {
+            background: #ff6b35;
+            border: none;
+            color: white;
+        }
+
+        .form-nav-btn.next:hover {
+            background: #ff8555;
+            transform: translateY(-1px);
+        }
+
+        .form-nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .submit-container {
             text-align: center;
-            margin-top: 3rem;
-            margin-bottom: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 2rem;
         }
 
         .submit-btn {
-            background: #1a1a1a !important;
+            background: #ff6b35 !important;
             color: white !important;
             padding: 20px 50px !important;
             border: none !important;
@@ -837,17 +964,15 @@
             transition: all 0.3s ease !important;
             text-transform: uppercase !important;
             letter-spacing: 2px !important;
-            border-radius: 0 !important;
+            border-radius: 4px !important;
             min-width: 250px !important;
-            display: block !important;
-            margin: 0 auto !important;
+            display: inline-block !important;
         }
 
         .submit-btn:hover {
-            background: white !important;
-            color: #ff6b35 !important;
+            background: #ff8555 !important;
             transform: translateY(-1px) !important;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3) !important;
         }
 
         .submit-btn:disabled {
@@ -876,6 +1001,102 @@
             border: 1px solid #f44336;
         }
 
+        /* Enhanced Footer */
+        .footer {
+            background: #0a0a0a;
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .footer-section h4 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .footer-section p {
+            color: #999;
+            line-height: 1.6;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-section a {
+            color: #999;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #ff6b35;
+        }
+
+        .footer-contact-email {
+            color: #ff6b35;
+            font-weight: 500;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: #ff6b35;
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-copyright {
+            color: #666;
+            margin: 0;
+        }
+
         /* Animations */
         @keyframes fadeInUp {
             from {
@@ -895,6 +1116,18 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            .nav {
+                padding: 0.5rem 16px;
+            }
+
+            .logo-img {
+                height: 60px;
+            }
+
+            .nav-wrapper.scrolled .logo-img {
+                height: 50px;
+            }
+
             .process-step {
                 grid-template-columns: 1fr;
                 gap: 2rem;
@@ -915,11 +1148,48 @@
             .hero {
                 text-align: left;
             }
+
+            .form-progress {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                padding-bottom: 1rem;
+            }
+
+            .progress-step-label {
+                font-size: 0.65rem;
+                white-space: nowrap;
+            }
+
+            .form-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .form-nav-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .footer-grid {
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .testimonials-container {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 
 <body>
+    <!-- Skip to Main Content Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <!-- Warning Banner (shown only when accessed via file://) -->
     <div id="fileWarningBanner"
         style="display: none; background: #f44336; color: white; padding: 1rem; text-align: center; font-weight: 600;">
@@ -928,22 +1198,25 @@
         properly.
     </div>
 
+    <!-- Sticky Navigation -->
+    <div class="nav-wrapper" id="navWrapper">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
+            <a href="/" class="logo"><img src="/attached_assets/NPL_Logo_HD_White_1764955423616.png" alt="Northbound Product Lab" class="logo-img"></a>
+            <div class="nav-links">
+                <a href="/" class="nav-link active">Home</a>
+                <a href="/services.html" class="nav-link">Services</a>
+                <a href="/dashboard-login.html" class="admin-link">Log in</a>
+            </div>
+        </nav>
+    </div>
+
     <!-- Header with Animated Beams Background -->
     <header>
         <canvas id="beamsCanvas" class="beams-canvas"></canvas>
         <div class="beams-overlay"></div>
         
         <div class="container">
-            <nav class="nav">
-                <a href="/" class="logo"><img src="/attached_assets/NPL_Logo_HD_White_1764955423616.png" alt="Northbound Product Lab" class="logo-img"></a>
-                <div class="nav-links">
-                    <a href="/" class="nav-link active">Home</a>
-                    <a href="/services.html" class="nav-link">Services</a>
-                    <a href="/dashboard-login.html" class="admin-link">Log in</a>
-                </div>
-            </nav>
-
-            <div class="hero">
+            <div class="hero" id="main-content">
                 <div class="hero-subtitle">Product Strategy</div>
                 <h1 class="hero-title">
                     Unlock <span class="accent">growth</span><br>
@@ -997,9 +1270,9 @@
             </p>
 
             <div class="who-grid">
-                <div class="who-card" onclick="toggleWhoCard(this)">
+                <div class="who-card" onclick="toggleWhoCard(this)" role="button" tabindex="0" aria-expanded="false">
                     <span class="who-icon">🚀</span>
-                    <h3>Startup Founders</h3>
+                    <h3>Startup Founders <span class="who-card-toggle" aria-hidden="true">▼</span></h3>
                     <p>Pre-Series A companies proving product-market fit through better conversion.</p>
                     <div class="who-card-details">
                         <ul>
@@ -1010,9 +1283,9 @@
                         <div class="highlight">"Perfect for founders preparing for their next funding round."</div>
                     </div>
                 </div>
-                <div class="who-card" onclick="toggleWhoCard(this)">
+                <div class="who-card" onclick="toggleWhoCard(this)" role="button" tabindex="0" aria-expanded="false">
                     <span class="who-icon">📊</span>
-                    <h3>Product Teams</h3>
+                    <h3>Product Teams <span class="who-card-toggle" aria-hidden="true">▼</span></h3>
                     <p>Teams improving activation, adoption, and free-to-paid conversion.</p>
                     <div class="who-card-details">
                         <ul>
@@ -1023,9 +1296,9 @@
                         <div class="highlight">"For PMs who want evidence-based design decisions."</div>
                     </div>
                 </div>
-                <div class="who-card" onclick="toggleWhoCard(this)">
+                <div class="who-card" onclick="toggleWhoCard(this)" role="button" tabindex="0" aria-expanded="false">
                     <span class="who-icon">📈</span>
-                    <h3>Growth Leaders</h3>
+                    <h3>Growth Leaders <span class="who-card-toggle" aria-hidden="true">▼</span></h3>
                     <p>Companies scaling efficiently and optimizing acquisition funnels.</p>
                     <div class="who-card-details">
                         <ul>
@@ -1036,9 +1309,9 @@
                         <div class="highlight">"For teams ready to scale with design-driven experiments."</div>
                     </div>
                 </div>
-                <div class="who-card" onclick="toggleWhoCard(this)">
+                <div class="who-card" onclick="toggleWhoCard(this)" role="button" tabindex="0" aria-expanded="false">
                     <span class="who-icon">💼</span>
-                    <h3>SaaS Companies</h3>
+                    <h3>SaaS Companies <span class="who-card-toggle" aria-hidden="true">▼</span></h3>
                     <p>B2B and B2C platforms improving trial-to-paid conversion.</p>
                     <div class="who-card-details">
                         <ul>
@@ -1146,196 +1419,240 @@
     <!-- Application -->
     <section class="application" id="apply">
         <div class="container">
-            <div class="section-number" style="color: rgba(255,255,255,0.8);">05</div>
+            <div class="section-number">05</div>
             <h2 class="section-title">Apply for review</h2>
             <p class="section-description">
                 We work with 3-4 companies per month. Takes about 5 minutes.
             </p>
 
-            <button class="form-toggle" id="formToggle">
-                <span class="toggle-text">Start Application</span>
-                <span class="toggle-icon">+</span>
-            </button>
+            <div style="text-align: center;">
+                <button class="form-toggle" id="formToggle" aria-expanded="false" aria-controls="formContainer">
+                    Start Application
+                </button>
+            </div>
 
-            <div class="form-container" id="formContainer">
+            <div class="form-container" id="formContainer" role="region" aria-label="Application form">
                 <div class="form-intro">
                     <h3>Design Audit Application</h3>
                     <p>Tell us about your product and goals. We'll review your application and reach out within 48 hours if we're a good fit. <em>All submissions are confidential.</em></p>
                 </div>
 
-                <form id="applicationForm">
+                <!-- Progress Indicator -->
+                <div class="form-progress" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="4" aria-label="Form progress">
+                    <div class="progress-step active" data-step="1">
+                        <div class="progress-step-number">1</div>
+                        <div class="progress-step-label">Contact</div>
+                    </div>
+                    <div class="progress-step" data-step="2">
+                        <div class="progress-step-number">2</div>
+                        <div class="progress-step-label">Company</div>
+                    </div>
+                    <div class="progress-step" data-step="3">
+                        <div class="progress-step-number">3</div>
+                        <div class="progress-step-label">Audit</div>
+                    </div>
+                    <div class="progress-step" data-step="4">
+                        <div class="progress-step-number">4</div>
+                        <div class="progress-step-label">Details</div>
+                    </div>
+                </div>
+
+                <form id="applicationForm" aria-label="Application form">
                     <!-- Status Message Container -->
-                    <div id="statusMessage" style="display: none;"></div>
+                    <div id="statusMessage" style="display: none;" role="alert" aria-live="polite"></div>
 
-                    <!-- Primary Contact -->
-                    <div class="form-section">
-                        <h4>Primary Contact</h4>
-                        <p class="section-note">This is the person we'll coordinate with and deliver the final report
-                            to.</p>
+                    <!-- Step 1: Primary Contact -->
+                    <div class="form-step active" data-step="1" aria-labelledby="step1-heading">
+                        <div class="form-section">
+                            <h4 id="step1-heading">Primary Contact</h4>
+                            <p class="section-note">This is the person we'll coordinate with and deliver the final report to.</p>
 
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="fullName">First & Last Name *</label>
-                                <input type="text" id="fullName" name="fullName" required>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="fullName">First & Last Name *</label>
+                                    <input type="text" id="fullName" name="fullName" required aria-required="true">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="jobTitle">Job Title *</label>
+                                    <input type="text" id="jobTitle" name="jobTitle" required aria-required="true">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email">Contact Email *</label>
+                                    <input type="email" id="email" name="email" required aria-required="true">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phone">Phone Number *</label>
+                                    <input type="tel" id="phone" name="phone" required aria-required="true">
+                                </div>
                             </div>
+                        </div>
 
-                            <div class="form-group">
-                                <label for="jobTitle">Job Title *</label>
-                                <input type="text" id="jobTitle" name="jobTitle" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="email">Contact Email *</label>
-                                <input type="email" id="email" name="email" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="phone">Phone Number *</label>
-                                <input type="tel" id="phone" name="phone" required>
-                            </div>
+                        <div class="form-navigation">
+                            <div></div>
+                            <button type="button" class="form-nav-btn next" onclick="nextStep()">Next Step →</button>
                         </div>
                     </div>
 
-                    <!-- Business Information -->
-                    <div class="form-section">
-                        <h4>Your Company</h4>
+                    <!-- Step 2: Your Company -->
+                    <div class="form-step" data-step="2" aria-labelledby="step2-heading">
+                        <div class="form-section">
+                            <h4 id="step2-heading">Your Company</h4>
 
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="businessName">Company Name *</label>
-                                <input type="text" id="businessName" name="businessName" required>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="businessName">Company Name *</label>
+                                    <input type="text" id="businessName" name="businessName" required aria-required="true">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="website">Website *</label>
+                                    <input type="url" id="website" name="website" required placeholder="https://" aria-required="true">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="industry">Industry *</label>
+                                    <input type="text" id="industry" name="industry" required placeholder="e.g., SaaS, E-commerce" aria-required="true">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="employeeCount">Team Size *</label>
+                                    <select id="employeeCount" name="employeeCount" required aria-required="true">
+                                        <option value="">Select range</option>
+                                        <option value="1-5">1-5</option>
+                                        <option value="6-15">6-15</option>
+                                        <option value="16-50">16-50</option>
+                                        <option value="51-200">51-200</option>
+                                        <option value="200+">200+</option>
+                                    </select>
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="website">Website *</label>
-                                <input type="url" id="website" name="website" required placeholder="https://">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="industry">Industry *</label>
-                                <input type="text" id="industry" name="industry" required placeholder="e.g., SaaS, E-commerce">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="employeeCount">Team Size *</label>
-                                <select id="employeeCount" name="employeeCount" required>
-                                    <option value="">Select range</option>
-                                    <option value="1-5">1-5</option>
-                                    <option value="6-15">6-15</option>
-                                    <option value="16-50">16-50</option>
-                                    <option value="51-200">51-200</option>
-                                    <option value="200+">200+</option>
-                                </select>
+                            <div class="form-group full-width">
+                                <label for="companyDescription">What does your company do? * (300 chars max)</label>
+                                <textarea id="companyDescription" name="companyDescription" maxlength="300" rows="3"
+                                    placeholder="Brief description of your product or service..."
+                                    required aria-required="true"></textarea>
+                                <div class="char-count" id="companyDescCount">0/300</div>
                             </div>
                         </div>
 
-                        <div class="form-group full-width">
-                            <label for="companyDescription">What does your company do? * (300 chars max)</label>
-                            <textarea id="companyDescription" name="companyDescription" maxlength="300" rows="3"
-                                placeholder="Brief description of your product or service..."
-                                required></textarea>
-                            <div class="char-count">0/300</div>
+                        <div class="form-navigation">
+                            <button type="button" class="form-nav-btn prev" onclick="prevStep()">← Back</button>
+                            <button type="button" class="form-nav-btn next" onclick="nextStep()">Next Step →</button>
                         </div>
                     </div>
 
-                    <!-- Audit Goals Section -->
-                    <div class="form-section">
-                        <h4>About the Audit</h4>
+                    <!-- Step 3: About the Audit -->
+                    <div class="form-step" data-step="3" aria-labelledby="step3-heading">
+                        <div class="form-section">
+                            <h4 id="step3-heading">About the Audit</h4>
 
-                        <div class="form-group full-width">
-                            <label for="serviceInterest">Which service are you interested in? *</label>
-                            <select id="serviceInterest" name="serviceInterest" required>
-                                <option value="">Select a service</option>
-                                <option value="revenue-impact-audit">Revenue Impact Audit</option>
-                                <option value="ux-ui-evaluation">UX/UI Performance Evaluation</option>
-                                <option value="conversion-optimization">Conversion Optimization Sprint</option>
-                                <option value="product-redesign">Product Experience Redesign</option>
-                                <option value="ab-testing">Experimentation & A/B Testing Support</option>
-                                <option value="advisory">Founder & Product Team Advisory</option>
-                                <option value="not-sure">Not sure yet - help me decide</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label for="auditGoals">What do you want to improve? * (300 chars max)</label>
-                            <textarea id="auditGoals" name="auditGoals" maxlength="300" rows="3"
-                                placeholder="e.g., Increase sign-up conversion, improve onboarding, reduce churn..."
-                                required></textarea>
-                            <div class="char-count">0/300</div>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label for="focusArea">Which part of your product should we focus on? (optional)</label>
-                            <textarea id="focusArea" name="focusArea" maxlength="200" rows="2"
-                                placeholder="e.g., Checkout flow, pricing page, onboarding..."></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="productStatus">Do you have a working product or prototype? *</label>
-                            <select id="productStatus" name="productStatus" required>
-                                <option value="">Select option</option>
-                                <option value="yes">Yes, it's live</option>
-                                <option value="prototype">We have a prototype</option>
-                                <option value="no">Not yet</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Final Details -->
-                    <div class="form-section">
-                        <h4>Final Details</h4>
-
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="preferredTiming">When would you like to start?</label>
-                                <select id="preferredTiming" name="preferredTiming">
-                                    <option value="">Select timing</option>
-                                    <option value="asap">As soon as possible</option>
-                                    <option value="1-month">Within 1 month</option>
-                                    <option value="2-3-months">2-3 months</option>
-                                    <option value="flexible">Flexible</option>
+                            <div class="form-group full-width">
+                                <label for="serviceInterest">Which service are you interested in? *</label>
+                                <select id="serviceInterest" name="serviceInterest" required aria-required="true">
+                                    <option value="">Select a service</option>
+                                    <option value="revenue-impact-audit">Revenue Impact Audit</option>
+                                    <option value="ux-ui-evaluation">UX/UI Performance Evaluation</option>
+                                    <option value="conversion-optimization">Conversion Optimization Sprint</option>
+                                    <option value="product-redesign">Product Experience Redesign</option>
+                                    <option value="ab-testing">Experimentation & A/B Testing Support</option>
+                                    <option value="advisory">Founder & Product Team Advisory</option>
+                                    <option value="not-sure">Not sure yet - help me decide</option>
                                 </select>
                             </div>
 
+                            <div class="form-group full-width">
+                                <label for="auditGoals">What do you want to improve? * (300 chars max)</label>
+                                <textarea id="auditGoals" name="auditGoals" maxlength="300" rows="3"
+                                    placeholder="e.g., Increase sign-up conversion, improve onboarding, reduce churn..."
+                                    required aria-required="true"></textarea>
+                                <div class="char-count" id="auditGoalsCount">0/300</div>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="focusArea">Which part of your product should we focus on? (optional)</label>
+                                <textarea id="focusArea" name="focusArea" maxlength="200" rows="2"
+                                    placeholder="e.g., Checkout flow, pricing page, onboarding..."></textarea>
+                            </div>
+
                             <div class="form-group">
-                                <label for="referralSource">How did you hear about us?</label>
-                                <select id="referralSource" name="referralSource">
+                                <label for="productStatus">Do you have a working product or prototype? *</label>
+                                <select id="productStatus" name="productStatus" required aria-required="true">
                                     <option value="">Select option</option>
-                                    <option value="google">Google search</option>
-                                    <option value="linkedin">LinkedIn</option>
-                                    <option value="referral">Referral</option>
-                                    <option value="other">Other</option>
+                                    <option value="yes">Yes, it's live</option>
+                                    <option value="prototype">We have a prototype</option>
+                                    <option value="no">Not yet</option>
                                 </select>
                             </div>
                         </div>
 
-                        <div class="form-group full-width">
-                            <label for="additionalInfo">Anything else we should know? (optional)</label>
-                            <textarea id="additionalInfo" name="additionalInfo" maxlength="300" rows="2"
-                                placeholder="Links to your product, additional context, etc."></textarea>
+                        <div class="form-navigation">
+                            <button type="button" class="form-nav-btn prev" onclick="prevStep()">← Back</button>
+                            <button type="button" class="form-nav-btn next" onclick="nextStep()">Next Step →</button>
                         </div>
+                    </div>
 
-                        <div class="form-group full-width">
-                            <label>Supporting Files (optional)</label>
-                            <div class="file-upload-area" id="fileUploadArea">
-                                <div class="file-upload-icon">📎</div>
-                                <div class="file-upload-text">Click to upload or drag and drop</div>
-                                <div class="file-upload-hint">PDF, PNG, JPG up to 10MB each (max 5 files)</div>
-                                <input type="file" id="fileInput" class="file-input" multiple accept=".pdf,.png,.jpg,.jpeg">
+                    <!-- Step 4: Final Details -->
+                    <div class="form-step" data-step="4" aria-labelledby="step4-heading">
+                        <div class="form-section">
+                            <h4 id="step4-heading">Final Details</h4>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="preferredTiming">When would you like to start?</label>
+                                    <select id="preferredTiming" name="preferredTiming">
+                                        <option value="">Select timing</option>
+                                        <option value="asap">As soon as possible</option>
+                                        <option value="1-month">Within 1 month</option>
+                                        <option value="2-3-months">2-3 months</option>
+                                        <option value="flexible">Flexible</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="referralSource">How did you hear about us?</label>
+                                    <select id="referralSource" name="referralSource">
+                                        <option value="">Select option</option>
+                                        <option value="google">Google search</option>
+                                        <option value="linkedin">LinkedIn</option>
+                                        <option value="referral">Referral</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="file-list" id="fileList"></div>
-                        </div>
 
-                        <div class="form-group checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="acknowledgement" name="acknowledgement" required>
-                                <span class="checkmark"></span>
-                                I understand there is a fee for the audit if selected. *
-                            </label>
-                        </div>
+                            <div class="form-group full-width">
+                                <label for="additionalInfo">Anything else we should know? (optional)</label>
+                                <textarea id="additionalInfo" name="additionalInfo" maxlength="300" rows="2"
+                                    placeholder="Links to your product, additional context, etc."></textarea>
+                            </div>
 
-                        <div class="submit-container">
-                            <button type="submit" class="submit-btn" id="submitButton">Submit Application</button>
+                            <div class="form-group full-width">
+                                <label>Supporting Files (optional)</label>
+                                <div class="file-upload-area" id="fileUploadArea" role="button" tabindex="0" aria-label="Upload files">
+                                    <div class="file-upload-icon">📎</div>
+                                    <div class="file-upload-text">Click to upload or drag and drop</div>
+                                    <div class="file-upload-hint">PDF, PNG, JPG up to 10MB each (max 5 files)</div>
+                                    <input type="file" id="fileInput" class="file-input" multiple accept=".pdf,.png,.jpg,.jpeg" aria-describedby="file-hint">
+                                </div>
+                                <div class="file-list" id="fileList" aria-live="polite"></div>
+                            </div>
+
+                            <div class="form-group checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="acknowledgement" name="acknowledgement" required aria-required="true">
+                                    <span class="checkmark"></span>
+                                    I understand there is a fee for the audit if selected. *
+                                </label>
+                            </div>
+
+                            <div class="form-navigation">
+                                <button type="button" class="form-nav-btn prev" onclick="prevStep()">← Back</button>
+                                <button type="submit" class="submit-btn" id="submitButton">Submit Application</button>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -1343,55 +1660,308 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer style="background: #1a1a1a; color: white; padding: 3rem 0 2rem;">
+    <!-- Enhanced Footer -->
+    <footer class="footer">
         <div class="container">
-            <div
-                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
-                <div>
-                    <h3 style="font-size: 1.2rem; margin-bottom: 1rem; font-weight: 600;">Northbound Product Lab</h3>
-                    <p style="color: #ccc; line-height: 1.6;">Design audits that unlock growth through human-centered
-                        innovation.</p>
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Northbound Product Lab</h3>
+                    <p>Design audits that unlock growth through human-centered innovation.</p>
+                    <div class="social-links">
+                        <a href="https://linkedin.com" class="social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
-                <div>
-                    <h4 style="font-size: 1rem; margin-bottom: 1rem; font-weight: 600;">Services</h4>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="margin-bottom: 0.5rem;"><a href="#"
-                                style="color: #ccc; text-decoration: none;">Revenue Impact Audits</a></li>
-                        <li style="margin-bottom: 0.5rem;"><a href="#" style="color: #ccc; text-decoration: none;">UX/UI
-                                Evaluation</a></li>
-                        <li style="margin-bottom: 0.5rem;"><a href="#"
-                                style="color: #ccc; text-decoration: none;">Conversion Optimization</a></li>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/services.html">Services</a></li>
+                        <li><a href="#apply">Apply</a></li>
                     </ul>
                 </div>
-                <div>
-                    <h4 style="font-size: 1rem; margin-bottom: 1rem; font-weight: 600;">Contact</h4>
-                    <p style="color: #ccc; line-height: 1.6;">
-                        Ready to unlock your product's potential?<br>
-                        <a href="#apply" style="color: #ff6b35; text-decoration: none;">Start your application →</a>
-                    </p>
+
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="/services.html">Revenue Impact Audits</a></li>
+                        <li><a href="/services.html">UX/UI Evaluation</a></li>
+                        <li><a href="/services.html">Conversion Optimization</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Ready to unlock your product's potential?</p>
+                    <p><a href="mailto:hello@northboundproductlab.com" class="footer-contact-email">hello@northboundproductlab.com</a></p>
+                    <p style="margin-top: 1rem;"><a href="#apply" style="color: #ff6b35;">Start your application →</a></p>
                 </div>
             </div>
-            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; text-align: center;">
-                <p style="color: #666; margin: 0;">&copy; 2025 Northbound Product Lab. All rights reserved.</p>
+            
+            <div class="footer-bottom">
+                <p class="footer-copyright">&copy; 2025 Northbound Product Lab. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script>
-        // Animated Beams Background - Initialize when DOM is ready
-        function initBeamsBackground() {
-            const canvas = document.getElementById('beamsCanvas');
-            if (!canvas) {
-                console.error('Beams canvas not found');
+        // Multi-Step Form Logic
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        function updateProgress() {
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const progressBar = document.querySelector('.form-progress');
+            
+            progressSteps.forEach((step, index) => {
+                const stepNum = index + 1;
+                step.classList.remove('active', 'completed');
+                
+                if (stepNum < currentStep) {
+                    step.classList.add('completed');
+                } else if (stepNum === currentStep) {
+                    step.classList.add('active');
+                }
+            });
+            
+            if (progressBar) {
+                progressBar.setAttribute('aria-valuenow', currentStep);
+            }
+        }
+
+        function showStep(step) {
+            const formSteps = document.querySelectorAll('.form-step');
+            formSteps.forEach(s => s.classList.remove('active'));
+            
+            const targetStep = document.querySelector(`.form-step[data-step="${step}"]`);
+            if (targetStep) {
+                targetStep.classList.add('active');
+            }
+            
+            updateProgress();
+        }
+
+        function validateCurrentStep() {
+            const currentStepEl = document.querySelector(`.form-step[data-step="${currentStep}"]`);
+            const requiredFields = currentStepEl.querySelectorAll('[required]');
+            
+            for (let field of requiredFields) {
+                if (!field.value.trim()) {
+                    field.focus();
+                    field.style.borderColor = '#f44336';
+                    setTimeout(() => {
+                        field.style.borderColor = 'transparent';
+                    }, 2000);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function nextStep() {
+            if (!validateCurrentStep()) {
                 return;
             }
             
-            const ctx = canvas.getContext('2d');
-            if (!ctx) {
-                console.error('Canvas context not available');
-                return;
+            if (currentStep < totalSteps) {
+                currentStep++;
+                showStep(currentStep);
+                document.querySelector('.form-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+                document.querySelector('.form-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Sticky Navigation
+        window.addEventListener('scroll', function() {
+            const navWrapper = document.getElementById('navWrapper');
+            if (window.scrollY > 50) {
+                navWrapper.classList.add('scrolled');
+            } else {
+                navWrapper.classList.remove('scrolled');
+            }
+        });
+
+        // Who Card Toggle Function
+        function toggleWhoCard(card) {
+            const isExpanded = card.classList.contains('expanded');
+            card.classList.toggle('expanded');
+            card.setAttribute('aria-expanded', !isExpanded);
+        }
+
+        // Keyboard support for who cards
+        document.querySelectorAll('.who-card').forEach(card => {
+            card.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleWhoCard(this);
+                }
+            });
+        });
+
+        // Form Toggle
+        document.getElementById('formToggle').addEventListener('click', function() {
+            const container = document.getElementById('formContainer');
+            const isExpanded = container.classList.contains('expanded');
+            
+            container.classList.toggle('expanded');
+            this.setAttribute('aria-expanded', !isExpanded);
+            
+            if (!isExpanded) {
+                this.textContent = 'Close Application';
+            } else {
+                this.textContent = 'Start Application';
+            }
+        });
+
+        // Character count for textareas
+        document.querySelectorAll('textarea[maxlength]').forEach(textarea => {
+            const counterId = textarea.id + 'Count';
+            const counter = document.getElementById(counterId) || textarea.nextElementSibling;
+            
+            if (counter && counter.classList.contains('char-count')) {
+                textarea.addEventListener('input', function() {
+                    const max = this.getAttribute('maxlength');
+                    counter.textContent = `${this.value.length}/${max}`;
+                });
+            }
+        });
+
+        // File Upload Handling
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        let uploadedFiles = [];
+
+        if (fileUploadArea && fileInput) {
+            fileUploadArea.addEventListener('click', () => fileInput.click());
+            fileUploadArea.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    fileInput.click();
+                }
+            });
+            
+            fileUploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                fileUploadArea.classList.add('dragover');
+            });
+            
+            fileUploadArea.addEventListener('dragleave', () => {
+                fileUploadArea.classList.remove('dragover');
+            });
+            
+            fileUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                fileUploadArea.classList.remove('dragover');
+                handleFiles(e.dataTransfer.files);
+            });
+            
+            fileInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files);
+            });
+        }
+
+        function handleFiles(files) {
+            const maxFiles = 5;
+            const maxSize = 10 * 1024 * 1024;
+            
+            for (let file of files) {
+                if (uploadedFiles.length >= maxFiles) {
+                    alert('Maximum 5 files allowed');
+                    break;
+                }
+                
+                if (file.size > maxSize) {
+                    alert(`File "${file.name}" is too large. Max size is 10MB.`);
+                    continue;
+                }
+                
+                uploadedFiles.push(file);
+            }
+            
+            renderFileList();
+        }
+
+        function renderFileList() {
+            if (!fileList) return;
+            
+            fileList.innerHTML = uploadedFiles.map((file, index) => `
+                <div class="file-item">
+                    <span class="file-item-name">${file.name}</span>
+                    <span class="file-item-size">${(file.size / 1024).toFixed(1)} KB</span>
+                    <button type="button" class="file-remove" onclick="removeFile(${index})" aria-label="Remove ${file.name}">×</button>
+                </div>
+            `).join('');
+        }
+
+        function removeFile(index) {
+            uploadedFiles.splice(index, 1);
+            renderFileList();
+        }
+
+        // Form Submission
+        document.getElementById('applicationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitButton');
+            const statusMessage = document.getElementById('statusMessage');
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            
+            const formData = new FormData(this);
+            uploadedFiles.forEach(file => {
+                formData.append('files', file);
+            });
+            
+            try {
+                const response = await fetch('/api/applications', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    statusMessage.className = 'status-message status-success';
+                    statusMessage.textContent = 'Application submitted successfully! We\'ll be in touch within 48 hours.';
+                    statusMessage.style.display = 'block';
+                    this.reset();
+                    uploadedFiles = [];
+                    renderFileList();
+                    currentStep = 1;
+                    showStep(1);
+                } else {
+                    throw new Error(result.message || 'Submission failed');
+                }
+            } catch (error) {
+                statusMessage.className = 'status-message status-error';
+                statusMessage.textContent = 'Error submitting application. Please try again.';
+                statusMessage.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Application';
+            }
+        });
+
+        // Animated Beams Background
+        function initBeamsBackground() {
+            const canvas = document.getElementById('beamsCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
             
             const BEAM_COUNT = 20;
             let beams = [];
@@ -1444,17 +2014,11 @@
                 ctx.restore();
             }
             
-            function updateCanvasSize() {
-                const dpr = window.devicePixelRatio || 1;
-                const header = canvas.parentElement;
-                width = header.offsetWidth;
-                height = header.offsetHeight;
-                
-                canvas.width = width * dpr;
-                canvas.height = height * dpr;
-                canvas.style.width = width + 'px';
-                canvas.style.height = height + 'px';
-                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            function resize() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
                 
                 beams = [];
                 for (let i = 0; i < BEAM_COUNT; i++) {
@@ -1464,363 +2028,34 @@
             
             function animate() {
                 ctx.clearRect(0, 0, width, height);
-                ctx.filter = 'blur(30px)';
                 
-                for (let i = 0; i < beams.length; i++) {
-                    const beam = beams[i];
+                beams.forEach((beam, index) => {
                     beam.y -= beam.speed;
                     beam.pulse += beam.pulseSpeed;
                     
-                    if (beam.y + beam.length < -100) {
-                        resetBeam(beam, i, width, height);
+                    if (beam.y + beam.length < 0) {
+                        resetBeam(beam, index, width, height);
                     }
                     
                     drawBeam(beam);
-                }
+                });
                 
                 requestAnimationFrame(animate);
             }
             
-            updateCanvasSize();
-            window.addEventListener('resize', updateCanvasSize);
+            window.addEventListener('resize', resize);
+            resize();
             animate();
         }
-        
-        // Start beams when page loads
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initBeamsBackground);
-        } else {
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
             initBeamsBackground();
-        }
-
-        // Toggle Who Card expansion
-        function toggleWhoCard(card) {
-            const wasExpanded = card.classList.contains('expanded');
             
-            // Close all other cards first
-            document.querySelectorAll('.who-card').forEach(c => {
-                c.classList.remove('expanded');
-            });
-            
-            // Toggle the clicked card (if it wasn't already expanded)
-            if (!wasExpanded) {
-                card.classList.add('expanded');
+            // Check if accessed via file://
+            if (window.location.protocol === 'file:') {
+                document.getElementById('fileWarningBanner').style.display = 'block';
             }
-        }
-
-        // Wait for DOM to be fully loaded
-        document.addEventListener('DOMContentLoaded', function () {
-            // Form toggle functionality
-            const formToggle = document.getElementById('formToggle');
-            const formContainer = document.getElementById('formContainer');
-            const toggleText = formToggle ? formToggle.querySelector('.toggle-text') : null;
-            const toggleIcon = formToggle ? formToggle.querySelector('.toggle-icon') : null;
-
-            if (formToggle && formContainer && toggleText && toggleIcon) {
-                formToggle.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    const isExpanded = formContainer.classList.contains('expanded');
-
-                    if (isExpanded) {
-                        formContainer.classList.remove('expanded');
-                        toggleText.textContent = 'Start Application';
-                        toggleIcon.classList.remove('rotated');
-                    } else {
-                        formContainer.classList.add('expanded');
-                        toggleText.textContent = 'Close Application';
-                        toggleIcon.classList.add('rotated');
-
-                        setTimeout(() => {
-                            formContainer.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                        }, 500);
-                    }
-                });
-            }
-
-            // Character counting for textareas
-            document.querySelectorAll('textarea[maxlength]').forEach(textarea => {
-                const charCount = textarea.nextElementSibling;
-                if (charCount && charCount.classList.contains('char-count')) {
-                    // Initialize counter
-                    const max = textarea.getAttribute('maxlength');
-                    charCount.textContent = `0/${max}`;
-
-                    textarea.addEventListener('input', function () {
-                        const current = this.value.length;
-                        charCount.textContent = `${current}/${max}`;
-
-                        if (current >= max * 0.9) {
-                            charCount.style.color = '#ff6b35';
-                        } else {
-                            charCount.style.color = 'rgba(255, 255, 255, 0.6)';
-                        }
-                    });
-                }
-            });
-
-            // Show/hide conditional fields
-            const videoParticipation = document.getElementById('videoParticipation');
-            if (videoParticipation) {
-                videoParticipation.addEventListener('change', function () {
-                    const exceptionGroup = document.getElementById('exceptionGroup');
-                    if (exceptionGroup) {
-                        if (this.value === 'no') {
-                            exceptionGroup.style.display = 'block';
-                        } else {
-                            exceptionGroup.style.display = 'none';
-                        }
-                    }
-                });
-            }
-
-            const preferredTiming = document.getElementById('preferredTiming');
-            if (preferredTiming) {
-                preferredTiming.addEventListener('change', function () {
-                    const otherTimingGroup = document.getElementById('otherTimingGroup');
-                    if (otherTimingGroup) {
-                        if (this.value === 'other') {
-                            otherTimingGroup.style.display = 'block';
-                        } else {
-                            otherTimingGroup.style.display = 'none';
-                        }
-                    }
-                });
-            }
-
-            // File upload handling
-            const fileUploadArea = document.getElementById('fileUploadArea');
-            const fileInput = document.getElementById('fileInput');
-            const fileList = document.getElementById('fileList');
-            let uploadedFiles = [];
-
-            if (fileUploadArea && fileInput) {
-                fileUploadArea.addEventListener('click', () => fileInput.click());
-
-                fileUploadArea.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                    fileUploadArea.classList.add('dragover');
-                });
-
-                fileUploadArea.addEventListener('dragleave', () => {
-                    fileUploadArea.classList.remove('dragover');
-                });
-
-                fileUploadArea.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    fileUploadArea.classList.remove('dragover');
-                    handleFiles(e.dataTransfer.files);
-                });
-
-                fileInput.addEventListener('change', () => {
-                    handleFiles(fileInput.files);
-                });
-            }
-
-            function handleFiles(files) {
-                const maxFiles = 5;
-                const maxSize = 10 * 1024 * 1024; // 10MB
-                const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg'];
-
-                Array.from(files).forEach(file => {
-                    if (uploadedFiles.length >= maxFiles) {
-                        alert('Maximum 5 files allowed');
-                        return;
-                    }
-                    if (file.size > maxSize) {
-                        alert(`File "${file.name}" exceeds 10MB limit`);
-                        return;
-                    }
-                    if (!allowedTypes.includes(file.type)) {
-                        alert(`File "${file.name}" is not a supported format (PDF, PNG, JPG only)`);
-                        return;
-                    }
-                    uploadedFiles.push(file);
-                });
-
-                updateFileList();
-            }
-
-            function updateFileList() {
-                if (!fileList) return;
-                fileList.innerHTML = '';
-                
-                uploadedFiles.forEach((file, index) => {
-                    const fileItem = document.createElement('div');
-                    fileItem.className = 'file-item';
-                    fileItem.innerHTML = `
-                        <span class="file-item-name">${file.name}</span>
-                        <span class="file-item-size">${formatFileSize(file.size)}</span>
-                        <button type="button" class="file-remove" data-index="${index}">&times;</button>
-                    `;
-                    fileList.appendChild(fileItem);
-                });
-
-                fileList.querySelectorAll('.file-remove').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const index = parseInt(e.target.dataset.index);
-                        uploadedFiles.splice(index, 1);
-                        updateFileList();
-                    });
-                });
-            }
-
-            function formatFileSize(bytes) {
-                if (bytes < 1024) return bytes + ' B';
-                if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-                return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-            }
-
-            // Status message helper
-            function showStatusMessage(message, type) {
-                const statusMessage = document.getElementById('statusMessage');
-                if (!statusMessage) {
-                    alert(message);
-                    return;
-                }
-                statusMessage.textContent = message;
-                statusMessage.className = `status-message status-${type}`;
-                statusMessage.style.display = 'block';
-
-                if (type === 'success') {
-                    setTimeout(() => {
-                        statusMessage.style.display = 'none';
-                    }, 5000);
-                }
-
-                statusMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-
-            // Form submission
-            const applicationForm = document.getElementById('applicationForm');
-            const submitButton = document.getElementById('submitButton');
-
-            if (!applicationForm || !submitButton) return;
-
-            applicationForm.addEventListener('submit', function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-
-                const form = this;
-                const formData = new FormData(form);
-                const data = Object.fromEntries(formData);
-
-                // Validate required fields
-                const requiredFields = form.querySelectorAll('[required]');
-                let isValid = true;
-                let firstInvalidField = null;
-                let invalidFields = [];
-
-                requiredFields.forEach(field => {
-                    const isFieldValid = field.value.trim() !== '' && !(field.type === 'checkbox' && !field.checked);
-
-                    if (!isFieldValid) {
-                        isValid = false;
-                        field.style.borderColor = '#ff6b35';
-                        invalidFields.push(field.name || field.id);
-                        if (!firstInvalidField) firstInvalidField = field;
-                    } else {
-                        field.style.borderColor = 'transparent';
-                    }
-                });
-
-                if (!isValid) {
-                    showStatusMessage(`Please fill in all required fields: ${invalidFields.join(', ')}`, 'error');
-                    if (firstInvalidField) {
-                        firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        firstInvalidField.focus();
-                    }
-                    return;
-                }
-
-                const submitBtn = document.getElementById('submitButton');
-                const originalText = submitBtn.textContent;
-                submitBtn.textContent = 'Submitting...';
-                submitBtn.disabled = true;
-
-                // Use FormData to include files
-                const submitData = new FormData();
-                Object.keys(data).forEach(key => {
-                    submitData.append(key, data[key]);
-                });
-                
-                // Add uploaded files
-                uploadedFiles.forEach(file => {
-                    submitData.append('files', file);
-                });
-
-                fetch('/api/submit-application', {
-                    method: 'POST',
-                    body: submitData
-                })
-                .then(response => {
-                    if (!response.ok) throw new Error('Server error: ' + response.status);
-                    return response.json();
-                })
-                .then(serverResponse => {
-                    showStatusMessage('Thank you! We\'ll review your application and contact you within 48 hours.', 'success');
-
-                    form.reset();
-                    uploadedFiles = [];
-                    updateFileList();
-                    document.querySelectorAll('.char-count').forEach(counter => {
-                        const max = counter.textContent.split('/')[1];
-                        counter.textContent = `0/${max}`;
-                        counter.style.color = 'rgba(255, 255, 255, 0.6)';
-                    });
-
-                    setTimeout(() => {
-                        if (formContainer) {
-                            formContainer.classList.remove('expanded');
-                            if (toggleText) toggleText.textContent = 'Start Application';
-                            if (toggleIcon) toggleIcon.classList.remove('rotated');
-                        }
-                    }, 4000);
-                })
-                .catch(error => {
-                    showStatusMessage(`Error: ${error.message}. Please try again.`, 'error');
-                })
-                .finally(() => {
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                });
-            });
-        });
-
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-in');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.service-card, .who-card, .process-step, .testimonial').forEach(el => {
-            observer.observe(el);
         });
     </script>
 </body>
