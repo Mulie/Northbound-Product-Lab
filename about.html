@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="/attached_assets/NPL_Logo_HD_ICON_1764956290133.png">
-    <title>Services - Northbound Product Lab</title>
+    <title>About - Northbound Product Lab</title>
     <style>
         * {
             margin: 0;
@@ -27,7 +27,6 @@
             padding: 0 24px;
         }
 
-        /* Header */
         header {
             background: #0a0a0a;
             padding: 2rem 0 6rem;
@@ -178,7 +177,7 @@
             font-size: clamp(2.5rem, 6vw, 4.5rem);
             font-weight: 300;
             line-height: 1.1;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             color: #ffffff;
         }
 
@@ -189,162 +188,131 @@
 
         .hero-description {
             font-size: 1.25rem;
-            line-height: 1.5;
-            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
             max-width: 600px;
         }
 
-        /* Services Section */
-        .services-section {
-            padding: 6rem 0;
+        .section {
+            padding: 5rem 0;
         }
 
-        .services-grid {
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+        }
+
+        .section-description {
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.8;
+            max-width: 800px;
+        }
+
+        .about-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 3rem;
+            margin-top: 3rem;
         }
 
-        .service-card {
+        .about-card {
             background: #fafafa;
-            padding: 3rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
-            border: none;
+            padding: 2.5rem;
+            border-left: 4px solid #ff6b35;
         }
 
-        .service-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: #ff6b35;
-            transform: scaleX(0);
-            transition: transform 0.4s ease;
-        }
-
-        .service-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .service-card:hover {
-            transform: translateY(-3px);
-            background: #ffffff;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
-        }
-
-        .service-number {
-            font-size: 3.5rem;
-            font-weight: 100;
-            color: #ff6b35;
-            margin-bottom: 1rem;
-            line-height: 1;
-        }
-
-        .service-card h3 {
-            font-size: 1.75rem;
+        .about-card h3 {
+            font-size: 1.3rem;
             font-weight: 600;
             margin-bottom: 1rem;
             color: #1a1a1a;
         }
 
-        .service-description {
+        .about-card p {
             color: #666;
             line-height: 1.7;
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
         }
 
-        .service-includes {
-            background: rgba(255, 107, 53, 0.05);
-            padding: 1.5rem;
-            margin-top: 1.5rem;
+        .values-section {
+            background: #1a1a1a;
+            color: white;
         }
 
-        .service-includes h4 {
-            font-size: 0.875rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #ff6b35;
-            margin-bottom: 1rem;
+        .values-section .section-title {
+            color: white;
+        }
+
+        .values-section .section-description {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .value-item {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .value-item h3 {
+            font-size: 1.2rem;
             font-weight: 600;
-        }
-
-        .service-includes ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .service-includes li {
-            padding: 0.5rem 0;
-            padding-left: 1.5rem;
-            position: relative;
-            color: #555;
-            line-height: 1.5;
-        }
-
-        .service-includes li::before {
-            content: '→';
+            margin-bottom: 0.75rem;
             color: #ff6b35;
-            position: absolute;
-            left: 0;
-            font-weight: bold;
         }
 
-        /* CTA Section */
+        .value-item p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
         .cta-section {
             background: #ff6b35;
-            padding: 6rem 0;
+            padding: 4rem 0;
             text-align: center;
         }
 
         .cta-section h2 {
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 300;
-            color: #ffffff;
-            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 1rem;
         }
 
         .cta-section p {
-            font-size: 1.25rem;
             color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 2.5rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
         }
 
         .cta-button {
-            background: #ffffff;
-            color: #0a0a0a;
-            padding: 18px 40px;
-            border: none;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            background: #1a1a1a;
+            color: white;
+            padding: 16px 40px;
             text-decoration: none;
+            font-weight: 600;
             display: inline-block;
+            transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         .cta-button:hover {
-            background: #0a0a0a;
-            color: #ffffff;
+            background: #000;
             transform: translateY(-2px);
         }
 
-        /* Footer */
         footer {
             background: #0a0a0a;
             color: white;
             padding: 4rem 0;
-            text-align: center;
         }
 
         .footer-logo {
@@ -359,7 +327,6 @@
             font-size: 0.9rem;
         }
 
-        /* Animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -377,20 +344,10 @@
 
         .delay-1 { animation-delay: 0.1s; }
         .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
 
-        /* Responsive */
         @media (max-width: 768px) {
-            .services-grid {
-                grid-template-columns: 1fr;
-            }
-
             .nav-links {
                 gap: 1rem;
-            }
-
-            .service-card {
-                padding: 2rem;
             }
 
             .hero-title {
@@ -429,8 +386,8 @@
                 <a href="/" class="logo"><img src="/attached_assets/NPL_Logo_HD_White_1764955423616.png" alt="Northbound Product Lab" class="logo-img"></a>
                 <div class="nav-links">
                     <a href="/" class="nav-link">Home</a>
-                    <a href="/services.html" class="nav-link active">Services</a>
-                    <a href="/about.html" class="nav-link">About</a>
+                    <a href="/services.html" class="nav-link">Services</a>
+                    <a href="/about.html" class="nav-link active">About</a>
                     <a href="/dashboard-login.html" class="admin-link">Log in</a>
                 </div>
             </nav>
@@ -441,104 +398,64 @@
         <canvas class="beams-canvas" id="beamsCanvas"></canvas>
         <div class="beams-overlay"></div>
         <div class="container" style="padding-top: 100px;">
-
             <div class="hero">
-                <p class="hero-subtitle animate-in">Our Services</p>
-                <h1 class="hero-title animate-in delay-1">Practical services built to expose <span class="accent">revenue leaks</span></h1>
-                <p class="hero-description animate-in delay-2">Strengthen product experience and turn UX into measurable growth.</p>
+                <p class="hero-subtitle animate-in">About Us</p>
+                <h1 class="hero-title animate-in delay-1">Helping companies unlock <span class="accent">growth through design</span></h1>
+                <p class="hero-description animate-in delay-2">We're a specialized product strategy consultancy focused on turning UX into measurable business results.</p>
             </div>
         </div>
     </header>
 
-    <section class="services-section">
+    <section class="section">
         <div class="container">
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-number">01</div>
-                    <h3>Revenue Impact Audit</h3>
-                    <p class="service-description">A deep diagnostic of your product's flows, funnels, and UI patterns. We identify the fastest path to unlocking new ARR through design.</p>
-                    <div class="service-includes">
-                        <h4>Includes</h4>
-                        <ul>
-                            <li>Full funnel review (acquisition to activation)</li>
-                            <li>Conversion loss analysis</li>
-                            <li>ROI-ranked recommendations</li>
-                        </ul>
-                    </div>
-                </div>
+            <h2 class="section-title">Who We Are</h2>
+            <p class="section-description">
+                Northbound Product Lab is a design strategy partner for growth-stage companies. We help teams identify where they're losing revenue due to UX friction and provide clear, actionable roadmaps to fix it.
+            </p>
+            <p class="section-description" style="margin-top: 1.5rem;">
+                Our approach is rooted in data, behavioral research, and years of hands-on experience optimizing digital products. We don't just point out problems—we deliver prioritized solutions with projected ROI.
+            </p>
 
-                <div class="service-card">
-                    <div class="service-number">02</div>
-                    <h3>UX/UI Performance Evaluation</h3>
-                    <p class="service-description">A comprehensive evaluation of usability, visual hierarchy, interaction patterns, and design consistency across your product.</p>
-                    <div class="service-includes">
-                        <h4>Includes</h4>
-                        <ul>
-                            <li>Heuristic evaluation</li>
-                            <li>Accessibility review</li>
-                            <li>Interaction pattern improvements</li>
-                            <li>Visual clarity and hierarchy fixes</li>
-                        </ul>
-                    </div>
+            <div class="about-grid">
+                <div class="about-card">
+                    <h3>Data-Driven Decisions</h3>
+                    <p>Every recommendation we make is backed by analytics, user research, and industry benchmarks. No guesswork, just evidence-based strategies.</p>
                 </div>
-
-                <div class="service-card">
-                    <div class="service-number">03</div>
-                    <h3>Conversion Optimization Sprint</h3>
-                    <p class="service-description">A fast, 2-week engagement focused on improving a single critical path. You get rapid tests, design improvements, and decision-ready data.</p>
-                    <div class="service-includes">
-                        <h4>Common Targets</h4>
-                        <ul>
-                            <li>Onboarding</li>
-                            <li>Checkout</li>
-                            <li>Pricing pages</li>
-                            <li>Upgrade prompts</li>
-                            <li>Trial-to-paid pathways</li>
-                        </ul>
-                    </div>
+                <div class="about-card">
+                    <h3>Revenue-Focused</h3>
+                    <p>We measure success in dollars, not just design metrics. Our audits are structured to identify the highest-impact opportunities first.</p>
                 </div>
-
-                <div class="service-card">
-                    <div class="service-number">04</div>
-                    <h3>Product Experience Redesign</h3>
-                    <p class="service-description">For teams that need more than an audit, but not a full agency engagement. We redesign the experiences that matter most for growth.</p>
-                    <div class="service-includes">
-                        <h4>Includes</h4>
-                        <ul>
-                            <li>Critical flow redesigns</li>
-                            <li>Wireframes + UI recommendations</li>
-                            <li>Interaction patterns that reduce friction</li>
-                        </ul>
-                    </div>
+                <div class="about-card">
+                    <h3>Implementation-Ready</h3>
+                    <p>Our deliverables are designed to be actionable. You get prioritized roadmaps that your team can start executing immediately.</p>
                 </div>
+            </div>
+        </div>
+    </section>
 
-                <div class="service-card">
-                    <div class="service-number">05</div>
-                    <h3>Experimentation & A/B Testing Support</h3>
-                    <p class="service-description">You get a clear testing plan, statistically sound experiment design, and insight into what drives the biggest lift.</p>
-                    <div class="service-includes">
-                        <h4>Includes</h4>
-                        <ul>
-                            <li>Hypothesis creation</li>
-                            <li>Experiment frameworks</li>
-                            <li>Test-ready design variations</li>
-                            <li>Impact reporting</li>
-                        </ul>
-                    </div>
+    <section class="section values-section">
+        <div class="container">
+            <h2 class="section-title">What We Believe</h2>
+            <p class="section-description">
+                Great products aren't just beautiful—they convert. We believe design is a growth lever that too many companies leave on the table.
+            </p>
+
+            <div class="values-grid">
+                <div class="value-item">
+                    <h3>Clarity Over Complexity</h3>
+                    <p>Simple, focused experiences outperform feature-bloated ones every time.</p>
                 </div>
-
-                <div class="service-card">
-                    <div class="service-number">06</div>
-                    <h3>Founder & Product Team Advisory</h3>
-                    <p class="service-description">Ongoing monthly support for leaders who want strategic product guidance without hiring full-time.</p>
-                    <div class="service-includes">
-                        <h4>You Get</h4>
-                        <ul>
-                            <li>Weekly async feedback</li>
-                            <li>Monthly product review sessions</li>
-                            <li>Priority access to audits and experiments</li>
-                        </ul>
-                    </div>
+                <div class="value-item">
+                    <h3>Speed Matters</h3>
+                    <p>Quick wins compound. We prioritize fast implementation over perfect plans.</p>
+                </div>
+                <div class="value-item">
+                    <h3>Evidence Over Opinion</h3>
+                    <p>We let data guide decisions, not personal preferences or trends.</p>
+                </div>
+                <div class="value-item">
+                    <h3>Partnership Over Projects</h3>
+                    <p>We succeed when you succeed. Our recommendations are built for your reality.</p>
                 </div>
             </div>
         </div>
@@ -546,8 +463,8 @@
 
     <section class="cta-section">
         <div class="container">
-            <h2>Ready to unlock your product's growth potential?</h2>
-            <p>Start with a conversation about your product challenges and goals.</p>
+            <h2>Ready to unlock your product's potential?</h2>
+            <p>Let's talk about where design can drive your next phase of growth.</p>
             <a href="/#apply" class="cta-button">Start Your Review</a>
         </div>
     </section>
@@ -564,6 +481,7 @@
                     <ul style="list-style: none; padding: 0;">
                         <li style="margin-bottom: 0.5rem;"><a href="/" style="color: rgba(255,255,255,0.7); text-decoration: none;">Home</a></li>
                         <li style="margin-bottom: 0.5rem;"><a href="/services.html" style="color: rgba(255,255,255,0.7); text-decoration: none;">Services</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/about.html" style="color: rgba(255,255,255,0.7); text-decoration: none;">About</a></li>
                         <li style="margin-bottom: 0.5rem;"><a href="/#apply" style="color: rgba(255,255,255,0.7); text-decoration: none;">Apply for Review</a></li>
                     </ul>
                 </div>
@@ -607,15 +525,11 @@
         }
         
         function resetBeam(beam, index, w, h) {
-            const column = index % 4;
-            const spacing = w / 4;
-            beam.y = h + 200;
-            beam.x = column * spacing + spacing / 2 + (Math.random() - 0.5) * spacing;
+            beam.y = h + 200 + Math.random() * 300;
+            beam.x = Math.random() * w;
             beam.width = 120 + Math.random() * 180;
             beam.speed = 1 + Math.random() * 1.5;
-            beam.hue = 15 + Math.random() * 20;
             beam.opacity = 0.4 + Math.random() * 0.3;
-            return beam;
         }
         
         function drawBeam(beam) {
@@ -678,7 +592,6 @@
         window.addEventListener('resize', updateCanvasSize);
         animate();
 
-        // Sticky nav scroll effect
         const navWrapper = document.getElementById('navWrapper');
         window.addEventListener('scroll', function() {
             if (window.scrollY > 50) {
