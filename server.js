@@ -5,7 +5,6 @@ const session = require('express-session');
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
-const archiver = require('archiver');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -374,43 +373,6 @@ app.delete('/api/submissions/:id', requireDashboardAuth, (req, res) => {
 // Health check endpoint
 app.get('/api/health', (req, res) => {
     res.json({ status: 'Server is running', timestamp: new Date().toISOString() });
-});
-
-// Download website content as ZIP
-app.get('/api/download-website', (req, res) => {
-    const archive = archiver('zip', { zlib: { level: 9 } });
-    
-    res.attachment('northbound-website.zip');
-    res.setHeader('Content-Type', 'application/zip');
-    
-    archive.on('error', (err) => {
-        console.error('Archive error:', err);
-        res.status(500).json({ error: 'Failed to create archive' });
-    });
-    
-    archive.pipe(res);
-    
-    const websiteFiles = [
-        'Index.html',
-        'about.html',
-        'services.html',
-        'dashboard-login.html',
-        'dashboard.html'
-    ];
-    
-    websiteFiles.forEach(file => {
-        const filePath = path.join(__dirname, file);
-        if (fs.existsSync(filePath)) {
-            archive.file(filePath, { name: file });
-        }
-    });
-    
-    const assetsDir = path.join(__dirname, 'attached_assets');
-    if (fs.existsSync(assetsDir)) {
-        archive.directory(assetsDir, 'attached_assets');
-    }
-    
-    archive.finalize();
 });
 
 // Start server
