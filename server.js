@@ -5,6 +5,7 @@ const session = require('express-session');
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
+const archiver = require('archiver');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -367,6 +368,50 @@ app.delete('/api/submissions/:id', requireDashboardAuth, (req, res) => {
             message: 'Error deleting submission',
             error: error.message
         });
+    }
+});
+
+// Download website content as ZIP
+app.get('/api/download-site', (req, res) => {
+    try {
+        res.setHeader('Content-Type', 'application/zip');
+        res.setHeader('Content-Disposition', 'attachment; filename="northbound-site.zip"');
+
+        const archive = archiver('zip', { zlib: { level: 9 } });
+
+        archive.on('error', (err) => {
+            console.error('Archive error:', err);
+            res.status(500).json({ error: 'Failed to create archive' });
+        });
+
+        archive.pipe(res);
+
+        // Include public website files
+        const filesToInclude = [
+            'Index.html',
+            'services.html',
+            'about.html',
+            'dashboard.html',
+            'dashboard-login.html'
+        ];
+
+        filesToInclude.forEach(file => {
+            const filePath = path.join(__dirname, file);
+            if (fs.existsSync(filePath)) {
+                archive.file(filePath, { name: file });
+            }
+        });
+
+        // Include attached_assets folder if it exists
+        const assetsDir = path.join(__dirname, 'attached_assets');
+        if (fs.existsSync(assetsDir)) {
+            archive.directory(assetsDir, 'attached_assets');
+        }
+
+        archive.finalize();
+    } catch (error) {
+        console.error('Download error:', error);
+        res.status(500).json({ error: 'Failed to create download' });
     }
 });
 
