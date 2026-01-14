@@ -1145,6 +1145,144 @@
             transform: rotate(-45deg) translate(5px, -5px);
         }
 
+        /* Email Popup Styles */
+        .email-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            backdrop-filter: blur(4px);
+        }
+
+        .email-popup-overlay.active {
+            display: flex;
+        }
+
+        .email-popup {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 2.5rem;
+            max-width: 420px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            animation: popupSlideIn 0.3s ease-out;
+        }
+
+        @keyframes popupSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .email-popup-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .email-popup-close:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .email-popup h3 {
+            color: #fff;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .email-popup p {
+            color: #aaa;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .email-popup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .email-popup-input {
+            padding: 14px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .email-popup-input:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .email-popup-input::placeholder {
+            color: #666;
+        }
+
+        .email-popup-submit {
+            background: #ff6b35;
+            color: #fff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .email-popup-submit:hover {
+            background: #e55a2b;
+        }
+
+        .email-popup-success {
+            text-align: center;
+            color: #4ade80;
+            font-size: 1.1rem;
+        }
+
+        .email-popup-skip {
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 0.85rem;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: color 0.2s ease;
+        }
+
+        .email-popup-skip:hover {
+            color: #aaa;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .nav {
@@ -2155,6 +2293,75 @@
                 document.getElementById('fileWarningBanner').style.display = 'block';
             }
         });
+    </script>
+
+    <!-- Email Capture Popup -->
+    <div class="email-popup-overlay" id="emailPopupOverlay">
+        <div class="email-popup">
+            <button class="email-popup-close" id="emailPopupClose" aria-label="Close popup">&times;</button>
+            <h3>Stay in the loop</h3>
+            <p>Share your email and we'll reach out to discuss how we can help your business grow.</p>
+            <form class="email-popup-form" id="emailPopupForm">
+                <input type="text" class="email-popup-input" id="popupName" placeholder="Your name" required>
+                <input type="email" class="email-popup-input" id="popupEmail" placeholder="Your email address" required>
+                <button type="submit" class="email-popup-submit">Get in Touch</button>
+            </form>
+            <button class="email-popup-skip" id="emailPopupSkip">No thanks, maybe later</button>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const overlay = document.getElementById('emailPopupOverlay');
+            const closeBtn = document.getElementById('emailPopupClose');
+            const skipBtn = document.getElementById('emailPopupSkip');
+            const form = document.getElementById('emailPopupForm');
+            const popup = document.querySelector('.email-popup');
+
+            const POPUP_DELAY = 5000;
+            const STORAGE_KEY = 'emailPopupDismissed';
+
+            function showPopup() {
+                if (localStorage.getItem(STORAGE_KEY)) return;
+                overlay.classList.add('active');
+            }
+
+            function hidePopup() {
+                overlay.classList.remove('active');
+                localStorage.setItem(STORAGE_KEY, 'true');
+            }
+
+            setTimeout(showPopup, POPUP_DELAY);
+
+            closeBtn.addEventListener('click', hidePopup);
+            skipBtn.addEventListener('click', hidePopup);
+
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) hidePopup();
+            });
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const name = document.getElementById('popupName').value;
+                const email = document.getElementById('popupEmail').value;
+
+                try {
+                    const response = await fetch('/api/email-signup', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name, email })
+                    });
+
+                    if (response.ok) {
+                        popup.innerHTML = '<div class="email-popup-success"><p>Thank you! We\'ll be in touch soon.</p></div>';
+                        setTimeout(hidePopup, 2000);
+                    }
+                } catch (error) {
+                    popup.innerHTML = '<div class="email-popup-success"><p>Thank you! We\'ll be in touch soon.</p></div>';
+                    setTimeout(hidePopup, 2000);
+                }
+            });
+        })();
     </script>
 </body>
 

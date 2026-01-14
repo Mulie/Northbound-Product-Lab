@@ -371,6 +371,47 @@ app.delete('/api/submissions/:id', requireDashboardAuth, (req, res) => {
     }
 });
 
+// Email signup from popup
+app.post('/api/email-signup', (req, res) => {
+    try {
+        const { name, email } = req.body;
+        
+        if (!email) {
+            return res.status(400).json({ success: false, message: 'Email is required' });
+        }
+
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const fileName = `email_${timestamp}.json`;
+        const filePath = path.join(submissionsDir, 'emails', fileName);
+
+        const emailsDir = path.join(submissionsDir, 'emails');
+        if (!fs.existsSync(emailsDir)) {
+            fs.mkdirSync(emailsDir, { recursive: true });
+        }
+
+        const signup = {
+            name: name || '',
+            email: email,
+            submittedAt: new Date().toISOString(),
+            source: 'popup'
+        };
+
+        fs.writeFileSync(filePath, JSON.stringify(signup, null, 2));
+
+        const csvPath = path.join(emailsDir, 'email_signups.csv');
+        if (!fs.existsSync(csvPath)) {
+            fs.writeFileSync(csvPath, 'Timestamp,Name,Email\n');
+        }
+        fs.appendFileSync(csvPath, `"${signup.submittedAt}","${name || ''}","${email}"\n`);
+
+        console.log(`New email signup: ${email}`);
+        res.json({ success: true, message: 'Email saved successfully' });
+    } catch (error) {
+        console.error('Email signup error:', error);
+        res.status(500).json({ success: false, message: 'Error saving email' });
+    }
+});
+
 // Download website content as ZIP
 app.get('/api/download-site', (req, res) => {
     try {
