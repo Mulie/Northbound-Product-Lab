@@ -243,6 +243,27 @@
             background: #ff6b35;
         }
 
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #22c55e;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
         .social-icon svg {
             width: 18px;
             height: 18px;
@@ -1043,9 +1064,14 @@
             navigator.clipboard.writeText(window.location.href);
             const btn = document.querySelector('.social-icon.copy-link');
             btn.style.background = '#22c55e';
+            
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            
             setTimeout(() => {
                 btn.style.background = '';
-            }, 1500);
+                toast.classList.remove('show');
+            }, 2000);
         }
 
         const COMMENTS_KEY = 'blog_comments_email_setup';
@@ -1102,6 +1128,7 @@
         
         loadComments();
     </script>
+    <div id="toast" class="toast">Link copied!</div>
 </body>
 
 </html>
