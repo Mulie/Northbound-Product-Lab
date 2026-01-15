@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/attached_assets/NPL_Logo_HD_ICON_1764956290133.png">
+    <title>Free Custom Domain Email Setup - Northbound Product Lab</title>
+    <meta name="description" content="Set up a professional email address using your own domain for free. Step-by-step guide using ImprovMX and Gmail.">
+    <meta property="og:title" content="Free Custom Domain Email Setup Guide">
+    <meta property="og:description" content="Get you@yourdomain.com for free using ImprovMX + Gmail. Perfect for founders and consultants.">
+    <meta property="og:type" content="article">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            color: #1a1a1a;
+            background: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .nav-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .nav-wrapper.scrolled {
+            background: rgba(10, 10, 10, 0.98);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            height: 80px;
+            width: auto;
+            transition: height 0.3s ease;
+        }
+
+        .nav-wrapper.scrolled .logo-img {
+            height: 60px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #ff6b35;
+        }
+
+        .admin-link {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .admin-link:hover {
+            color: #ff6b35;
+            border-color: #ff6b35;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 1001;
+        }
+
+        .mobile-menu-toggle span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: #fff;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .article-header {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            padding: 10rem 0 4rem;
+        }
+
+        .article-header .container {
+            max-width: 800px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumb a {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: #ff6b35;
+        }
+
+        .breadcrumb span {
+            color: rgba(255, 255, 255, 0.3);
+            margin: 0 0.5rem;
+        }
+
+        .article-tag {
+            display: inline-block;
+            background: rgba(255, 107, 53, 0.2);
+            color: #ff6b35;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+        }
+
+        .article-header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .article-content {
+            padding: 4rem 0;
+        }
+
+        .article-content .container {
+            max-width: 800px;
+        }
+
+        .article-content h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin: 3rem 0 1.5rem;
+            color: #1a1a1a;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .article-content h2:first-child {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+        }
+
+        .article-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            color: #1a1a1a;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+            color: #444;
+            font-size: 1.1rem;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.75rem;
+            color: #444;
+            font-size: 1.1rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fff8f5 0%, #fff3ef 100%);
+            border-left: 4px solid #ff6b35;
+            padding: 1.5rem 2rem;
+            border-radius: 0 12px 12px 0;
+            margin: 2rem 0;
+        }
+
+        .highlight-box h3 {
+            color: #ff6b35;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .highlight-box ul {
+            margin-bottom: 0;
+        }
+
+        .highlight-box li {
+            color: #333;
+        }
+
+        .dns-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+            background: #fafafa;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .dns-table th {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .dns-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        }
+
+        .dns-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .code-block {
+            background: #1a1a1a;
+            color: #e0e0e0;
+            padding: 1.25rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 0.95rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: #ff6b35;
+            color: #fff;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-right: 0.75rem;
+        }
+
+        .warning-box {
+            background: #fff9e6;
+            border-left: 4px solid #f0b429;
+            padding: 1.25rem 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .warning-box p {
+            margin: 0;
+            color: #8a6d0b;
+        }
+
+        .success-box {
+            background: #e6f9ed;
+            border-left: 4px solid #22c55e;
+            padding: 1.25rem 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .success-box p {
+            margin: 0;
+            color: #15803d;
+        }
+
+        .info-box {
+            background: #f0f7ff;
+            border-left: 4px solid #3b82f6;
+            padding: 1.25rem 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .info-box p {
+            margin: 0;
+            color: #1e40af;
+        }
+
+        .share-section {
+            background: #f8f8f8;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .share-section h3 {
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .share-btn.twitter {
+            background: #1da1f2;
+            color: #fff;
+        }
+
+        .share-btn.linkedin {
+            background: #0077b5;
+            color: #fff;
+        }
+
+        .share-btn.copy {
+            background: #1a1a1a;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #ff6b35;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 3rem;
+            transition: gap 0.2s ease;
+        }
+
+        .back-link:hover {
+            gap: 0.75rem;
+        }
+
+        footer {
+            background: #0a0a0a;
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 280px;
+                height: 100vh;
+                background: rgba(10, 10, 10, 0.98);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 2rem;
+                transition: right 0.3s ease;
+                padding: 2rem;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .article-header {
+                padding: 8rem 0 3rem;
+            }
+
+            .dns-table {
+                font-size: 0.8rem;
+            }
+
+            .dns-table th,
+            .dns-table td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .share-buttons {
+                flex-direction: column;
+            }
+
+            .share-btn {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav-wrapper" id="navWrapper">
+        <nav class="nav">
+            <a href="/" class="logo">
+                <img src="/attached_assets/NPL_Logo_HD_White_1765582270189.png" alt="Northbound Product Lab" class="logo-img">
+            </a>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="navLinks">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/services.html" class="nav-link">Services</a>
+                <a href="/about.html" class="nav-link">About</a>
+                <a href="/blog.html" class="nav-link active">Blog</a>
+                <a href="/dashboard-login.html" class="admin-link">Log in</a>
+            </div>
+        </nav>
+    </div>
+
+    <header class="article-header">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="/">Home</a>
+                <span>/</span>
+                <a href="/blog.html">Blog</a>
+                <span>/</span>
+                <a href="#">This Article</a>
+            </div>
+            <span class="article-tag">Guide</span>
+            <h1>Free Custom Domain Email Setup</h1>
+            <div class="article-meta">
+                <span>5 min read</span>
+                <span>•</span>
+                <span>Updated January 2025</span>
+            </div>
+        </div>
+    </header>
+
+    <article class="article-content">
+        <div class="container">
+            <div class="highlight-box">
+                <h3>What this gives you</h3>
+                <ul>
+                    <li><strong>you@yourdomain.com</strong> — Professional email address</li>
+                    <li>Emails arrive in your existing <strong>Gmail inbox</strong></li>
+                    <li>You can <strong>send email from your domain</strong></li>
+                    <li><strong>$0 cost</strong> — Completely free</li>
+                </ul>
+            </div>
+
+            <p>Tech stack: <strong>ImprovMX</strong> (email forwarding) + <strong>Gmail</strong> (send-as)</p>
+
+            <h2>What you need</h2>
+            <ul>
+                <li>A domain you own</li>
+                <li>Access to your domain's DNS settings</li>
+                <li>A Gmail account</li>
+            </ul>
+
+            <h2><span class="step-number">1</span>Set up free email forwarding (ImprovMX)</h2>
+            <ol>
+                <li>Go to <a href="https://improvmx.com" target="_blank" rel="noopener">improvmx.com</a></li>
+                <li>Click <strong>Add domain</strong></li>
+                <li>Enter your domain (example: yourdomain.com)</li>
+                <li>Create a forwarding rule:
+                    <ul>
+                        <li><strong>Alias:</strong> hello (or your name)</li>
+                        <li><strong>Destination:</strong> yourgmail@gmail.com</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <div class="success-box">
+                <p><strong>Result:</strong> hello@yourdomain.com → yourgmail@gmail.com</p>
+            </div>
+
+            <h2><span class="step-number">2</span>Add MX records to your domain (critical)</h2>
+            <p>Go to your domain's DNS manager and add both MX records below:</p>
+
+            <table class="dns-table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Host</th>
+                        <th>Value</th>
+                        <th>Priority</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>MX</td>
+                        <td>@</td>
+                        <td>mx1.improvmx.com</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td>MX</td>
+                        <td>@</td>
+                        <td>mx2.improvmx.com</td>
+                        <td>20</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>Save changes.</p>
+
+            <div class="info-box">
+                <p><strong>Note:</strong> DNS propagation usually takes 5–60 minutes (sometimes longer).</p>
+            </div>
+
+            <h2><span class="step-number">3</span>Add SPF record (avoid spam)</h2>
+            <p>Still in DNS, add this TXT record:</p>
+
+            <table class="dns-table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Host</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>TXT</td>
+                        <td>@</td>
+                        <td>v=spf1 include:improvmx.com ~all</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="warning-box">
+                <p><strong>Warning:</strong> If an SPF record already exists, edit it and add <code>include:improvmx.com</code> — do not create a second SPF record.</p>
+            </div>
+
+            <h2><span class="step-number">4</span>Test receiving email</h2>
+            <p>Send a test email from another account to:</p>
+            <div class="code-block">hello@yourdomain.com</div>
+            
+            <div class="success-box">
+                <p>If it arrives in Gmail, forwarding is working! ✅</p>
+            </div>
+
+            <h2><span class="step-number">5</span>Configure Gmail to send FROM your domain</h2>
+            <ol>
+                <li>Open Gmail</li>
+                <li>Go to <strong>Settings → See all settings</strong></li>
+                <li>Open <strong>Accounts and Import</strong></li>
+                <li>Under <strong>Send mail as</strong>, click <strong>Add another email address</strong></li>
+                <li>Enter:
+                    <ul>
+                        <li><strong>Name:</strong> Your name</li>
+                        <li><strong>Email:</strong> hello@yourdomain.com</li>
+                    </ul>
+                </li>
+                <li>Check <strong>Treat as an alias</strong></li>
+            </ol>
+
+            <h3>SMTP settings</h3>
+            <table class="dns-table">
+                <tbody>
+                    <tr>
+                        <td>SMTP server</td>
+                        <td>smtp.gmail.com</td>
+                    </tr>
+                    <tr>
+                        <td>Username</td>
+                        <td>yourgmail@gmail.com</td>
+                    </tr>
+                    <tr>
+                        <td>Password</td>
+                        <td>Gmail App Password (next step)</td>
+                    </tr>
+                    <tr>
+                        <td>Port</td>
+                        <td>587</td>
+                    </tr>
+                    <tr>
+                        <td>TLS</td>
+                        <td>ON</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2><span class="step-number">6</span>Create a Gmail App Password (required)</h2>
+            <ol>
+                <li>Go to <a href="https://myaccount.google.com/security" target="_blank" rel="noopener">Google Account → Security</a></li>
+                <li>Enable <strong>2-Step Verification</strong></li>
+                <li>Open <strong>App Passwords</strong></li>
+                <li>Create a password for <strong>Mail</strong></li>
+                <li>Use this password in Step 5</li>
+            </ol>
+
+            <h2><span class="step-number">7</span>Set your default From address</h2>
+            <p>In Gmail:</p>
+            <ol>
+                <li>Go to <strong>Accounts and Import</strong></li>
+                <li>Under <strong>Send mail as</strong></li>
+                <li>Set <strong>hello@yourdomain.com</strong> as default</li>
+            </ol>
+
+            <div class="highlight-box">
+                <h3>Final result</h3>
+                <p>Every email you send:</p>
+                <ul>
+                    <li>Comes from your domain</li>
+                    <li>Uses Gmail's interface</li>
+                    <li>Costs nothing</li>
+                </ul>
+            </div>
+
+            <h2>Troubleshooting quick checks</h2>
+            <ul>
+                <li>Only <strong>two MX records</strong> should exist (ImprovMX)</li>
+                <li>Only <strong>one SPF record</strong> should exist</li>
+                <li>DNS changes may take up to 4 hours on some hosts</li>
+            </ul>
+
+            <div class="info-box">
+                <p>This setup is ideal for <strong>founders, consultants, and solo operators</strong> who want a professional email without paying for Google Workspace.</p>
+            </div>
+
+            <div class="share-section">
+                <h3>Found this helpful? Share it!</h3>
+                <div class="share-buttons">
+                    <a href="https://twitter.com/intent/tweet?text=Free%20Custom%20Domain%20Email%20Setup%20Guide&url=" class="share-btn twitter" target="_blank" rel="noopener">Share on Twitter</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=" class="share-btn linkedin" target="_blank" rel="noopener">Share on LinkedIn</a>
+                    <button class="share-btn copy" onclick="copyLink()">Copy Link</button>
+                </div>
+            </div>
+
+            <a href="/blog.html" class="back-link">← Back to Blog</a>
+        </div>
+    </article>
+
+    <footer>
+        <div class="container">
+            <div class="footer-logo">Northbound Product Lab</div>
+            <p>&copy; 2025 Northbound Product Lab. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const navWrapper = document.getElementById('navWrapper');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                navWrapper.classList.add('scrolled');
+            } else {
+                navWrapper.classList.remove('scrolled');
+            }
+        });
+
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        mobileMenuToggle.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenuToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href);
+            const btn = document.querySelector('.share-btn.copy');
+            btn.textContent = 'Copied!';
+            setTimeout(() => {
+                btn.textContent = 'Copy Link';
+            }, 2000);
+        }
+    </script>
+</body>
+
+</html>
