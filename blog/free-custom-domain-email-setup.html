@@ -195,6 +195,13 @@
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
         }
 
+        .article-author {
+            color: #ff6b35;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
         .article-meta {
             display: flex;
             align-items: center;
@@ -454,6 +461,114 @@
             gap: 0.75rem;
         }
 
+        .comments-section {
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid #eee;
+        }
+
+        .comments-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: #1a1a1a;
+        }
+
+        .comment-form {
+            background: #f8f8f8;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .comment-form label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .comment-form input,
+        .comment-form textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            margin-bottom: 1rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .comment-form input:focus,
+        .comment-form textarea:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .comment-form textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .comment-form button {
+            background: #ff6b35;
+            color: #fff;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .comment-form button:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+
+        .comments-list {
+            margin-top: 2rem;
+        }
+
+        .comment {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .comment-date {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .comment-text {
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .no-comments {
+            text-align: center;
+            color: #888;
+            padding: 2rem;
+            font-style: italic;
+        }
+
         footer {
             background: #0a0a0a;
             color: white;
@@ -553,6 +668,7 @@
             </div>
             <span class="article-tag">Guide</span>
             <h1>Free Custom Domain Email Setup</h1>
+            <p class="article-author">By Muleh Bisrat</p>
             <div class="article-meta">
                 <span>5 min read</span>
                 <span>•</span>
@@ -802,6 +918,23 @@
                 </div>
             </div>
 
+            <div class="comments-section">
+                <h3>Comments</h3>
+                <form class="comment-form" id="commentForm">
+                    <label for="commentName">Name</label>
+                    <input type="text" id="commentName" name="name" placeholder="Your name" required>
+                    
+                    <label for="commentText">Comment</label>
+                    <textarea id="commentText" name="comment" placeholder="Share your thoughts..." required></textarea>
+                    
+                    <button type="submit">Post Comment</button>
+                </form>
+                
+                <div class="comments-list" id="commentsList">
+                    <p class="no-comments">Be the first to leave a comment!</p>
+                </div>
+            </div>
+
             <a href="/blog.html" class="back-link">← Back to Blog</a>
         </div>
     </article>
@@ -846,6 +979,60 @@
                 btn.textContent = 'Copy Link';
             }, 2000);
         }
+
+        const COMMENTS_KEY = 'blog_comments_email_setup';
+        
+        function loadComments() {
+            const comments = JSON.parse(localStorage.getItem(COMMENTS_KEY) || '[]');
+            const commentsList = document.getElementById('commentsList');
+            
+            if (comments.length === 0) {
+                commentsList.innerHTML = '<p class="no-comments">Be the first to leave a comment!</p>';
+                return;
+            }
+            
+            commentsList.innerHTML = comments.map(comment => `
+                <div class="comment">
+                    <div class="comment-header">
+                        <span class="comment-author">${escapeHtml(comment.name)}</span>
+                        <span class="comment-date">${comment.date}</span>
+                    </div>
+                    <p class="comment-text">${escapeHtml(comment.text)}</p>
+                </div>
+            `).join('');
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        document.getElementById('commentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('commentName').value.trim();
+            const text = document.getElementById('commentText').value.trim();
+            
+            if (!name || !text) return;
+            
+            const comments = JSON.parse(localStorage.getItem(COMMENTS_KEY) || '[]');
+            
+            comments.unshift({
+                name: name,
+                text: text,
+                date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+            });
+            
+            localStorage.setItem(COMMENTS_KEY, JSON.stringify(comments));
+            
+            document.getElementById('commentName').value = '';
+            document.getElementById('commentText').value = '';
+            
+            loadComments();
+        });
+        
+        loadComments();
     </script>
 </body>
 
