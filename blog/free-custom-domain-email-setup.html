@@ -358,6 +358,24 @@
             color: #1e40af;
         }
 
+        .screenshot {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin: 1.5rem 0;
+            border: 1px solid #eee;
+        }
+
+        .screenshot-caption {
+            font-size: 0.85rem;
+            color: #666;
+            text-align: center;
+            margin-top: -1rem;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
         .share-section {
             background: #f8f8f8;
             padding: 2rem;
@@ -558,15 +576,30 @@
             <h2><span class="step-number">1</span>Set up free email forwarding (ImprovMX)</h2>
             <ol>
                 <li>Go to <a href="https://improvmx.com" target="_blank" rel="noopener">improvmx.com</a></li>
+            </ol>
+            <img src="images/image8.png" alt="ImprovMX homepage" class="screenshot">
+
+            <ol start="2">
                 <li>Click <strong>Add domain</strong></li>
+            </ol>
+            <img src="images/image4.png" alt="Add domain button" class="screenshot">
+
+            <ol start="3">
                 <li>Enter your domain (example: yourdomain.com)</li>
+            </ol>
+            <img src="images/image2.png" alt="Enter your domain" class="screenshot">
+
+            <ol start="4">
                 <li>Create a forwarding rule:
                     <ul>
                         <li><strong>Alias:</strong> hello (or your name)</li>
-                        <li><strong>Destination:</strong> yourgmail@gmail.com</li>
                     </ul>
                 </li>
             </ol>
+            <img src="images/image9.png" alt="Alias field" class="screenshot">
+
+            <p style="margin-left: 1.5rem;"><strong>Destination:</strong> yourgmail@gmail.com</p>
+            <img src="images/image10.png" alt="Destination field" class="screenshot">
 
             <div class="success-box">
                 <p><strong>Result:</strong> hello@yourdomain.com → yourgmail@gmail.com</p>
@@ -574,6 +607,9 @@
 
             <h2><span class="step-number">2</span>Add MX records to your domain (critical)</h2>
             <p>Go to your domain's DNS manager and add both MX records below:</p>
+
+            <img src="images/image14.png" alt="DNS Manager MX records" class="screenshot">
+            <img src="images/image17.png" alt="Adding MX records" class="screenshot">
 
             <table class="dns-table">
                 <thead>
@@ -601,6 +637,7 @@
             </table>
 
             <p>Save changes.</p>
+            <img src="images/image5.png" alt="Save DNS changes" class="screenshot">
 
             <div class="info-box">
                 <p><strong>Note:</strong> DNS propagation usually takes 5–60 minutes (sometimes longer).</p>
@@ -630,6 +667,8 @@
                 <p><strong>Warning:</strong> If an SPF record already exists, edit it and add <code>include:improvmx.com</code> — do not create a second SPF record.</p>
             </div>
 
+            <img src="images/image1.png" alt="SPF record in DNS" class="screenshot">
+
             <h2><span class="step-number">4</span>Test receiving email</h2>
             <p>Send a test email from another account to:</p>
             <div class="code-block">hello@yourdomain.com</div>
@@ -642,7 +681,15 @@
             <ol>
                 <li>Open Gmail</li>
                 <li>Go to <strong>Settings → See all settings</strong></li>
+            </ol>
+            <img src="images/image15.png" alt="Gmail Settings" class="screenshot">
+
+            <ol start="3">
                 <li>Open <strong>Accounts and Import</strong></li>
+            </ol>
+            <img src="images/image13.png" alt="Accounts and Import tab" class="screenshot">
+
+            <ol start="4">
                 <li>Under <strong>Send mail as</strong>, click <strong>Add another email address</strong></li>
                 <li>Enter:
                     <ul>
@@ -650,6 +697,10 @@
                         <li><strong>Email:</strong> hello@yourdomain.com</li>
                     </ul>
                 </li>
+            </ol>
+            <img src="images/image12.png" alt="Add email address dialog" class="screenshot">
+
+            <ol start="6">
                 <li>Check <strong>Treat as an alias</strong></li>
             </ol>
 
@@ -679,14 +730,29 @@
                 </tbody>
             </table>
 
+            <img src="images/image11.png" alt="SMTP settings" class="screenshot">
+
             <h2><span class="step-number">6</span>Create a Gmail App Password (required)</h2>
             <ol>
                 <li>Go to <a href="https://myaccount.google.com/security" target="_blank" rel="noopener">Google Account → Security</a></li>
+            </ol>
+            <img src="images/image3.png" alt="Google Account Security" class="screenshot">
+
+            <ol start="2">
                 <li>Enable <strong>2-Step Verification</strong></li>
                 <li>Open <strong>App Passwords</strong></li>
+            </ol>
+            <img src="images/image16.png" alt="App Passwords option" class="screenshot">
+
+            <ol start="4">
                 <li>Create a password for <strong>Mail</strong></li>
+            </ol>
+            <img src="images/image6.png" alt="Create app password" class="screenshot">
+
+            <ol start="5">
                 <li>Use this password in Step 5</li>
             </ol>
+            <img src="images/image7.png" alt="Copy app password" class="screenshot">
 
             <h2><span class="step-number">7</span>Set your default From address</h2>
             <p>In Gmail:</p>
