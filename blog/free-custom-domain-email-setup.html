@@ -807,6 +807,8 @@
 
     <article class="article-content">
         <div class="container">
+            <p>There's a special kind of pain that comes with paying for software you barely use. Google Workspace for one email address? That's $84/year to feel professional. I found a way to get the same result for $0, and honestly, it felt like finding money in an old jacket. Here's how to do it.</p>
+
             <div class="info-box" style="margin-bottom: 2rem;">
                 <p>This setup is ideal for <strong>founders, consultants, and solo operators</strong> who want a professional email without paying for Google Workspace.</p>
             </div>
@@ -834,39 +836,37 @@
             <ol>
                 <li>Go to <a href="https://improvmx.com" target="_blank" rel="noopener">improvmx.com</a></li>
             </ol>
+
+            <p>ImprovMX is a free email forwarding service. It doesn't host your inbox or replace Gmail — it simply acts as a bridge that receives emails sent to your domain and forwards them to your existing email address. This is what makes it possible to use a professional domain email without paying for Google Workspace or managing a separate inbox.</p>
+
             <img src="images/image8.png" alt="ImprovMX homepage" class="screenshot">
 
             <ol start="2">
                 <li>Click <strong>Add domain</strong></li>
+                <li>Enter your domain (example: yourdomain.com)</li>
             </ol>
             <img src="images/image4.png" alt="Add domain button" class="screenshot">
 
-            <ol start="3">
-                <li>Enter your domain (example: yourdomain.com)</li>
-            </ol>
-            <img src="images/image2.png" alt="Enter your domain" class="screenshot">
-
             <ol start="4">
-                <li>Create a forwarding rule:
-                    <ul>
-                        <li><strong>Alias:</strong> hello (or your name)</li>
-                    </ul>
-                </li>
+                <li>Create a forwarding rule:</li>
             </ol>
-            <img src="images/image9.png" alt="Alias field" class="screenshot">
+            <p style="margin-left: 1.5rem;"><strong>Alias:</strong> hello (or your name)</p>
+            <img src="images/image2.png" alt="Alias field" class="screenshot">
 
             <p style="margin-left: 1.5rem;"><strong>Destination:</strong> yourgmail@gmail.com</p>
-            <img src="images/image10.png" alt="Destination field" class="screenshot">
+            <img src="images/image9.png" alt="Destination field" class="screenshot">
 
             <div class="success-box">
                 <p><strong>Result:</strong> hello@yourdomain.com → yourgmail@gmail.com</p>
             </div>
 
             <h2><span class="step-number">2</span>Add MX records to your domain (critical)</h2>
-            <p>Go to your domain's DNS manager and add both MX records below:</p>
+            <p>MX records (Mail Exchange records) tell the internet where emails for your domain should be delivered. When someone emails you@yourdomain.com, MX records act like routing instructions, pointing that message to the service responsible for receiving it. In this setup, they tell the world to send your email to ImprovMX, which then forwards it to Gmail.</p>
 
-            <img src="images/image14.png" alt="DNS Manager MX records" class="screenshot">
-            <img src="images/image17.png" alt="Adding MX records" class="screenshot">
+            <p>Go to your domain's DNS manager and add both MX records below.</p>
+
+            <img src="images/image10.png" alt="DNS Manager" class="screenshot">
+            <img src="images/image14.png" alt="Adding MX records" class="screenshot">
 
             <table class="dns-table">
                 <thead>
@@ -894,13 +894,15 @@
             </table>
 
             <p>Save changes.</p>
-            <img src="images/image5.png" alt="Save DNS changes" class="screenshot">
+            <img src="images/image17.png" alt="Save DNS changes" class="screenshot">
 
             <div class="info-box">
                 <p><strong>Note:</strong> DNS propagation usually takes 5–60 minutes (sometimes longer).</p>
             </div>
 
             <h2><span class="step-number">3</span>Add SPF record (avoid spam)</h2>
+            <p>An SPF record (Sender Policy Framework) tells email providers which services are allowed to send email on behalf of your domain. It helps prevent spoofing and keeps your emails from landing in spam by proving that messages sent from your domain are legitimate.</p>
+
             <p>Still in DNS, add this TXT record:</p>
 
             <table class="dns-table">
@@ -924,7 +926,7 @@
                 <p><strong>Warning:</strong> If an SPF record already exists, edit it and add <code>include:improvmx.com</code> — do not create a second SPF record.</p>
             </div>
 
-            <img src="images/image1.png" alt="SPF record in DNS" class="screenshot">
+            <img src="images/image5.png" alt="SPF record in DNS" class="screenshot">
 
             <h2><span class="step-number">4</span>Test receiving email</h2>
             <p>Send a test email from another account to:</p>
@@ -939,12 +941,12 @@
                 <li>Open Gmail</li>
                 <li>Go to <strong>Settings → See all settings</strong></li>
             </ol>
-            <img src="images/image15.png" alt="Gmail Settings" class="screenshot">
+            <img src="images/image1.png" alt="Gmail Settings" class="screenshot">
 
             <ol start="3">
                 <li>Open <strong>Accounts and Import</strong></li>
             </ol>
-            <img src="images/image13.png" alt="Accounts and Import tab" class="screenshot">
+            <img src="images/image15.png" alt="Accounts and Import tab" class="screenshot">
 
             <ol start="4">
                 <li>Under <strong>Send mail as</strong>, click <strong>Add another email address</strong></li>
@@ -955,41 +957,24 @@
                     </ul>
                 </li>
             </ol>
-            <img src="images/image12.png" alt="Add email address dialog" class="screenshot">
+            <img src="images/image13.png" alt="Add email address dialog" class="screenshot">
 
             <ol start="6">
                 <li>Check <strong>Treat as an alias</strong></li>
             </ol>
 
             <h3>SMTP settings</h3>
-            <table class="dns-table">
-                <tbody>
-                    <tr>
-                        <td>SMTP server</td>
-                        <td>smtp.gmail.com</td>
-                    </tr>
-                    <tr>
-                        <td>Username</td>
-                        <td>yourgmail@gmail.com</td>
-                    </tr>
-                    <tr>
-                        <td>Password</td>
-                        <td>Gmail App Password (next step)</td>
-                    </tr>
-                    <tr>
-                        <td>Port</td>
-                        <td>587</td>
-                    </tr>
-                    <tr>
-                        <td>TLS</td>
-                        <td>ON</td>
-                    </tr>
-                </tbody>
-            </table>
+            <p><strong>SMTP server:</strong> smtp.gmail.com</p>
+            <p><strong>Username:</strong> yourgmail@gmail.com</p>
+            <img src="images/image12.png" alt="SMTP Username" class="screenshot">
 
-            <img src="images/image11.png" alt="SMTP settings" class="screenshot">
+            <p><strong>Password:</strong> Gmail App Password (next step)</p>
+            <p><strong>Port:</strong> 587</p>
+            <p><strong>TLS:</strong> ON</p>
 
             <h2><span class="step-number">6</span>Create a Gmail App Password (required)</h2>
+            <img src="images/image11.png" alt="App Password section" class="screenshot">
+
             <ol>
                 <li>Go to <a href="https://myaccount.google.com/security" target="_blank" rel="noopener">Google Account → Security</a></li>
             </ol>
