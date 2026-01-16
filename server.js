@@ -461,6 +461,65 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'Server is running', timestamp: new Date().toISOString() });
 });
 
+// Comments directory
+const commentsDir = path.join(__dirname, 'comments');
+if (!fs.existsSync(commentsDir)) {
+    fs.mkdirSync(commentsDir, { recursive: true });
+}
+
+// Get comments for a blog post
+app.get('/api/comments/:postId', (req, res) => {
+    try {
+        const postId = req.params.postId.replace(/[^a-z0-9-]/gi, '_');
+        const filePath = path.join(commentsDir, `${postId}.json`);
+        
+        if (!fs.existsSync(filePath)) {
+            return res.json({ success: true, comments: [] });
+        }
+        
+        const comments = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        res.json({ success: true, comments });
+    } catch (error) {
+        console.error('Error reading comments:', error);
+        res.status(500).json({ success: false, message: 'Error reading comments' });
+    }
+});
+
+// Add a comment to a blog post
+app.post('/api/comments/:postId', (req, res) => {
+    try {
+        const postId = req.params.postId.replace(/[^a-z0-9-]/gi, '_');
+        const { name, text } = req.body;
+        
+        if (!name || !text) {
+            return res.status(400).json({ success: false, message: 'Name and comment are required' });
+        }
+        
+        const filePath = path.join(commentsDir, `${postId}.json`);
+        let comments = [];
+        
+        if (fs.existsSync(filePath)) {
+            comments = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        }
+        
+        const newComment = {
+            id: Date.now().toString(),
+            name: name.substring(0, 100),
+            text: text.substring(0, 2000),
+            date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
+            createdAt: new Date().toISOString()
+        };
+        
+        comments.unshift(newComment);
+        fs.writeFileSync(filePath, JSON.stringify(comments, null, 2));
+        
+        res.json({ success: true, comment: newComment });
+    } catch (error) {
+        console.error('Error saving comment:', error);
+        res.status(500).json({ success: false, message: 'Error saving comment' });
+    }
+});
+
 // Start server
 app.listen(PORT, HOST, () => {
     console.log(`

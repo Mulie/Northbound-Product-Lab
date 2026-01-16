@@ -1106,26 +1106,33 @@
             }, 2000);
         }
 
-        const COMMENTS_KEY = 'blog_comments_email_setup';
+        const POST_ID = 'free-custom-domain-email-setup';
         
-        function loadComments() {
-            const comments = JSON.parse(localStorage.getItem(COMMENTS_KEY) || '[]');
+        async function loadComments() {
             const commentsList = document.getElementById('commentsList');
             
-            if (comments.length === 0) {
-                commentsList.innerHTML = '<p class="no-comments">Be the first to leave a comment!</p>';
-                return;
-            }
-            
-            commentsList.innerHTML = comments.map(comment => `
-                <div class="comment">
-                    <div class="comment-header">
-                        <span class="comment-author">${escapeHtml(comment.name)}</span>
-                        <span class="comment-date">${comment.date}</span>
+            try {
+                const response = await fetch(`/api/comments/${POST_ID}`);
+                const data = await response.json();
+                
+                if (!data.success || data.comments.length === 0) {
+                    commentsList.innerHTML = '<p class="no-comments">Be the first to leave a comment!</p>';
+                    return;
+                }
+                
+                commentsList.innerHTML = data.comments.map(comment => `
+                    <div class="comment">
+                        <div class="comment-header">
+                            <span class="comment-author">${escapeHtml(comment.name)}</span>
+                            <span class="comment-date">${comment.date}</span>
+                        </div>
+                        <p class="comment-text">${escapeHtml(comment.text)}</p>
                     </div>
-                    <p class="comment-text">${escapeHtml(comment.text)}</p>
-                </div>
-            `).join('');
+                `).join('');
+            } catch (error) {
+                console.error('Error loading comments:', error);
+                commentsList.innerHTML = '<p class="no-comments">Unable to load comments.</p>';
+            }
         }
         
         function escapeHtml(text) {
@@ -1134,28 +1141,41 @@
             return div.innerHTML;
         }
         
-        document.getElementById('commentForm').addEventListener('submit', function(e) {
+        document.getElementById('commentForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const name = document.getElementById('commentName').value.trim();
             const text = document.getElementById('commentText').value.trim();
+            const submitBtn = this.querySelector('button');
             
             if (!name || !text) return;
             
-            const comments = JSON.parse(localStorage.getItem(COMMENTS_KEY) || '[]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Posting...';
             
-            comments.unshift({
-                name: name,
-                text: text,
-                date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
-            });
-            
-            localStorage.setItem(COMMENTS_KEY, JSON.stringify(comments));
-            
-            document.getElementById('commentName').value = '';
-            document.getElementById('commentText').value = '';
-            
-            loadComments();
+            try {
+                const response = await fetch(`/api/comments/${POST_ID}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, text })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('commentName').value = '';
+                    document.getElementById('commentText').value = '';
+                    loadComments();
+                } else {
+                    alert('Failed to post comment. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error posting comment:', error);
+                alert('Failed to post comment. Please try again.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Post Comment';
+            }
         });
         
         loadComments();
