@@ -1,0 +1,118 @@
+Free Custom Domain Email Setup
+What this gives you
+✔ you@yourdomain.com
+✔ Emails arrive in your existing Gmail inbox
+✔ You can send email from your domain
+✔ $0 cost
+Tech stack: ImprovMX (email forwarding) + Gmail (send-as)
+
+What you need 
+A domain you own
+Access to your domain’s DNS settings
+A Gmail account
+
+Step 1 — Set up free email forwarding (ImprovMX)
+Go to improvmx.com
+
+Click Add domain
+Enter your domain (example: yourdomain.com)
+
+Create a forwarding rule:
+Alias: hello (or your name)
+
+Destination: yourgmail@gmail.com
+
+Result:
+hello@yourdomain.com → yourgmail@gmail.com
+
+
+Step 2 — Add MX records to your domain (critical)
+Go to your domain’s DNS manager and add both MX records below.
+
+Type
+Host
+Value
+Priority
+MX
+@
+mx1.improvmx.com
+10
+MX
+@
+mx2.improvmx.com
+20
+
+Save changes.
+
+⏳ DNS propagation usually takes 5–60 minutes (sometimes longer).
+
+Step 3 — Add SPF record (avoid spam)
+Still in DNS, add this TXT record:
+Type
+Host
+Value
+TXT
+@
+v=spf1 include:improvmx.com ~all
+
+⚠️ If an SPF record already exists, edit it and add include:improvmx.com — do not create a second SPF record.
+
+
+Step 4 — Test receiving email
+Send a test email from another account to:
+hello@yourdomain.com
+
+If it arrives in Gmail, forwarding is working ✅
+
+Step 5 — Configure Gmail to send FROM your domain
+Open Gmail
+Go to Settings → See all settings
+
+Open Accounts and Import
+
+Under Send mail as, click Add another email address
+Enter:
+Name: Your name
+Email: hello@yourdomain.com
+
+Check Treat as an alias
+SMTP settings
+SMTP server: smtp.gmail.com
+Username: yourgmail@gmail.com
+
+Password: Gmail App Password (next step)
+Port: 587
+TLS: ON
+
+Step 6 — Create a Gmail App Password (required)
+
+Go to Google Account → Security
+
+Enable 2-Step Verification
+
+Open App Passwords
+
+Create a password for Mail
+
+Use this password in Step 5
+
+Step 7 — Set your default From address
+In Gmail:
+Go to Accounts and Import
+Under Send mail as
+Set hello@yourdomain.com as default
+
+Final result
+Every email you send:
+Comes from your domain
+Uses Gmail’s interface
+Costs nothing
+
+Troubleshooting quick checks
+Only two MX records should exist (ImprovMX)
+Only one SPF record should exist
+DNS changes may take up to 4 hours on some hosts
+
+This setup is ideal for founders, consultants, and solo operators who want a professional email without paying for Google Workspace.
+
+
