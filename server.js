@@ -461,6 +461,34 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'Server is running', timestamp: new Date().toISOString() });
 });
 
+// Get email signups (for dashboard) - protected
+app.get('/api/email-signups', requireDashboardAuth, (req, res) => {
+    try {
+        const emailsDir = path.join(submissionsDir, 'emails');
+        if (!fs.existsSync(emailsDir)) {
+            return res.json({ success: true, count: 0, signups: [] });
+        }
+        
+        const files = fs.readdirSync(emailsDir)
+            .filter(file => file.endsWith('.json'))
+            .map(file => {
+                const filePath = path.join(emailsDir, file);
+                const content = fs.readFileSync(filePath, 'utf8');
+                const data = JSON.parse(content);
+                return {
+                    id: file.replace('.json', ''),
+                    ...data
+                };
+            })
+            .sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+        
+        res.json({ success: true, count: files.length, signups: files });
+    } catch (error) {
+        console.error('Error reading email signups:', error);
+        res.status(500).json({ success: false, message: 'Error reading email signups' });
+    }
+});
+
 // Comments directory
 const commentsDir = path.join(__dirname, 'comments');
 if (!fs.existsSync(commentsDir)) {

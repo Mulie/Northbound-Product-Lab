@@ -462,6 +462,10 @@
                 <h3>This Month</h3>
                 <div class="value" id="monthCount">0</div>
             </div>
+            <div class="stat-card" style="border-left-color: #4ade80;">
+                <h3>Email Signups</h3>
+                <div class="value" id="emailCount">0</div>
+            </div>
         </div>
 
         <!-- Controls -->
@@ -485,6 +489,17 @@
                 <div class="loading">Loading submissions...</div>
             </div>
         </div>
+
+        <!-- Email Signups Section -->
+        <div class="submissions-table" style="margin-top: 2rem;">
+            <div class="table-header" style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);">
+                <h2 style="color: #2e7d32;">Email Signups (Popup)</h2>
+                <span id="emailDisplayCount" style="color: #2e7d32;">Showing 0 signups</span>
+            </div>
+            <div class="submission-list" id="emailSignupList" style="max-height: 400px;">
+                <div class="loading">Loading email signups...</div>
+            </div>
+        </div>
     </div>
 
     <!-- Modal -->
@@ -505,15 +520,73 @@
         let allSubmissions = [];
         let filteredSubmissions = [];
 
+        let allEmailSignups = [];
+
         // Load submissions on page load
         window.addEventListener('DOMContentLoaded', () => {
             loadSubmissions();
+            loadEmailSignups();
 
             // Set up search
             document.getElementById('searchInput').addEventListener('input', (e) => {
                 filterSubmissions(e.target.value);
             });
         });
+
+        async function loadEmailSignups() {
+            try {
+                const response = await fetch('/api/email-signups');
+                const data = await response.json();
+
+                if (data.success) {
+                    allEmailSignups = data.signups;
+                    document.getElementById('emailCount').textContent = data.count;
+                    displayEmailSignups(allEmailSignups);
+                }
+            } catch (error) {
+                console.error('Error loading email signups:', error);
+                document.getElementById('emailSignupList').innerHTML = '<div class="empty-state"><p>Error loading email signups</p></div>';
+            }
+        }
+
+        function displayEmailSignups(signups) {
+            const listEl = document.getElementById('emailSignupList');
+            const countEl = document.getElementById('emailDisplayCount');
+
+            countEl.textContent = `Showing ${signups.length} signup${signups.length !== 1 ? 's' : ''}`;
+
+            if (signups.length === 0) {
+                listEl.innerHTML = '<div class="empty-state"><h3>No email signups yet</h3><p>Signups from the popup will appear here</p></div>';
+                return;
+            }
+
+            listEl.innerHTML = signups.map(signup => {
+                const date = new Date(signup.submittedAt);
+                const isToday = date.toDateString() === new Date().toDateString();
+                const badge = isToday ? '<span class="badge badge-today">Today</span>' : '';
+
+                return `
+                    <div class="submission-item" style="cursor: default;">
+                        <div class="submission-header">
+                            <div>
+                                <h3>${signup.name || 'Anonymous'} ${badge}</h3>
+                                <div class="submission-meta">
+                                    <div class="meta-item">
+                                        <strong>Email:</strong> <a href="mailto:${signup.email}">${signup.email}</a>
+                                    </div>
+                                    <div class="meta-item">
+                                        <strong>Signed up:</strong> ${date.toLocaleString()}
+                                    </div>
+                                    <div class="meta-item">
+                                        <strong>Source:</strong> ${signup.source || 'popup'}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
 
         async function loadSubmissions() {
             try {
@@ -820,6 +893,7 @@
         function refreshData() {
             document.getElementById('searchInput').value = '';
             loadSubmissions();
+            loadEmailSignups();
         }
 
         function exportToCSV() {
