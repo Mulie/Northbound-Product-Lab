@@ -2192,7 +2192,7 @@
                     <h3>Northbound Product Lab</h3>
                     <p>Design audits that unlock growth through human-centered innovation.</p>
                     <div class="social-links">
-                        <a href="https://linkedin.com/company/northboundproductlab" class="social-link" aria-label="LinkedIn" target="_blank"
+                        <a href="https://www.linkedin.com/company/northbound-product-lab/" class="social-link" aria-label="LinkedIn" target="_blank"
                             rel="noopener noreferrer">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                                 <path
@@ -2479,14 +2479,19 @@
                 const result = await response.json();
 
                 if (response.ok) {
+                    // Hide all form steps
+                    document.querySelectorAll('.form-step').forEach(step => {
+                        step.classList.remove('active');
+                        step.style.display = 'none';
+                    });
+                    // Hide progress indicator
+                    document.querySelector('.progress-bar').style.display = 'none';
+                    // Show success message
                     statusMessage.className = 'status-message status-success';
-                    statusMessage.textContent = 'Application submitted successfully! We\'ll be in touch within 48 hours.';
+                    statusMessage.innerHTML = '<h3 style="margin-bottom: 1rem; color: #10b981;">Application Submitted!</h3><p>Thank you for your application. We\'ll review it and get back to you within 48 hours.</p>';
                     statusMessage.style.display = 'block';
-                    this.reset();
-                    uploadedFiles = [];
-                    renderFileList();
-                    currentStep = 1;
-                    showStep(1);
+                    statusMessage.style.textAlign = 'center';
+                    statusMessage.style.padding = '3rem 2rem';
                 } else {
                     throw new Error(result.message || 'Submission failed');
                 }
@@ -2694,6 +2699,21 @@
                     setTimeout(hidePopup, 2000);
                 }
             });
+        })();
+    </script>
+
+    <!-- Page View Tracking -->
+    <script>
+        (function() {
+            fetch('/api/track-visit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    page: window.location.pathname,
+                    title: document.title,
+                    referrer: document.referrer || 'direct'
+                })
+            }).catch(() => {});
         })();
     </script>
 </body>

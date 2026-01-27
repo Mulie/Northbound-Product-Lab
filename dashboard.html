@@ -1374,99 +1374,43 @@
                     updateTopPages(data.topPages);
                     updateTopReferrers(data.referrers);
                 } else {
-                    // Use sample data if API not available
-                    loadSampleTrafficData(days);
+                    showNoTrafficData();
                 }
             } catch (error) {
-                console.log('Traffic API not available, using sample data');
-                loadSampleTrafficData(days);
+                console.error('Error loading traffic data:', error);
+                showNoTrafficData();
             }
         }
 
-        function loadSampleTrafficData(days) {
-            // Generate sample data for demonstration
-            const labels = [];
-            const pageViews = [];
-            const visitors = [];
+        function showNoTrafficData() {
+            // Show zeros for stats
+            document.getElementById('totalPageViews').textContent = '0';
+            document.getElementById('uniqueVisitors').textContent = '0';
+            document.getElementById('bounceRate').textContent = '0%';
+            document.getElementById('avgSession').textContent = '0 pages';
 
-            for (let i = days - 1; i >= 0; i--) {
-                const date = new Date();
-                date.setDate(date.getDate() - i);
-                labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+            document.getElementById('pageViewsChange').textContent = 'No previous data';
+            document.getElementById('pageViewsChange').className = 'change';
+            document.getElementById('visitorsChange').textContent = 'No previous data';
+            document.getElementById('visitorsChange').className = 'change';
+            document.getElementById('bounceChange').textContent = 'No previous data';
+            document.getElementById('bounceChange').className = 'change';
+            document.getElementById('sessionChange').textContent = 'No previous data';
+            document.getElementById('sessionChange').className = 'change';
 
-                // Generate realistic-looking random data
-                const baseViews = 50 + Math.floor(Math.random() * 100);
-                const weekendFactor = [0, 6].includes(date.getDay()) ? 0.6 : 1;
-                pageViews.push(Math.floor(baseViews * weekendFactor));
-                visitors.push(Math.floor((baseViews * 0.7) * weekendFactor));
-            }
-
-            // Update stats
-            const totalViews = pageViews.reduce((a, b) => a + b, 0);
-            const totalVisitors = visitors.reduce((a, b) => a + b, 0);
-
-            document.getElementById('totalPageViews').textContent = totalViews.toLocaleString();
-            document.getElementById('uniqueVisitors').textContent = totalVisitors.toLocaleString();
-            document.getElementById('bounceRate').textContent = '42%';
-            document.getElementById('avgSession').textContent = '2:34';
-
-            document.getElementById('pageViewsChange').textContent = '+12% vs last week';
-            document.getElementById('pageViewsChange').className = 'change positive';
-            document.getElementById('visitorsChange').textContent = '+8% vs last week';
-            document.getElementById('visitorsChange').className = 'change positive';
-            document.getElementById('bounceChange').textContent = '-3% vs last week';
-            document.getElementById('bounceChange').className = 'change positive';
-            document.getElementById('sessionChange').textContent = '+15% vs last week';
-            document.getElementById('sessionChange').className = 'change positive';
-
-            // Update daily chart
-            dailyTrafficChart.data.labels = labels;
-            dailyTrafficChart.data.datasets[0].data = pageViews;
-            dailyTrafficChart.data.datasets[1].data = visitors;
+            // Show empty chart
+            dailyTrafficChart.data.labels = [];
+            dailyTrafficChart.data.datasets[0].data = [];
+            dailyTrafficChart.data.datasets[1].data = [];
             dailyTrafficChart.update();
 
-            // Update sources chart with sample data
-            const sources = [
-                Math.floor(totalViews * 0.35),  // Direct
-                Math.floor(totalViews * 0.30),  // Google
-                Math.floor(totalViews * 0.15),  // LinkedIn
-                Math.floor(totalViews * 0.12),  // Referral
-                Math.floor(totalViews * 0.08)   // Social
-            ];
-            trafficSourcesChart.data.datasets[0].data = sources;
+            // Show empty sources chart
+            trafficSourcesChart.data.datasets[0].data = [0, 0, 0, 0, 0];
             trafficSourcesChart.update();
 
-            // Update top pages
-            const topPages = [
-                { page: '/', name: 'Homepage', views: Math.floor(totalViews * 0.40) },
-                { page: '/services.html', name: 'Services', views: Math.floor(totalViews * 0.20) },
-                { page: '/about.html', name: 'About', views: Math.floor(totalViews * 0.15) },
-                { page: '/blog.html', name: 'Blog', views: Math.floor(totalViews * 0.12) },
-                { page: '/contact.html', name: 'Contact', views: Math.floor(totalViews * 0.08) }
-            ];
-
-            document.getElementById('topPagesList').innerHTML = topPages.map(p => `
-                <li>
-                    <span class="page-name">📄 ${p.name}</span>
-                    <span class="page-views">${p.views.toLocaleString()}</span>
-                </li>
-            `).join('');
-
-            // Update top referrers
-            const referrers = [
-                { source: 'google.com', visits: Math.floor(totalViews * 0.30) },
-                { source: 'linkedin.com', visits: Math.floor(totalViews * 0.15) },
-                { source: 'twitter.com', visits: Math.floor(totalViews * 0.08) },
-                { source: 'github.com', visits: Math.floor(totalViews * 0.05) },
-                { source: 'Direct', visits: Math.floor(totalViews * 0.35) }
-            ];
-
-            document.getElementById('topReferrersList').innerHTML = referrers.map(r => `
-                <li>
-                    <span class="page-name">🔗 ${r.source}</span>
-                    <span class="page-views">${r.visits.toLocaleString()}</span>
-                </li>
-            `).join('');
+            // Show no data messages
+            document.getElementById('topPagesList').innerHTML = '<li><span class="page-name">No page views recorded yet</span></li>';
+            document.getElementById('topReferrersList').innerHTML = '<li><span class="page-name">No referrer data yet</span></li>';
         }
 
         function updateTrafficStats(stats) {

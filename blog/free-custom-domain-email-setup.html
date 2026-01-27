@@ -1180,10 +1180,25 @@
                 submitBtn.textContent = 'Post Comment';
             }
         });
-        
+
         loadComments();
     </script>
     <div id="toast" class="toast">Link copied!</div>
+
+    <!-- Page View Tracking -->
+    <script>
+        (function() {
+            fetch('/api/track-visit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    page: window.location.pathname,
+                    title: document.title,
+                    referrer: document.referrer || 'direct'
+                })
+            }).catch(() => {});
+        })();
+    </script>
 </body>
 
 </html>

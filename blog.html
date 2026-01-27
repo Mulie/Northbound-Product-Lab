@@ -574,7 +574,7 @@
                     <h4 style="font-size: 1rem; margin-bottom: 1rem; font-weight: 600;">Contact</h4>
                     <p style="color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">hello@northboundproductlab.com</p>
                     <div style="margin-top: 1rem;">
-                        <a href="https://linkedin.com/company/northboundproductlab" target="_blank" rel="noopener" style="color: rgba(255,255,255,0.7); text-decoration: none; margin-right: 1rem;"
+                        <a href="https://www.linkedin.com/company/northbound-product-lab/" target="_blank" rel="noopener" style="color: rgba(255,255,255,0.7); text-decoration: none; margin-right: 1rem;"
                             aria-label="LinkedIn">
                             <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
                                 <path
@@ -705,6 +705,21 @@
                 navLinks.classList.remove('active');
             });
         });
+    </script>
+
+    <!-- Page View Tracking -->
+    <script>
+        (function() {
+            fetch('/api/track-visit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    page: window.location.pathname,
+                    title: document.title,
+                    referrer: document.referrer || 'direct'
+                })
+            }).catch(() => {});
+        })();
     </script>
 </body>
 
