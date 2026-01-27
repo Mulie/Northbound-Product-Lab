@@ -371,6 +371,43 @@ app.delete('/api/submissions/:id', requireDashboardAuth, (req, res) => {
     }
 });
 
+// Contact form submissions
+app.post('/api/contact', (req, res) => {
+    try {
+        const { name, email, subject, message } = req.body;
+
+        if (!name || !email || !message) {
+            return res.status(400).json({ success: false, message: 'Name, email, and message are required' });
+        }
+
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const contactDir = path.join(submissionsDir, 'contacts');
+
+        if (!fs.existsSync(contactDir)) {
+            fs.mkdirSync(contactDir, { recursive: true });
+        }
+
+        const fileName = `contact_${timestamp}.json`;
+        const filePath = path.join(contactDir, fileName);
+
+        const contact = {
+            name,
+            email,
+            subject: subject || '',
+            message,
+            submittedAt: new Date().toISOString()
+        };
+
+        fs.writeFileSync(filePath, JSON.stringify(contact, null, 2));
+        console.log(`New contact submission from: ${email}`);
+
+        res.json({ success: true, message: 'Message sent successfully' });
+    } catch (error) {
+        console.error('Contact form error:', error);
+        res.status(500).json({ success: false, message: 'Error saving message' });
+    }
+});
+
 // Email signup from popup
 app.post('/api/email-signup', (req, res) => {
     try {

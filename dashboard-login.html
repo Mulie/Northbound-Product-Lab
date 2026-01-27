@@ -133,17 +133,35 @@
             color: #ff6b35;
         }
 
+        .back-link a:focus-visible,
+        .login-btn:focus-visible,
+        .form-group input:focus-visible {
+            outline: 2px solid #ff6b35;
+            outline-offset: 2px;
+        }
+
         .lock-icon {
             text-align: center;
-            font-size: 3rem;
             margin-bottom: 1rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .lock-icon svg {
+            width: 48px;
+            height: 48px;
+            color: #ff6b35;
         }
     </style>
 </head>
 <body>
     <div class="login-container">
         <div class="logo">
-            <div class="lock-icon">🔒</div>
+            <div class="lock-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+            </div>
             <h1>Northbound <span>Product Lab</span></h1>
         </div>
         
@@ -165,7 +183,7 @@
         </form>
 
         <div class="back-link">
-            <a href="/Index.html">← Back to website</a>
+            <a href="/">← Back to website</a>
         </div>
     </div>
 

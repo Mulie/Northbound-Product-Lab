@@ -5,8 +5,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="/attached_assets/NPL_Logo_HD_ICON_1764956290133.png">
+    <!-- Google Fonts -->
+    <!-- Removed Google Fonts to match other pages -->
     <title>Northbound Product Lab - Product Strategy That Drives Growth</title>
+    <meta name="description" content="Northbound Product Lab helps growth-stage companies unlock revenue through design audits, UX optimization, and product strategy consulting.">
     <style>
+        :root {
+            /* Colors */
+            --bg-dark: #050505;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-muted: rgba(255, 255, 255, 0.5);
+            --primary: #ff6b35;
+            --primary-gradient: linear-gradient(135deg, #ff6b35 0%, #ff9f43 100%);
+            --border-light: rgba(255, 255, 255, 0.1);
+
+            /* Typography */
+            /* Reverted to system fonts */
+
+            /* Spacing */
+            --container-padding: 24px;
+            --section-spacing: 8rem;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -16,15 +39,16 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
             line-height: 1.6;
-            color: #1a1a1a;
-            background: #ffffff;
+            color: var(--text-primary);
+            background: var(--bg-dark);
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 var(--container-padding);
         }
 
         /* Skip to Main Content Link */
@@ -47,11 +71,13 @@
 
         /* Header with Beams Background */
         header {
-            background: #0a0a0a;
+            background: var(--bg-dark);
             padding: 2rem 0 6rem;
             position: relative;
             min-height: 100vh;
             overflow: hidden;
+            display: flex;
+            align-items: center;
         }
 
         .beams-canvas {
@@ -61,6 +87,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
+            z-index: 1;
         }
 
         .beams-overlay {
@@ -69,13 +96,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(10, 10, 10, 0.1);
+            background: radial-gradient(circle at 50% 50%, rgba(255, 107, 53, 0.05), transparent 70%);
             pointer-events: none;
+            z-index: 2;
         }
 
         header .container {
             position: relative;
             z-index: 10;
+            width: 100%;
         }
 
         /* Sticky Navigation */
@@ -85,24 +114,31 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            transition: background 0.3s ease, box-shadow 0.3s ease;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0);
+            transition: all 0.4s ease;
         }
 
         .nav-wrapper.scrolled {
-            background: rgba(10, 10, 10, 0.98);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+            background: rgba(5, 5, 5, 0.95);
+            border-bottom: 1px solid var(--border-light);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
         }
 
         .nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.5rem 24px;
+            padding: 1rem 24px;
             max-width: 1200px;
             margin: 0 auto;
+            transition: padding 0.3s ease;
+        }
+
+        .nav-wrapper.scrolled .nav {
+            padding: 0.75rem 24px;
         }
 
         .logo {
@@ -110,52 +146,70 @@
             align-items: center;
             text-decoration: none;
         }
-        
+
         .logo-img {
-            height: 80px;
+            height: 48px;
             width: auto;
             transition: height 0.3s ease;
         }
 
-        .nav-wrapper.scrolled .logo-img {
-            height: 60px;
-        }
-
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 2.5rem;
             align-items: center;
         }
 
         .nav-link {
-            font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            color: var(--text-secondary);
             text-decoration: none;
             transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
         }
 
         .nav-link:hover {
-            color: #ff6b35;
+            color: #ffffff;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
         }
 
         .nav-link.active {
-            color: #ff6b35;
+            color: #ffffff;
+        }
+
+        .nav-link.active::after {
+            width: 100%;
         }
 
         .admin-link {
-            font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            color: var(--text-primary);
             text-decoration: none;
-            padding: 0.5rem 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
+            padding: 0.6rem 1.4rem;
+            border: 1px solid var(--border-light);
+            border-radius: 100px;
             transition: all 0.3s ease;
+            font-weight: 500;
         }
 
         .admin-link:hover {
-            color: #ff6b35;
-            border-color: #ff6b35;
-            text-decoration: none;
+            color: white;
+            border-color: var(--primary);
+            background: rgba(255, 107, 53, 0.1);
         }
 
         .hero {
@@ -164,108 +218,163 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            min-height: calc(100vh - 200px);
-            padding-top: 100px;
+            min-height: calc(100vh - 100px);
+            padding-top: 60px;
+            position: relative;
+            z-index: 2;
         }
 
         .hero-subtitle {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 500;
+            letter-spacing: 3px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .hero-subtitle::before {
+            content: '';
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
         }
 
         .hero-title {
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 300;
-            line-height: 0.9;
+            font-size: clamp(3.5rem, 8vw, 7rem);
+            font-weight: 600;
+            line-height: 0.95;
             margin-bottom: 2rem;
             color: #ffffff;
+            letter-spacing: -2px;
         }
 
         .hero-title .accent {
             font-weight: 700;
-            color: #ff6b35;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: var(--primary);
+            /* Fallback */
         }
 
         .hero-description {
-            font-size: 1.5rem;
-            line-height: 1.4;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 3rem;
-            max-width: 600px;
+            font-size: 1.25rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 3.5rem;
+            max-width: 580px;
+            font-weight: 300;
         }
 
         .hero-cta {
-            background: #ffffff;
-            color: #0a0a0a;
-            padding: 18px 40px;
+            background: var(--primary-gradient);
+            color: white;
+            padding: 18px 42px;
             border: none;
-            border-radius: 0;
+            border-radius: 100px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
             text-transform: uppercase;
             letter-spacing: 1px;
             width: auto;
             max-width: fit-content;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-cta::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(255, 255, 255, 0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .hero-cta:hover {
-            background: #ff6b35;
-            color: #ffffff;
-            transform: translateY(-2px);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.4);
+        }
+
+        .hero-cta:hover::after {
+            opacity: 1;
         }
 
         /* Section Styles */
         .section {
-            padding: 6rem 0;
+            padding: var(--section-spacing) 0;
+            position: relative;
         }
 
         .section-number {
-            font-size: 1rem;
-            color: #ff6b35;
+            font-size: 0.9rem;
+            color: var(--primary);
             font-weight: 600;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-number::before {
+            content: '';
+            width: 30px;
+            height: 1px;
+            background: var(--primary);
+            opacity: 0.5;
         }
 
         .section-title {
             font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 300;
+            font-weight: 600;
             margin-bottom: 2rem;
-            color: #1a1a1a;
+            color: var(--text-primary);
             line-height: 1.1;
+            letter-spacing: -1px;
         }
 
         .section-description {
-            font-size: 1.3rem;
-            color: #666;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
             margin-bottom: 4rem;
-            max-width: 700px;
+            max-width: 600px;
+            font-weight: 300;
         }
 
         /* What We Do */
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 4rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
             margin-top: 4rem;
         }
 
         .service-card {
-            background: #fafafa;
-            padding: 3rem 2rem;
-            transition: all 0.4s ease;
-            border: none;
+            background: var(--bg-card);
+            padding: 3rem 2.5rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(10px);
         }
 
         .service-card::before {
@@ -274,80 +383,108 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 4px;
-            background: #ff6b35;
-            transform: scaleX(0);
-            transition: transform 0.4s ease;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(255, 107, 53, 0.1), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
-        .service-card:hover::before {
-            transform: scaleX(1);
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: scaleX(0);
+            transition: transform 0.6s ease;
         }
 
         .service-card:hover {
-            transform: translateY(-3px);
-            background: #ffffff;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            transform: translateY(-8px);
+            background: var(--bg-card-hover);
+            border-color: rgba(255, 107, 53, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-card:hover::after {
+            transform: scaleX(1);
         }
 
         .service-number {
-            font-size: 3rem;
-            font-weight: 100;
-            color: #ff6b35;
-            margin-bottom: 1rem;
+            font-size: 4rem;
+            font-weight: 700;
+            color: rgba(255, 107, 53, 0.4);
+            margin-bottom: 1.5rem;
+            line-height: 1;
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover .service-number {
+            color: rgba(255, 107, 53, 0.6);
         }
 
         .service-card h3 {
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 1rem;
-            color: #1a1a1a;
+            color: var(--text-primary);
         }
 
         .service-card p {
-            color: #666;
-            line-height: 1.6;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 0.95rem;
         }
 
         /* Who Section */
         .who-section {
-            background: #1a1a1a;
-            color: white;
+            background: inherit;
+            /* Use global dark background */
         }
 
         .who-section .section-title {
-            color: white;
+            color: var(--text-primary);
         }
 
         .who-section .section-description {
-            color: #ccc;
+            color: var(--text-secondary);
         }
 
         .who-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 3rem;
+            gap: 2rem;
             margin-top: 4rem;
         }
 
         .who-card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
+            background: var(--bg-card);
+            padding: 2.5rem;
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            transition: all 0.4s ease;
             cursor: pointer;
             position: relative;
+            backdrop-filter: blur(5px);
         }
 
         .who-card:hover {
-            background: rgba(255, 107, 53, 0.1);
-            border-color: #ff6b35;
-            transform: translateY(-2px);
+            background: var(--bg-card-hover);
+            border-color: rgba(255, 107, 53, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
         }
 
         .who-card.expanded {
-            background: rgba(255, 107, 53, 0.15);
-            border-color: #ff6b35;
+            background: rgba(255, 107, 53, 0.08);
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.1);
         }
 
         .who-icon {
@@ -355,10 +492,11 @@
             margin-bottom: 1.5rem;
             display: inline-block;
             transition: transform 0.4s ease;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
         }
 
         .who-card:hover .who-icon {
-            transform: scale(1.05);
+            transform: scale(1.1);
         }
 
         .who-card h3 {
@@ -368,37 +506,48 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            color: var(--text-primary);
         }
 
         .who-card-toggle {
             font-size: 0.875rem;
-            color: #ff6b35;
+            color: var(--primary);
             transition: transform 0.3s ease;
             display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .who-card.expanded .who-card-toggle {
             transform: rotate(180deg);
+            background: var(--primary);
+            color: white;
         }
 
         .who-card p {
-            color: #ccc;
+            color: var(--text-secondary);
             line-height: 1.6;
+            margin-bottom: 0;
         }
 
         .who-card-details {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.4s ease, opacity 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 0;
-            border-top: 1px solid rgba(255, 255, 255, 0);
+            border-top: 1px solid transparent;
             margin-top: 0;
         }
 
         .who-card.expanded .who-card-details {
-            max-height: 500px;
+            max-height: 600px;
             opacity: 1;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             margin-top: 1.5rem;
             padding-top: 1.5rem;
         }
@@ -410,28 +559,31 @@
         }
 
         .who-card-details li {
-            color: #ddd;
+            color: var(--text-secondary);
             padding: 0.5rem 0;
-            padding-left: 1.5rem;
+            padding-left: 1.75rem;
             position: relative;
             line-height: 1.5;
+            font-size: 0.95rem;
         }
 
         .who-card-details li::before {
             content: '✓';
-            color: #ff6b35;
+            color: var(--primary);
             position: absolute;
             left: 0;
             font-weight: bold;
         }
 
         .who-card-details .highlight {
-            background: rgba(255, 107, 53, 0.2);
-            padding: 1rem;
-            margin-top: 1rem;
-            border-radius: 4px;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(255, 107, 53, 0.05));
+            padding: 1.25rem;
+            margin-top: 1.5rem;
+            border-radius: 8px;
             font-style: italic;
-            color: #fff;
+            color: white;
+            border-left: 3px solid var(--primary);
+            font-size: 0.9rem;
         }
 
         /* Process */
@@ -457,15 +609,18 @@
         }
 
         .step-visual {
-            background: #fafafa;
-            height: 250px;
+            background: var(--bg-card);
+            height: 300px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4rem;
-            color: #ff6b35;
+            font-size: 5rem;
+            color: var(--primary);
             position: relative;
             overflow: hidden;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-light);
         }
 
         .step-visual img {
@@ -475,6 +630,12 @@
             position: absolute;
             top: 0;
             left: 0;
+            opacity: 0.7;
+            transition: transform 0.6s ease;
+        }
+
+        .process-step:hover .step-visual img {
+            transform: scale(1.1);
         }
 
         .step-visual .step-overlay {
@@ -483,28 +644,30 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(255, 107, 53, 0.15) 0%, rgba(0, 0, 0, 0.3) 100%);
+            background: radial-gradient(circle at center, rgba(255, 107, 53, 0.2), rgba(0, 0, 0, 0.6));
             z-index: 1;
+            backdrop-filter: blur(2px);
         }
 
         .step-number {
             position: absolute;
-            top: 1rem;
-            left: 1rem;
-            font-size: 1rem;
-            font-weight: 600;
+            top: 1.5rem;
+            left: 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
             color: #ffffff;
             z-index: 2;
-            background: rgba(255, 107, 53, 0.9);
-            padding: 0.5rem 0.75rem;
-            border-radius: 4px;
+            background: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
         }
 
         .step-content h3 {
-            font-size: 2rem;
+            font-size: 2.25rem;
             font-weight: 600;
             margin-bottom: 1rem;
-            color: #1a1a1a;
+            color: var(--text-primary);
         }
 
         .step-content p {
@@ -516,46 +679,73 @@
         /* Testimonials */
         .testimonials-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
             margin-top: 4rem;
         }
 
         .testimonial {
-            background: #fafafa;
+            background: var(--bg-card);
             padding: 3rem;
             position: relative;
-            border-left: 4px solid #ff6b35;
+            border-left: 2px solid var(--primary);
+            border-radius: 0 16px 16px 0;
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--border-light);
+            border-left: 4px solid var(--primary);
+            transition: transform 0.3s ease;
+        }
+
+        .testimonial:hover {
+            transform: translateY(-5px);
+            background: var(--bg-card-hover);
         }
 
         .quote {
-            font-size: 1.4rem;
-            line-height: 1.5;
+            font-size: 1.25rem;
+            line-height: 1.6;
             margin-bottom: 2rem;
-            color: #1a1a1a;
+            color: var(--text-primary);
             font-weight: 300;
+            font-style: italic;
         }
 
         .author {
             font-weight: 600;
-            color: #1a1a1a;
-            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            letter-spacing: 0.5px;
         }
 
         .role {
-            color: #666;
-            font-size: 0.9rem;
+            color: var(--primary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
         }
 
         /* Application - Dark Theme for Better Contrast */
         .application {
-            background: #1a1a1a;
+            background: linear-gradient(to bottom, var(--bg-dark), #000000);
             color: white;
-            padding: 6rem 0;
+            padding: 8rem 0;
+            position: relative;
+        }
+
+        .application::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: radial-gradient(circle at center, var(--primary), transparent 70%);
+            opacity: 0.3;
         }
 
         .application .section-number {
-            color: #ff6b35;
+            color: var(--primary);
         }
 
         .application .section-title {
@@ -563,39 +753,44 @@
         }
 
         .application .section-description {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.7);
         }
 
         .form-container {
-            background: #252525;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(20px);
             padding: 0;
-            margin-top: 3rem;
+            margin-top: 4rem;
             max-width: 900px;
             margin-left: auto;
             margin-right: auto;
             max-height: 0;
             overflow: hidden;
             opacity: 0;
-            transition: all 0.4s ease-out;
-            transform: translateY(-5px);
-            border-radius: 8px;
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            transform: translateY(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.5);
         }
 
         .form-container.expanded {
             max-height: 5000px;
             opacity: 1;
             transform: translateY(0);
-            padding: 3rem;
+            padding: 4rem;
+            border-color: rgba(255, 107, 53, 0.2);
         }
 
         .form-intro {
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
             padding-bottom: 2rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .form-intro h3 {
-            font-size: 1.5rem;
+            font-family: var(--font-display);
+            font-size: 1.75rem;
             margin-bottom: 1rem;
             color: white;
             font-weight: 600;
@@ -604,7 +799,7 @@
         .form-intro p {
             margin-bottom: 1rem;
             line-height: 1.6;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.7);
         }
 
         /* Multi-Step Form Progress */
@@ -612,7 +807,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
             position: relative;
         }
 
@@ -623,7 +818,7 @@
             left: 0;
             right: 0;
             height: 2px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
             transform: translateY(-50%);
             z-index: 1;
         }
@@ -638,23 +833,25 @@
         }
 
         .progress-step-number {
-            width: 40px;
-            height: 40px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            background: #333;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: #1a1a1a;
+            border: 2px solid rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            color: rgba(255, 255, 255, 0.5);
-            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.3);
+            transition: all 0.4s ease;
+            font-family: var(--font-display);
         }
 
         .progress-step.active .progress-step-number {
-            background: #ff6b35;
-            border-color: #ff6b35;
+            background: var(--primary);
+            border-color: var(--primary);
             color: white;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.4);
         }
 
         .progress-step.completed .progress-step-number {
@@ -665,15 +862,17 @@
 
         .progress-step-label {
             font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.5);
-            margin-top: 0.5rem;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 0.75rem;
             text-align: center;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
+            font-weight: 500;
+            transition: color 0.3s ease;
         }
 
         .progress-step.active .progress-step-label {
-            color: #ff6b35;
+            color: var(--primary);
         }
 
         .progress-step.completed .progress-step-label {
@@ -683,6 +882,19 @@
         /* Form Steps */
         .form-step {
             display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .form-step.active {
@@ -690,27 +902,28 @@
         }
 
         .form-section {
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
         }
 
         .form-section h4 {
-            font-size: 1.3rem;
+            font-family: var(--font-display);
+            font-size: 1.25rem;
             color: white;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
             font-weight: 600;
         }
 
         .section-note {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.5);
             margin-bottom: 1.5rem;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
         .char-count {
             font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.4);
             text-align: right;
-            margin-top: 0.25rem;
+            margin-top: 0.5rem;
         }
 
         .checkbox-group {
@@ -722,59 +935,95 @@
         .checkbox-label {
             display: flex;
             align-items: flex-start;
-            gap: 0.75rem;
+            gap: 1rem;
             cursor: pointer;
-            color: rgba(255, 255, 255, 0.9);
-            line-height: 1.4;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+            transition: color 0.3s ease;
+        }
+
+        .checkbox-label:hover {
+            color: white;
         }
 
         .checkbox-label input[type="checkbox"] {
             width: auto;
             margin: 0;
+            display: none;
+            /* Custom checkbox */
         }
 
         .checkmark {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.5);
+            width: 22px;
+            height: 22px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
             background: transparent;
             flex-shrink: 0;
             margin-top: 2px;
+            border-radius: 4px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-label input[type="checkbox"]:checked+.checkmark {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .checkmark::after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 3px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .checkbox-label input[type="checkbox"]:checked+.checkmark::after {
+            opacity: 1;
         }
 
         .file-upload-area {
-            border: 2px dashed rgba(255, 255, 255, 0.3);
-            padding: 2rem;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            padding: 3rem;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
         }
 
         .file-upload-area:hover {
-            border-color: #ff6b35;
-            background: rgba(255, 107, 53, 0.1);
+            border-color: var(--primary);
+            background: rgba(255, 107, 53, 0.05);
         }
 
         .file-upload-area.dragover {
-            border-color: #ff6b35;
-            background: rgba(255, 107, 53, 0.15);
+            border-color: var(--primary);
+            background: rgba(255, 107, 53, 0.1);
+            transform: scale(1.02);
         }
 
         .file-upload-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
             opacity: 0.8;
+            color: var(--primary);
         }
 
         .file-upload-text {
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 0.5rem;
+            color: white;
+            margin-bottom: 0.75rem;
+            font-weight: 500;
         }
 
         .file-upload-hint {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.5);
             font-size: 0.85rem;
         }
 
@@ -783,7 +1032,7 @@
         }
 
         .file-list {
-            margin-top: 1rem;
+            margin-top: 1.5rem;
             text-align: left;
         }
 
@@ -791,15 +1040,16 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0.75rem 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            margin-bottom: 0.5rem;
-            border-radius: 4px;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .file-item-name {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 0.9rem;
+            color: white;
+            font-size: 0.95rem;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -808,46 +1058,57 @@
         }
 
         .file-item-size {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
             margin-right: 1rem;
         }
 
         .file-remove {
-            background: none;
-            border: none;
-            color: #ff6b35;
-            cursor: pointer;
+            background: padding-box;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.6);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1.2rem;
-            padding: 0;
             line-height: 1;
+            transition: all 0.2s ease;
+            cursor: pointer;
         }
 
         .file-remove:hover {
-            color: #ff4500;
+            color: white;
+            background: #f44336;
+            border-color: #f44336;
         }
 
         .form-toggle {
-            background: #ff6b35;
+            background: var(--primary-gradient);
             border: none;
             color: white;
-            padding: 18px 40px;
-            font-size: 1rem;
+            padding: 20px 48px;
+            font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-top: 2rem;
-            display: inline-block;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
             margin-left: auto;
             margin-right: auto;
+            border-radius: 100px;
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
         }
 
         .form-toggle:hover {
-            background: #ff8555;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.4);
         }
 
         .form-grid {
@@ -857,7 +1118,7 @@
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .form-group.full-width {
@@ -866,37 +1127,39 @@
 
         .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
         }
 
         .form-group input,
         .form-group select,
         .form-group textarea {
             width: 100%;
-            padding: 15px;
-            border: none;
-            background: white;
-            color: #1a1a1a;
+            padding: 16px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
             font-size: 1rem;
-            border: 2px solid transparent;
-            transition: border-color 0.3s ease;
-            border-radius: 4px;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            font-family: var(--font-body);
         }
 
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #ff6b35;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
         }
 
         .form-group textarea {
-            height: 120px;
+            height: 140px;
             resize: vertical;
         }
 
@@ -905,47 +1168,52 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 2rem;
+            margin-top: 3rem;
             padding-top: 2rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .form-nav-btn {
-            padding: 14px 30px;
+            padding: 16px 32px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
-            border-radius: 4px;
+            border-radius: 100px;
         }
 
         .form-nav-btn.prev {
             background: transparent;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.8);
         }
 
         .form-nav-btn.prev:hover {
             border-color: white;
-            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .form-nav-btn.next {
-            background: #ff6b35;
+            background: var(--primary);
             border: none;
             color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
         }
 
         .form-nav-btn.next:hover {
             background: #ff8555;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
         }
 
         .form-nav-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
         }
 
         .submit-container {
@@ -954,9 +1222,9 @@
         }
 
         .submit-btn {
-            background: #ff6b35 !important;
+            background: var(--primary-gradient) !important;
             color: white !important;
-            padding: 20px 50px !important;
+            padding: 20px 60px !important;
             border: none !important;
             font-size: 1.1rem !important;
             font-weight: 600 !important;
@@ -964,15 +1232,15 @@
             transition: all 0.3s ease !important;
             text-transform: uppercase !important;
             letter-spacing: 2px !important;
-            border-radius: 4px !important;
-            min-width: 250px !important;
+            border-radius: 100px !important;
+            min-width: 280px !important;
             display: inline-block !important;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3) !important;
         }
 
         .submit-btn:hover {
-            background: #ff8555 !important;
-            transform: translateY(-1px) !important;
-            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3) !important;
+            transform: translateY(-4px) !important;
+            box-shadow: 0 20px 50px rgba(255, 107, 53, 0.4) !important;
         }
 
         .submit-btn:disabled {
@@ -984,102 +1252,125 @@
         .status-message {
             padding: 1rem;
             margin: 1rem 0;
-            border-radius: 4px;
+            border-radius: 8px;
             text-align: center;
             font-weight: 500;
         }
 
         .status-success {
-            background: rgba(76, 175, 80, 0.2);
-            color: #4caf50;
-            border: 1px solid #4caf50;
+            background: rgba(76, 175, 80, 0.1);
+            color: #4ade80;
+            border: 1px solid rgba(76, 175, 80, 0.3);
         }
 
         .status-error {
-            background: rgba(244, 67, 54, 0.2);
-            color: #f44336;
-            border: 1px solid #f44336;
+            background: rgba(244, 67, 54, 0.1);
+            color: #f87171;
+            border: 1px solid rgba(244, 67, 54, 0.3);
         }
 
         /* Enhanced Footer */
         .footer {
-            background: #0a0a0a;
+            background: #050505;
             color: white;
-            padding: 4rem 0 2rem;
+            padding: 6rem 0 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-family: var(--font-body);
         }
 
         .footer-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 3rem;
-            margin-bottom: 3rem;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 5rem;
         }
 
         .footer-section h3 {
-            font-size: 1.2rem;
+            font-family: var(--font-display);
+            font-size: 1.5rem;
             margin-bottom: 1.5rem;
             font-weight: 600;
             color: white;
+            letter-spacing: -0.5px;
         }
 
         .footer-section h4 {
-            font-size: 1rem;
-            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
             font-weight: 600;
             color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
         }
 
         .footer-section p {
-            color: #999;
+            color: rgba(255, 255, 255, 0.6);
             line-height: 1.6;
+            margin-bottom: 1rem;
         }
 
         .footer-section ul {
             list-style: none;
             padding: 0;
+            margin: 0;
         }
 
         .footer-section li {
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
         }
 
         .footer-section a {
-            color: #999;
+            color: rgba(255, 255, 255, 0.6);
             text-decoration: none;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
         }
 
         .footer-section a:hover {
-            color: #ff6b35;
+            color: var(--primary);
+            padding-left: 5px;
         }
 
         .footer-contact-email {
-            color: #ff6b35;
+            color: white !important;
             font-weight: 500;
+            border-bottom: 1px solid rgba(255, 107, 53, 0.3);
+            padding-bottom: 2px;
+        }
+
+        .footer-contact-email:hover {
+            border-color: var(--primary);
+            padding-left: 0 !important;
         }
 
         .social-links {
             display: flex;
             gap: 1rem;
-            margin-top: 1rem;
+            margin-top: 2rem;
         }
 
         .social-link {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             text-decoration: none;
             transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .social-link:hover {
-            background: #ff6b35;
-            transform: translateY(-2px);
+            background: var(--primary);
+            color: white;
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+            padding-left: 0 !important;
         }
 
         .footer-bottom {
@@ -1093,8 +1384,9 @@
         }
 
         .footer-copyright {
-            color: #666;
+            color: rgba(255, 255, 255, 0.4);
             margin: 0;
+            font-size: 0.9rem;
         }
 
         /* Animations */
@@ -1181,6 +1473,7 @@
                 opacity: 0;
                 transform: translateY(-20px) scale(0.95);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0) scale(1);
@@ -1467,15 +1760,14 @@
     <!-- Warning Banner (shown only when accessed via file://) -->
     <div id="fileWarningBanner"
         style="display: none; background: #f44336; color: white; padding: 1rem; text-align: center; font-weight: 600;">
-        ⚠️ WARNING: You opened this file directly! Please access it at <a href="http://localhost:3000/Index.html"
-            style="color: #fff; text-decoration: underline;">http://localhost:3000/Index.html</a> for the form to work
-        properly.
+        ⚠️ WARNING: You opened this file directly! Please access via the hosted website for forms to work properly.
     </div>
 
     <!-- Sticky Navigation -->
     <div class="nav-wrapper" id="navWrapper">
         <nav class="nav" role="navigation" aria-label="Main navigation">
-            <a href="/" class="logo"><img src="/attached_assets/NPL_Logo_HD_White_1765582270189.png" alt="Northbound Product Lab" class="logo-img"></a>
+            <a href="/" class="logo"><img src="/attached_assets/NPL_Logo_HD_White_1765582270189.png"
+                    alt="Northbound Product Lab" class="logo-img"></a>
             <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu">
                 <span></span>
                 <span></span>
@@ -1486,6 +1778,7 @@
                 <a href="/services.html" class="nav-link">Services</a>
                 <a href="/about.html" class="nav-link">About</a>
                 <a href="/blog.html" class="nav-link">Blog</a>
+                <a href="/contact.html" class="nav-link">Contact</a>
                 <a href="/dashboard-login.html" class="admin-link">Log in</a>
             </div>
         </nav>
@@ -1495,7 +1788,7 @@
     <header>
         <canvas id="beamsCanvas" class="beams-canvas"></canvas>
         <div class="beams-overlay"></div>
-        
+
         <div class="container">
             <div class="hero" id="main-content">
                 <div class="hero-subtitle">Product Strategy</div>
@@ -1623,12 +1916,14 @@
                     <div class="role">Head of Growth, TechFlow SaaS</div>
                 </div>
                 <div class="testimonial">
-                    <p class="quote">"They found $200K in lost revenue from our checkout flow. Paid for itself in month one."</p>
+                    <p class="quote">"They found $200K in lost revenue from our checkout flow. Paid for itself in month
+                        one."</p>
                     <div class="author">Marcus Rodriguez</div>
                     <div class="role">Founder, EcomPlus</div>
                 </div>
                 <div class="testimonial">
-                    <p class="quote">"Actionable insights, not vague recommendations. Integrated perfectly with our sprints."</p>
+                    <p class="quote">"Actionable insights, not vague recommendations. Integrated perfectly with our
+                        sprints."</p>
                     <div class="author">Jessica Park</div>
                     <div class="role">Product Manager, DataSync</div>
                 </div>
@@ -1654,11 +1949,13 @@
             <div class="form-container" id="formContainer" role="region" aria-label="Application form">
                 <div class="form-intro">
                     <h3>Design Audit Application</h3>
-                    <p>Tell us about your product and goals. We'll review your application and reach out within 48 hours if we're a good fit. <em>All submissions are confidential.</em></p>
+                    <p>Tell us about your product and goals. We'll review your application and reach out within 48 hours
+                        if we're a good fit. <em>All submissions are confidential.</em></p>
                 </div>
 
                 <!-- Progress Indicator -->
-                <div class="form-progress" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="4" aria-label="Form progress">
+                <div class="form-progress" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="4"
+                    aria-label="Form progress">
                     <div class="progress-step active" data-step="1">
                         <div class="progress-step-number">1</div>
                         <div class="progress-step-label">Contact</div>
@@ -1685,7 +1982,8 @@
                     <div class="form-step active" data-step="1" aria-labelledby="step1-heading">
                         <div class="form-section">
                             <h4 id="step1-heading">Primary Contact</h4>
-                            <p class="section-note">This is the person we'll coordinate with and deliver the final report to.</p>
+                            <p class="section-note">This is the person we'll coordinate with and deliver the final
+                                report to.</p>
 
                             <div class="form-grid">
                                 <div class="form-group">
@@ -1724,17 +2022,20 @@
                             <div class="form-grid">
                                 <div class="form-group">
                                     <label for="businessName">Company Name *</label>
-                                    <input type="text" id="businessName" name="businessName" required aria-required="true">
+                                    <input type="text" id="businessName" name="businessName" required
+                                        aria-required="true">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="website">Website *</label>
-                                    <input type="url" id="website" name="website" required placeholder="https://" aria-required="true">
+                                    <input type="url" id="website" name="website" required placeholder="https://"
+                                        aria-required="true">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="industry">Industry *</label>
-                                    <input type="text" id="industry" name="industry" required placeholder="e.g., SaaS, E-commerce" aria-required="true">
+                                    <input type="text" id="industry" name="industry" required
+                                        placeholder="e.g., SaaS, E-commerce" aria-required="true">
                                 </div>
 
                                 <div class="form-group">
@@ -1753,8 +2054,8 @@
                             <div class="form-group full-width">
                                 <label for="companyDescription">What does your company do? * (300 chars max)</label>
                                 <textarea id="companyDescription" name="companyDescription" maxlength="300" rows="3"
-                                    placeholder="Brief description of your product or service..."
-                                    required aria-required="true"></textarea>
+                                    placeholder="Brief description of your product or service..." required
+                                    aria-required="true"></textarea>
                                 <div class="char-count" id="companyDescCount">0/300</div>
                             </div>
                         </div>
@@ -1852,18 +2153,21 @@
 
                             <div class="form-group full-width">
                                 <label>Supporting Files (optional)</label>
-                                <div class="file-upload-area" id="fileUploadArea" role="button" tabindex="0" aria-label="Upload files">
+                                <div class="file-upload-area" id="fileUploadArea" role="button" tabindex="0"
+                                    aria-label="Upload files">
                                     <div class="file-upload-icon">📎</div>
                                     <div class="file-upload-text">Click to upload or drag and drop</div>
                                     <div class="file-upload-hint">PDF, PNG, JPG up to 10MB each (max 5 files)</div>
-                                    <input type="file" id="fileInput" class="file-input" multiple accept=".pdf,.png,.jpg,.jpeg" aria-describedby="file-hint">
+                                    <input type="file" id="fileInput" class="file-input" multiple
+                                        accept=".pdf,.png,.jpg,.jpeg" aria-describedby="file-hint">
                                 </div>
                                 <div class="file-list" id="fileList" aria-live="polite"></div>
                             </div>
 
                             <div class="form-group checkbox-group">
                                 <label class="checkbox-label">
-                                    <input type="checkbox" id="acknowledgement" name="acknowledgement" required aria-required="true">
+                                    <input type="checkbox" id="acknowledgement" name="acknowledgement" required
+                                        aria-required="true">
                                     <span class="checkmark"></span>
                                     I understand there is a fee for the audit if selected. *
                                 </label>
@@ -1888,14 +2192,16 @@
                     <h3>Northbound Product Lab</h3>
                     <p>Design audits that unlock growth through human-centered innovation.</p>
                     <div class="social-links">
-                        <a href="https://linkedin.com" class="social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+                        <a href="https://linkedin.com/company/northboundproductlab" class="social-link" aria-label="LinkedIn" target="_blank"
+                            rel="noopener noreferrer">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                <path
+                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                             </svg>
                         </a>
                     </div>
                 </div>
-                
+
                 <div class="footer-section">
                     <h4>Quick Links</h4>
                     <ul>
@@ -1913,15 +2219,17 @@
                         <li><a href="/services.html">Conversion Optimization</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="footer-section">
                     <h4>Contact</h4>
                     <p>Ready to unlock your product's potential?</p>
-                    <p><a href="mailto:hello@northboundproductlab.com" class="footer-contact-email">hello@northboundproductlab.com</a></p>
-                    <p style="margin-top: 1rem;"><a href="#apply" style="color: #ff6b35;">Start your application →</a></p>
+                    <p><a href="mailto:hello@northboundproductlab.com"
+                            class="footer-contact-email">hello@northboundproductlab.com</a></p>
+                    <p style="margin-top: 1rem;"><a href="#apply" style="color: #ff6b35;">Start your application →</a>
+                    </p>
                 </div>
             </div>
-            
+
             <div class="footer-bottom">
                 <p class="footer-copyright">&copy; 2026 Northbound Product Lab. All rights reserved.</p>
             </div>
@@ -1936,18 +2244,18 @@
         function updateProgress() {
             const progressSteps = document.querySelectorAll('.progress-step');
             const progressBar = document.querySelector('.form-progress');
-            
+
             progressSteps.forEach((step, index) => {
                 const stepNum = index + 1;
                 step.classList.remove('active', 'completed');
-                
+
                 if (stepNum < currentStep) {
                     step.classList.add('completed');
                 } else if (stepNum === currentStep) {
                     step.classList.add('active');
                 }
             });
-            
+
             if (progressBar) {
                 progressBar.setAttribute('aria-valuenow', currentStep);
             }
@@ -1956,19 +2264,19 @@
         function showStep(step) {
             const formSteps = document.querySelectorAll('.form-step');
             formSteps.forEach(s => s.classList.remove('active'));
-            
+
             const targetStep = document.querySelector(`.form-step[data-step="${step}"]`);
             if (targetStep) {
                 targetStep.classList.add('active');
             }
-            
+
             updateProgress();
         }
 
         function validateCurrentStep() {
             const currentStepEl = document.querySelector(`.form-step[data-step="${currentStep}"]`);
             const requiredFields = currentStepEl.querySelectorAll('[required]');
-            
+
             for (let field of requiredFields) {
                 if (!field.value.trim()) {
                     field.focus();
@@ -1986,7 +2294,7 @@
             if (!validateCurrentStep()) {
                 return;
             }
-            
+
             if (currentStep < totalSteps) {
                 currentStep++;
                 showStep(currentStep);
@@ -2003,7 +2311,7 @@
         }
 
         // Sticky Navigation
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             const navWrapper = document.getElementById('navWrapper');
             if (window.scrollY > 50) {
                 navWrapper.classList.add('scrolled');
@@ -2015,8 +2323,8 @@
         // Mobile Menu Toggle
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const navLinks = document.getElementById('navLinks');
-        
-        mobileMenuToggle.addEventListener('click', function() {
+
+        mobileMenuToggle.addEventListener('click', function () {
             this.classList.toggle('active');
             navLinks.classList.toggle('active');
         });
@@ -2038,7 +2346,7 @@
 
         // Keyboard support for who cards
         document.querySelectorAll('.who-card').forEach(card => {
-            card.addEventListener('keydown', function(e) {
+            card.addEventListener('keydown', function (e) {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     toggleWhoCard(this);
@@ -2047,13 +2355,13 @@
         });
 
         // Form Toggle
-        document.getElementById('formToggle').addEventListener('click', function() {
+        document.getElementById('formToggle').addEventListener('click', function () {
             const container = document.getElementById('formContainer');
             const isExpanded = container.classList.contains('expanded');
-            
+
             container.classList.toggle('expanded');
             this.setAttribute('aria-expanded', !isExpanded);
-            
+
             if (!isExpanded) {
                 this.textContent = 'Close Application';
             } else {
@@ -2065,9 +2373,9 @@
         document.querySelectorAll('textarea[maxlength]').forEach(textarea => {
             const counterId = textarea.id + 'Count';
             const counter = document.getElementById(counterId) || textarea.nextElementSibling;
-            
+
             if (counter && counter.classList.contains('char-count')) {
-                textarea.addEventListener('input', function() {
+                textarea.addEventListener('input', function () {
                     const max = this.getAttribute('maxlength');
                     counter.textContent = `${this.value.length}/${max}`;
                 });
@@ -2088,22 +2396,22 @@
                     fileInput.click();
                 }
             });
-            
+
             fileUploadArea.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 fileUploadArea.classList.add('dragover');
             });
-            
+
             fileUploadArea.addEventListener('dragleave', () => {
                 fileUploadArea.classList.remove('dragover');
             });
-            
+
             fileUploadArea.addEventListener('drop', (e) => {
                 e.preventDefault();
                 fileUploadArea.classList.remove('dragover');
                 handleFiles(e.dataTransfer.files);
             });
-            
+
             fileInput.addEventListener('change', (e) => {
                 handleFiles(e.target.files);
             });
@@ -2112,27 +2420,27 @@
         function handleFiles(files) {
             const maxFiles = 5;
             const maxSize = 10 * 1024 * 1024;
-            
+
             for (let file of files) {
                 if (uploadedFiles.length >= maxFiles) {
                     alert('Maximum 5 files allowed');
                     break;
                 }
-                
+
                 if (file.size > maxSize) {
                     alert(`File "${file.name}" is too large. Max size is 10MB.`);
                     continue;
                 }
-                
+
                 uploadedFiles.push(file);
             }
-            
+
             renderFileList();
         }
 
         function renderFileList() {
             if (!fileList) return;
-            
+
             fileList.innerHTML = uploadedFiles.map((file, index) => `
                 <div class="file-item">
                     <span class="file-item-name">${file.name}</span>
@@ -2148,28 +2456,28 @@
         }
 
         // Form Submission
-        document.getElementById('applicationForm').addEventListener('submit', async function(e) {
+        document.getElementById('applicationForm').addEventListener('submit', async function (e) {
             e.preventDefault();
-            
+
             const submitBtn = document.getElementById('submitButton');
             const statusMessage = document.getElementById('statusMessage');
-            
+
             submitBtn.disabled = true;
             submitBtn.textContent = 'Submitting...';
-            
+
             const formData = new FormData(this);
             uploadedFiles.forEach(file => {
                 formData.append('files', file);
             });
-            
+
             try {
                 const response = await fetch('/api/submit-application', {
                     method: 'POST',
                     body: formData
                 });
-                
+
                 const result = await response.json();
-                
+
                 if (response.ok) {
                     statusMessage.className = 'status-message status-success';
                     statusMessage.textContent = 'Application submitted successfully! We\'ll be in touch within 48 hours.';
@@ -2196,14 +2504,14 @@
         function initBeamsBackground() {
             const canvas = document.getElementById('beamsCanvas');
             if (!canvas) return;
-            
+
             const ctx = canvas.getContext('2d');
             if (!ctx) return;
-            
+
             const BEAM_COUNT = 20;
             let beams = [];
             let width, height;
-            
+
             function createBeam(w, h) {
                 const angle = -30 + Math.random() * 15;
                 return {
@@ -2219,7 +2527,7 @@
                     pulseSpeed: 0.02 + Math.random() * 0.02
                 };
             }
-            
+
             function resetBeam(beam, index, w, h) {
                 const column = index % 4;
                 const spacing = w / 4;
@@ -2231,68 +2539,91 @@
                 beam.opacity = 0.4 + Math.random() * 0.3;
                 return beam;
             }
-            
+
             function drawBeam(beam) {
                 ctx.save();
                 ctx.translate(beam.x, beam.y);
                 ctx.rotate((beam.angle * Math.PI) / 180);
-                
+
                 const pulsingOpacity = beam.opacity * (0.85 + Math.sin(beam.pulse) * 0.15);
                 const gradient = ctx.createLinearGradient(0, 0, 0, beam.length);
-                
+
                 gradient.addColorStop(0, `hsla(${beam.hue}, 90%, 55%, 0)`);
                 gradient.addColorStop(0.2, `hsla(${beam.hue}, 90%, 55%, ${pulsingOpacity * 0.6})`);
                 gradient.addColorStop(0.5, `hsla(${beam.hue}, 90%, 55%, ${pulsingOpacity})`);
                 gradient.addColorStop(0.8, `hsla(${beam.hue}, 90%, 55%, ${pulsingOpacity * 0.6})`);
                 gradient.addColorStop(1, `hsla(${beam.hue}, 90%, 55%, 0)`);
-                
+
                 ctx.fillStyle = gradient;
                 ctx.fillRect(-beam.width / 2, 0, beam.width, beam.length);
                 ctx.restore();
             }
-            
+
             function resize() {
                 width = window.innerWidth;
                 height = window.innerHeight;
                 canvas.width = width;
                 canvas.height = height;
-                
+
                 beams = [];
                 for (let i = 0; i < BEAM_COUNT; i++) {
                     beams.push(createBeam(width, height));
                 }
             }
-            
+
             function animate() {
                 ctx.clearRect(0, 0, width, height);
-                
+
                 beams.forEach((beam, index) => {
                     beam.y -= beam.speed;
                     beam.pulse += beam.pulseSpeed;
-                    
+
                     if (beam.y + beam.length < 0) {
                         resetBeam(beam, index, width, height);
                     }
-                    
+
                     drawBeam(beam);
                 });
-                
+
                 requestAnimationFrame(animate);
             }
-            
+
             window.addEventListener('resize', resize);
             resize();
             animate();
         }
 
         // Initialize when DOM is ready
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             initBeamsBackground();
-            
+
             // Check if accessed via file://
             if (window.location.protocol === 'file:') {
                 document.getElementById('fileWarningBanner').style.display = 'block';
             }
+
+            // Intersection Observer for Fade In Animation
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            // Select elements to animate
+            document.querySelectorAll('.section-title, .section-description, .service-card, .who-card, .process-step, .testimonial, .footer-section').forEach(el => {
+                el.style.opacity = '0'; // Hide initially
+                el.style.transform = 'translateY(12px)'; // Optional: initial offset matching keyframes
+                observer.observe(el);
+            });
         });
     </script>
 
@@ -2301,7 +2632,8 @@
         <div class="email-popup">
             <button class="email-popup-close" id="emailPopupClose" aria-label="Close popup">&times;</button>
             <h3>Stay in the loop</h3>
-            <p>Share your email if you wish to be contacted, and we'll reach out to discuss how we can help your business grow.</p>
+            <p>Share your email if you wish to be contacted, and we'll reach out to discuss how we can help your
+                business grow.</p>
             <form class="email-popup-form" id="emailPopupForm">
                 <input type="text" class="email-popup-input" id="popupName" placeholder="Your name" required>
                 <input type="email" class="email-popup-input" id="popupEmail" placeholder="Your email address" required>
@@ -2312,7 +2644,7 @@
     </div>
 
     <script>
-        (function() {
+        (function () {
             const overlay = document.getElementById('emailPopupOverlay');
             const closeBtn = document.getElementById('emailPopupClose');
             const skipBtn = document.getElementById('emailPopupSkip');
@@ -2337,11 +2669,11 @@
             closeBtn.addEventListener('click', hidePopup);
             skipBtn.addEventListener('click', hidePopup);
 
-            overlay.addEventListener('click', function(e) {
+            overlay.addEventListener('click', function (e) {
                 if (e.target === overlay) hidePopup();
             });
 
-            form.addEventListener('submit', async function(e) {
+            form.addEventListener('submit', async function (e) {
                 e.preventDefault();
                 const name = document.getElementById('popupName').value;
                 const email = document.getElementById('popupEmail').value;

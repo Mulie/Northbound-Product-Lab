@@ -1,8 +1,11 @@
 {
-  "name": "product-review-studio",
+  "name": "northbound-product-lab",
   "version": "1.0.0",
   "description": "Northbound Product Lab Website with Form Submission Handler",
   "main": "server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
