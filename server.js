@@ -784,6 +784,1059 @@ if (!fs.existsSync(commentsDir)) {
     fs.mkdirSync(commentsDir, { recursive: true });
 }
 
+// Blog data directory
+const blogDataDir = path.join(__dirname, 'blog-data');
+if (!fs.existsSync(blogDataDir)) {
+    fs.mkdirSync(blogDataDir, { recursive: true });
+    console.log('✅ Created blog-data directory');
+}
+
+// ==========================================
+// BLOG MANAGEMENT ENDPOINTS
+// ==========================================
+
+// Helper function to generate slug from title
+function generateSlug(title) {
+    return title
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .trim();
+}
+
+// Helper function to estimate read time
+function estimateReadTime(content) {
+    const text = content.replace(/<[^>]*>/g, '');
+    const words = text.split(/\s+/).length;
+    const minutes = Math.ceil(words / 200);
+    return `${minutes} min read`;
+}
+
+// Helper function to generate blog post HTML
+function generateBlogPostHTML(post) {
+    const currentDate = new Date(post.publishedAt || post.createdAt);
+    const monthYear = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+    return `<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/attached_assets/NPL_Logo_HD_ICON_1764956290133.png">
+    <title>${post.title} - Northbound Product Lab</title>
+    <meta name="description" content="${post.excerpt}">
+    <meta property="og:title" content="${post.title}">
+    <meta property="og:description" content="${post.excerpt}">
+    <meta property="og:type" content="article">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            color: #1a1a1a;
+            background: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .nav-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .nav-wrapper.scrolled {
+            background: rgba(10, 10, 10, 0.98);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            height: 80px;
+            width: auto;
+            transition: height 0.3s ease;
+        }
+
+        .nav-wrapper.scrolled .logo-img {
+            height: 60px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #ff6b35;
+        }
+
+        .admin-link {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .admin-link:hover {
+            color: #ff6b35;
+            border-color: #ff6b35;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 1001;
+        }
+
+        .mobile-menu-toggle span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: #fff;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        .article-header {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            padding: 10rem 0 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .article-header .container {
+            max-width: 800px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumb a {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: #ff6b35;
+        }
+
+        .article-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2) 0%, rgba(147, 51, 234, 0.15) 100%);
+            color: #ff6b35;
+            padding: 8px 18px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+        }
+
+        .article-header h1 {
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            line-height: 1.15;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            border-radius: 20px;
+            margin-top: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .article-author {
+            color: #ff6b35;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        .article-content {
+            padding: 4rem 0;
+        }
+
+        .article-content .container {
+            max-width: 800px;
+        }
+
+        .article-content h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin: 3rem 0 1.5rem;
+            color: #1a1a1a;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .article-content h2:first-child {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+        }
+
+        .article-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            color: #1a1a1a;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+            color: #444;
+            font-size: 1.1rem;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.75rem;
+            color: #444;
+            font-size: 1.1rem;
+        }
+
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+        }
+
+        .article-content a {
+            color: #ff6b35;
+            text-decoration: none;
+        }
+
+        .article-content a:hover {
+            text-decoration: underline;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid #ff6b35;
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: #666;
+        }
+
+        .article-content pre {
+            background: #1a1a1a;
+            color: #e0e0e0;
+            padding: 1.25rem 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        .article-content code {
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 0.9rem;
+        }
+
+        .share-section {
+            background: #f8f8f8;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .share-section h3 {
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.75rem;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .share-btn.twitter {
+            background: #1da1f2;
+            color: #fff;
+        }
+
+        .share-btn.linkedin {
+            background: #0077b5;
+            color: #fff;
+        }
+
+        .share-btn.copy {
+            background: #1a1a1a;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #ff6b35;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            font-weight: 600;
+            margin-top: 3rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 107, 53, 0.15);
+            transform: translateX(-5px);
+        }
+
+        .comments-section {
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid #eee;
+        }
+
+        .comments-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: #1a1a1a;
+        }
+
+        .comment-form {
+            background: #f8f8f8;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .comment-form label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .comment-form input,
+        .comment-form textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            margin-bottom: 1rem;
+        }
+
+        .comment-form input:focus,
+        .comment-form textarea:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .comment-form textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .comment-form button {
+            background: #ff6b35;
+            color: #fff;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .comment-form button:hover {
+            background: #e55a2b;
+        }
+
+        .comments-list {
+            margin-top: 2rem;
+        }
+
+        .comment {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .comment-date {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .comment-text {
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .no-comments {
+            text-align: center;
+            color: #888;
+            padding: 2rem;
+            font-style: italic;
+        }
+
+        footer {
+            background: #0a0a0a;
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 280px;
+                height: 100vh;
+                background: rgba(10, 10, 10, 0.98);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 2rem;
+                transition: right 0.3s ease;
+                padding: 2rem;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .article-header {
+                padding: 8rem 0 3rem;
+            }
+
+            .share-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav-wrapper" id="navWrapper">
+        <nav class="nav">
+            <a href="/" class="logo">
+                <img src="/attached_assets/NPL_Logo_HD_White_1765582270189.png" alt="Northbound Product Lab" class="logo-img">
+            </a>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="navLinks">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/services.html" class="nav-link">Services</a>
+                <a href="/about.html" class="nav-link">About</a>
+                <a href="/blog.html" class="nav-link active">Blog</a>
+                <a href="/contact.html" class="nav-link">Contact</a>
+                <a href="/dashboard-login.html" class="admin-link">Log in</a>
+            </div>
+        </nav>
+    </div>
+
+    <header class="article-header" id="main-content">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="/">Home</a>
+                <span style="color: rgba(255,255,255,0.3); margin: 0 0.5rem;">/</span>
+                <a href="/blog.html">Blog</a>
+                <span style="color: rgba(255,255,255,0.3); margin: 0 0.5rem;">/</span>
+                <a href="#">This Article</a>
+            </div>
+            <span class="article-tag">${post.category}</span>
+            <h1>${post.title}</h1>
+            <p class="article-author">By ${post.author}</p>
+            <div class="article-meta">
+                <span>${post.readTime}</span>
+                <span>•</span>
+                <span>Updated ${monthYear}</span>
+            </div>
+            ${post.heroImage ? `<img src="${post.heroImage}" alt="${post.title}" class="hero-image">` : ''}
+        </div>
+    </header>
+
+    <article class="article-content">
+        <div class="container">
+            ${post.content}
+
+            <div class="share-section">
+                <h3>Found this helpful? Share it!</h3>
+                <div class="share-buttons">
+                    <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=" class="share-btn twitter" target="_blank" rel="noopener">Share on Twitter</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=" class="share-btn linkedin" target="_blank" rel="noopener">Share on LinkedIn</a>
+                    <button class="share-btn copy" onclick="copyLink()">Copy Link</button>
+                </div>
+            </div>
+
+            <div class="comments-section">
+                <h3>Comments</h3>
+                <form class="comment-form" id="commentForm">
+                    <label for="commentName">Name</label>
+                    <input type="text" id="commentName" name="name" placeholder="Your name" required>
+
+                    <label for="commentText">Comment</label>
+                    <textarea id="commentText" name="comment" placeholder="Share your thoughts..." required></textarea>
+
+                    <button type="submit">Post Comment</button>
+                </form>
+
+                <div class="comments-list" id="commentsList">
+                    <p class="no-comments">Be the first to leave a comment!</p>
+                </div>
+            </div>
+
+            <a href="/blog.html" class="back-link">← Back to Blog</a>
+        </div>
+    </article>
+
+    <footer>
+        <div class="container">
+            <div class="footer-logo">Northbound Product Lab</div>
+            <p>&copy; 2026 Northbound Product Lab. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const navWrapper = document.getElementById('navWrapper');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                navWrapper.classList.add('scrolled');
+            } else {
+                navWrapper.classList.remove('scrolled');
+            }
+        });
+
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        mobileMenuToggle.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href);
+            const btn = document.querySelector('.share-btn.copy');
+            btn.textContent = 'Copied!';
+            setTimeout(() => {
+                btn.textContent = 'Copy Link';
+            }, 2000);
+        }
+
+        const POST_ID = '${post.slug}';
+
+        async function loadComments() {
+            const commentsList = document.getElementById('commentsList');
+
+            try {
+                const response = await fetch(\`/api/comments/\${POST_ID}\`);
+                const data = await response.json();
+
+                if (!data.success || data.comments.length === 0) {
+                    commentsList.innerHTML = '<p class="no-comments">Be the first to leave a comment!</p>';
+                    return;
+                }
+
+                commentsList.innerHTML = data.comments.map(comment => \`
+                    <div class="comment">
+                        <div class="comment-header">
+                            <span class="comment-author">\${escapeHtml(comment.name)}</span>
+                            <span class="comment-date">\${comment.date}</span>
+                        </div>
+                        <p class="comment-text">\${escapeHtml(comment.text)}</p>
+                    </div>
+                \`).join('');
+            } catch (error) {
+                commentsList.innerHTML = '<p class="no-comments">Unable to load comments.</p>';
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        document.getElementById('commentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('commentName').value.trim();
+            const text = document.getElementById('commentText').value.trim();
+            const submitBtn = this.querySelector('button');
+
+            if (!name || !text) return;
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Posting...';
+
+            try {
+                const response = await fetch(\`/api/comments/\${POST_ID}\`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, text })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('commentName').value = '';
+                    document.getElementById('commentText').value = '';
+                    loadComments();
+                }
+            } catch (error) {
+                alert('Failed to post comment.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Post Comment';
+            }
+        });
+
+        loadComments();
+    </script>
+
+    <!-- Page View Tracking -->
+    <script>
+        (function() {
+            fetch('/api/track-visit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    page: window.location.pathname,
+                    title: document.title,
+                    referrer: document.referrer || 'direct'
+                })
+            }).catch(() => {});
+        })();
+    </script>
+</body>
+
+</html>`;
+}
+
+// Helper function to generate blog card HTML for blog.html
+function generateBlogCardHTML(post) {
+    const date = new Date(post.publishedAt || post.createdAt);
+    const monthYear = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+    return `
+            <article class="blog-card animate-in" data-post-slug="${post.slug}">
+                <div class="blog-card-content">
+                    <span class="blog-card-tag">${post.category}</span>
+                    <h2><a href="/blog/${post.slug}.html">${post.title}</a></h2>
+                    <p>${post.excerpt}</p>
+                    <div class="blog-card-meta">
+                        <span>${post.readTime}</span>
+                        <span>•</span>
+                        <span>${monthYear}</span>
+                        <a href="/blog/${post.slug}.html" class="read-more">Read article →</a>
+                    </div>
+                </div>
+            </article>`;
+}
+
+// Helper function to update blog.html with new post
+function updateBlogListing(post, action = 'add') {
+    const blogHtmlPath = path.join(__dirname, 'blog.html');
+
+    if (!fs.existsSync(blogHtmlPath)) {
+        console.error('blog.html not found');
+        return false;
+    }
+
+    let blogHtml = fs.readFileSync(blogHtmlPath, 'utf8');
+
+    if (action === 'add') {
+        // Find the blog-list container and add the new card after the container div opening
+        const blogContainerMatch = blogHtml.match(/<section class="blog-list">\s*<div class="container">/);
+        if (blogContainerMatch) {
+            const insertPosition = blogHtml.indexOf(blogContainerMatch[0]) + blogContainerMatch[0].length;
+            const newCard = generateBlogCardHTML(post);
+            blogHtml = blogHtml.slice(0, insertPosition) + newCard + blogHtml.slice(insertPosition);
+        }
+    } else if (action === 'remove') {
+        // Remove the blog card for this post
+        const cardRegex = new RegExp(`\\s*<article class="blog-card[^"]*" data-post-slug="${post.slug}">[\\s\\S]*?</article>`, 'g');
+        blogHtml = blogHtml.replace(cardRegex, '');
+    }
+
+    fs.writeFileSync(blogHtmlPath, blogHtml);
+    return true;
+}
+
+// Get all blog posts (protected)
+app.get('/api/blog-posts', requireDashboardAuth, (req, res) => {
+    try {
+        const files = fs.readdirSync(blogDataDir)
+            .filter(file => file.endsWith('.json'))
+            .map(file => {
+                const filePath = path.join(blogDataDir, file);
+                const content = fs.readFileSync(filePath, 'utf8');
+                return JSON.parse(content);
+            })
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        res.json({ success: true, posts: files });
+    } catch (error) {
+        console.error('Error reading blog posts:', error);
+        res.status(500).json({ success: false, message: 'Error reading blog posts' });
+    }
+});
+
+// Create new blog post (protected)
+app.post('/api/blog-posts', requireDashboardAuth, (req, res) => {
+    try {
+        const { title, excerpt, content, category, author, heroImage, status } = req.body;
+
+        if (!title || !content) {
+            return res.status(400).json({ success: false, message: 'Title and content are required' });
+        }
+
+        const slug = generateSlug(title);
+        const filePath = path.join(blogDataDir, `${slug}.json`);
+
+        // Check if post with this slug already exists
+        if (fs.existsSync(filePath)) {
+            return res.status(400).json({ success: false, message: 'A post with this title already exists' });
+        }
+
+        const post = {
+            slug,
+            title,
+            excerpt: excerpt || '',
+            content,
+            category: category || 'Article',
+            author: author || 'Muleh Bisrat',
+            heroImage: heroImage || '',
+            readTime: estimateReadTime(content),
+            status: status || 'draft',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            publishedAt: null
+        };
+
+        fs.writeFileSync(filePath, JSON.stringify(post, null, 2));
+        console.log(`✅ Created blog post: ${slug}`);
+
+        res.json({ success: true, post });
+    } catch (error) {
+        console.error('Error creating blog post:', error);
+        res.status(500).json({ success: false, message: 'Error creating blog post' });
+    }
+});
+
+// Get single blog post (protected)
+app.get('/api/blog-posts/:slug', requireDashboardAuth, (req, res) => {
+    try {
+        const slug = req.params.slug.replace(/[^a-z0-9-]/gi, '');
+        const filePath = path.join(blogDataDir, `${slug}.json`);
+
+        if (!fs.existsSync(filePath)) {
+            return res.status(404).json({ success: false, message: 'Post not found' });
+        }
+
+        const content = fs.readFileSync(filePath, 'utf8');
+        const post = JSON.parse(content);
+
+        res.json({ success: true, post });
+    } catch (error) {
+        console.error('Error reading blog post:', error);
+        res.status(500).json({ success: false, message: 'Error reading blog post' });
+    }
+});
+
+// Update blog post (protected)
+app.put('/api/blog-posts/:slug', requireDashboardAuth, (req, res) => {
+    try {
+        const slug = req.params.slug.replace(/[^a-z0-9-]/gi, '');
+        const filePath = path.join(blogDataDir, `${slug}.json`);
+
+        if (!fs.existsSync(filePath)) {
+            return res.status(404).json({ success: false, message: 'Post not found' });
+        }
+
+        const existingPost = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        const { title, excerpt, content, category, author, heroImage } = req.body;
+
+        const updatedPost = {
+            ...existingPost,
+            title: title || existingPost.title,
+            excerpt: excerpt !== undefined ? excerpt : existingPost.excerpt,
+            content: content || existingPost.content,
+            category: category || existingPost.category,
+            author: author || existingPost.author,
+            heroImage: heroImage !== undefined ? heroImage : existingPost.heroImage,
+            readTime: content ? estimateReadTime(content) : existingPost.readTime,
+            updatedAt: new Date().toISOString()
+        };
+
+        fs.writeFileSync(filePath, JSON.stringify(updatedPost, null, 2));
+
+        // If post is published, update the HTML file
+        if (updatedPost.status === 'published') {
+            const htmlPath = path.join(__dirname, 'blog', `${slug}.html`);
+            fs.writeFileSync(htmlPath, generateBlogPostHTML(updatedPost));
+        }
+
+        console.log(`✅ Updated blog post: ${slug}`);
+        res.json({ success: true, post: updatedPost });
+    } catch (error) {
+        console.error('Error updating blog post:', error);
+        res.status(500).json({ success: false, message: 'Error updating blog post' });
+    }
+});
+
+// Delete blog post (protected)
+app.delete('/api/blog-posts/:slug', requireDashboardAuth, (req, res) => {
+    try {
+        const slug = req.params.slug.replace(/[^a-z0-9-]/gi, '');
+        const filePath = path.join(blogDataDir, `${slug}.json`);
+
+        if (!fs.existsSync(filePath)) {
+            return res.status(404).json({ success: false, message: 'Post not found' });
+        }
+
+        const post = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+        // Remove HTML file if it exists
+        const htmlPath = path.join(__dirname, 'blog', `${slug}.html`);
+        if (fs.existsSync(htmlPath)) {
+            fs.unlinkSync(htmlPath);
+        }
+
+        // Remove from blog.html listing if published
+        if (post.status === 'published') {
+            updateBlogListing(post, 'remove');
+        }
+
+        // Delete the JSON file
+        fs.unlinkSync(filePath);
+        console.log(`🗑️  Deleted blog post: ${slug}`);
+
+        res.json({ success: true, message: 'Post deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting blog post:', error);
+        res.status(500).json({ success: false, message: 'Error deleting blog post' });
+    }
+});
+
+// Publish blog post (protected)
+app.post('/api/blog-posts/:slug/publish', requireDashboardAuth, (req, res) => {
+    try {
+        const slug = req.params.slug.replace(/[^a-z0-9-]/gi, '');
+        const filePath = path.join(blogDataDir, `${slug}.json`);
+
+        if (!fs.existsSync(filePath)) {
+            return res.status(404).json({ success: false, message: 'Post not found' });
+        }
+
+        const post = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+        if (post.status === 'published') {
+            return res.status(400).json({ success: false, message: 'Post is already published' });
+        }
+
+        // Update post status
+        post.status = 'published';
+        post.publishedAt = new Date().toISOString();
+        post.updatedAt = new Date().toISOString();
+
+        // Save updated post data
+        fs.writeFileSync(filePath, JSON.stringify(post, null, 2));
+
+        // Generate and save HTML file
+        const blogDir = path.join(__dirname, 'blog');
+        if (!fs.existsSync(blogDir)) {
+            fs.mkdirSync(blogDir, { recursive: true });
+        }
+
+        const htmlPath = path.join(blogDir, `${slug}.html`);
+        fs.writeFileSync(htmlPath, generateBlogPostHTML(post));
+
+        // Add to blog.html listing
+        updateBlogListing(post, 'add');
+
+        console.log(`📢 Published blog post: ${slug}`);
+        res.json({ success: true, post, message: 'Post published successfully' });
+    } catch (error) {
+        console.error('Error publishing blog post:', error);
+        res.status(500).json({ success: false, message: 'Error publishing blog post' });
+    }
+});
+
+// Unpublish blog post (protected)
+app.post('/api/blog-posts/:slug/unpublish', requireDashboardAuth, (req, res) => {
+    try {
+        const slug = req.params.slug.replace(/[^a-z0-9-]/gi, '');
+        const filePath = path.join(blogDataDir, `${slug}.json`);
+
+        if (!fs.existsSync(filePath)) {
+            return res.status(404).json({ success: false, message: 'Post not found' });
+        }
+
+        const post = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+        if (post.status !== 'published') {
+            return res.status(400).json({ success: false, message: 'Post is not published' });
+        }
+
+        // Update post status
+        post.status = 'draft';
+        post.updatedAt = new Date().toISOString();
+
+        // Save updated post data
+        fs.writeFileSync(filePath, JSON.stringify(post, null, 2));
+
+        // Remove HTML file
+        const htmlPath = path.join(__dirname, 'blog', `${slug}.html`);
+        if (fs.existsSync(htmlPath)) {
+            fs.unlinkSync(htmlPath);
+        }
+
+        // Remove from blog.html listing
+        updateBlogListing(post, 'remove');
+
+        console.log(`📝 Unpublished blog post: ${slug}`);
+        res.json({ success: true, post, message: 'Post unpublished successfully' });
+    } catch (error) {
+        console.error('Error unpublishing blog post:', error);
+        res.status(500).json({ success: false, message: 'Error unpublishing blog post' });
+    }
+})
+
 // Get comments for a blog post
 app.get('/api/comments/:postId', (req, res) => {
     try {

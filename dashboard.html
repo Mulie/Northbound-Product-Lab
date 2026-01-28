@@ -7,6 +7,9 @@
     <link rel="icon" type="image/png" href="/attached_assets/NPL_Logo_HD_ICON_1764956290133.png">
     <title>Admin Dashboard - Northbound Product Lab</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Quill.js Rich Text Editor -->
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -593,6 +596,365 @@
             }
         }
 
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            gap: 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            background: white;
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn:hover {
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        .tab-btn.active {
+            background: #fff8f5;
+            color: #ff6b35;
+            border-bottom-color: #ff6b35;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Blog Management Styles */
+        .blog-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #ff6b35 0%, #f44336 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .blog-posts-list {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .blog-post-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .blog-post-item:hover {
+            background: #f9f9f9;
+        }
+
+        .blog-post-item:last-child {
+            border-bottom: none;
+        }
+
+        .blog-post-info h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-post-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .badge-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-draft {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .badge-published {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .blog-post-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .btn-edit {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .btn-edit:hover {
+            background: #1976d2;
+            color: white;
+        }
+
+        .btn-publish {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .btn-publish:hover {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .btn-unpublish {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .btn-unpublish:hover {
+            background: #f57c00;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .btn-delete:hover {
+            background: #c62828;
+            color: white;
+        }
+
+        /* Blog Editor Modal */
+        .blog-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .blog-modal.active {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .blog-modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 900px;
+            width: 100%;
+            margin: 2rem auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .blog-modal-header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .blog-modal-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .blog-modal-close {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .blog-modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .blog-modal-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        #editor-container {
+            height: 400px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        #editor-container .ql-toolbar {
+            border: none;
+            border-bottom: 2px solid #e0e0e0;
+            background: #f9f9f9;
+            border-radius: 8px 8px 0 0;
+        }
+
+        #editor-container .ql-container {
+            border: none;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .blog-modal-footer {
+            padding: 1.5rem 2rem;
+            background: #f9f9f9;
+            border-radius: 0 0 12px 12px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .btn-save-draft {
+            background: #f0f0f0;
+            color: #333;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-save-draft:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-publish-post {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-publish-post:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
@@ -617,6 +979,30 @@
             .chart-container {
                 height: 250px;
             }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .blog-post-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .blog-post-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .tab-nav {
+                flex-wrap: wrap;
+            }
+
+            .tab-btn {
+                flex: none;
+                width: 50%;
+            }
         }
     </style>
 </head>
@@ -633,30 +1019,75 @@
     </div>
 
     <div class="container">
-        <!-- Stats -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>Total Submissions</h3>
-                <div class="value" id="totalCount">0</div>
+        <!-- Tab Navigation -->
+        <div class="tab-nav">
+            <button class="tab-btn active" data-tab="submissions">Submissions</button>
+            <button class="tab-btn" data-tab="traffic">Traffic Analytics</button>
+            <button class="tab-btn" data-tab="blog">Blog Posts</button>
+        </div>
+
+        <!-- Submissions Tab -->
+        <div class="tab-content active" id="submissions-tab">
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Submissions</h3>
+                    <div class="value" id="totalCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Today</h3>
+                    <div class="value" id="todayCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>This Week</h3>
+                    <div class="value" id="weekCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>This Month</h3>
+                    <div class="value" id="monthCount">0</div>
+                </div>
+                <div class="stat-card" style="border-left-color: #4ade80;">
+                    <h3>Email Signups</h3>
+                    <div class="value" id="emailCount">0</div>
+                </div>
             </div>
-            <div class="stat-card">
-                <h3>Today</h3>
-                <div class="value" id="todayCount">0</div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search by name, email, company, industry...">
+                </div>
+                <div class="filter-buttons">
+                    <button class="btn btn-primary" onclick="refreshData()">🔄 Refresh</button>
+                    <button class="btn btn-secondary" onclick="exportToCSV()">📥 Export CSV</button>
+                </div>
             </div>
-            <div class="stat-card">
-                <h3>This Week</h3>
-                <div class="value" id="weekCount">0</div>
+
+            <!-- Submissions Table -->
+            <div class="submissions-table">
+                <div class="table-header">
+                    <h2>Recent Applications</h2>
+                    <span id="displayCount">Showing 0 submissions</span>
+                </div>
+                <div class="submission-list" id="submissionList">
+                    <div class="loading">Loading submissions...</div>
+                </div>
             </div>
-            <div class="stat-card">
-                <h3>This Month</h3>
-                <div class="value" id="monthCount">0</div>
-            </div>
-            <div class="stat-card" style="border-left-color: #4ade80;">
-                <h3>Email Signups</h3>
-                <div class="value" id="emailCount">0</div>
+
+            <!-- Email Signups Section -->
+            <div class="submissions-table" style="margin-top: 2rem;">
+                <div class="table-header" style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);">
+                    <h2 style="color: #2e7d32;">Email Signups (Popup)</h2>
+                    <span id="emailDisplayCount" style="color: #2e7d32;">Showing 0 signups</span>
+                </div>
+                <div class="submission-list" id="emailSignupList" style="max-height: 400px;">
+                    <div class="loading">Loading email signups...</div>
+                </div>
             </div>
         </div>
 
+        <!-- Traffic Analytics Tab -->
+        <div class="tab-content" id="traffic-tab">
         <!-- Traffic Analytics Section -->
         <div class="analytics-section">
             <h2>📈 Traffic Analytics</h2>
@@ -742,37 +1173,74 @@
                 </div>
             </div>
         </div>
+        </div><!-- End Traffic Tab -->
 
-        <!-- Controls -->
-        <div class="controls">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search by name, email, company, industry...">
+        <!-- Blog Posts Tab -->
+        <div class="tab-content" id="blog-tab">
+            <div class="blog-header">
+                <h2>Blog Posts</h2>
+                <button class="btn-add" onclick="openBlogEditor()">
+                    <span>+</span> New Post
+                </button>
             </div>
-            <div class="filter-buttons">
-                <button class="btn btn-primary" onclick="refreshData()">🔄 Refresh</button>
-                <button class="btn btn-secondary" onclick="exportToCSV()">📥 Export CSV</button>
+
+            <div class="blog-posts-list" id="blogPostsList">
+                <div class="loading">Loading blog posts...</div>
             </div>
         </div>
+    </div>
 
-        <!-- Submissions Table -->
-        <div class="submissions-table">
-            <div class="table-header">
-                <h2>Recent Applications</h2>
-                <span id="displayCount">Showing 0 submissions</span>
+    <!-- Blog Editor Modal -->
+    <div class="blog-modal" id="blogEditorModal">
+        <div class="blog-modal-content">
+            <div class="blog-modal-header">
+                <h2 id="blogEditorTitle">New Blog Post</h2>
+                <button class="blog-modal-close" onclick="closeBlogEditor()">&times;</button>
             </div>
-            <div class="submission-list" id="submissionList">
-                <div class="loading">Loading submissions...</div>
-            </div>
-        </div>
+            <div class="blog-modal-body">
+                <input type="hidden" id="editingPostSlug">
 
-        <!-- Email Signups Section -->
-        <div class="submissions-table" style="margin-top: 2rem;">
-            <div class="table-header" style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);">
-                <h2 style="color: #2e7d32;">Email Signups (Popup)</h2>
-                <span id="emailDisplayCount" style="color: #2e7d32;">Showing 0 signups</span>
+                <div class="form-group">
+                    <label for="postTitle">Title *</label>
+                    <input type="text" id="postTitle" placeholder="Enter post title...">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="postCategory">Category</label>
+                        <select id="postCategory">
+                            <option value="Article">Article</option>
+                            <option value="Guide">Guide</option>
+                            <option value="Tutorial">Tutorial</option>
+                            <option value="Case Study">Case Study</option>
+                            <option value="News">News</option>
+                            <option value="Insights">Insights</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="postAuthor">Author</label>
+                        <input type="text" id="postAuthor" placeholder="Author name" value="Muleh Bisrat">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="postExcerpt">Excerpt (Short description for listing)</label>
+                    <textarea id="postExcerpt" placeholder="Brief description that appears on the blog listing page..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="postHeroImage">Hero Image URL (optional)</label>
+                    <input type="text" id="postHeroImage" placeholder="https://example.com/image.jpg">
+                </div>
+
+                <div class="form-group">
+                    <label>Content *</label>
+                    <div id="editor-container"></div>
+                </div>
             </div>
-            <div class="submission-list" id="emailSignupList" style="max-height: 400px;">
-                <div class="loading">Loading email signups...</div>
+            <div class="blog-modal-footer">
+                <button class="btn-save-draft" onclick="saveBlogPost('draft')">Save as Draft</button>
+                <button class="btn-publish-post" onclick="saveBlogPost('publish')">Save & Publish</button>
             </div>
         </div>
     </div>
@@ -1195,6 +1663,310 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeModal();
+                closeBlogEditor();
+            }
+        });
+
+        // ==========================================
+        // TAB NAVIGATION
+        // ==========================================
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update buttons
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Update content
+                const tabId = btn.dataset.tab;
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabId + '-tab').classList.add('active');
+
+                // Load blog posts when switching to blog tab
+                if (tabId === 'blog') {
+                    loadBlogPosts();
+                }
+            });
+        });
+
+        // ==========================================
+        // BLOG MANAGEMENT
+        // ==========================================
+
+        let allBlogPosts = [];
+        let quillEditor = null;
+        let isEditingPost = false;
+
+        // Initialize Quill editor
+        function initQuillEditor() {
+            if (quillEditor) return;
+
+            quillEditor = new Quill('#editor-container', {
+                theme: 'snow',
+                placeholder: 'Write your blog post content here...',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['blockquote', 'code-block'],
+                        ['link', 'image'],
+                        [{ 'align': [] }],
+                        ['clean']
+                    ]
+                }
+            });
+        }
+
+        async function loadBlogPosts() {
+            const listEl = document.getElementById('blogPostsList');
+            listEl.innerHTML = '<div class="loading">Loading blog posts...</div>';
+
+            try {
+                const response = await fetch('/api/blog-posts');
+                const data = await response.json();
+
+                if (data.success) {
+                    allBlogPosts = data.posts;
+                    displayBlogPosts(allBlogPosts);
+                } else {
+                    listEl.innerHTML = '<div class="empty-state"><p>Error loading blog posts</p></div>';
+                }
+            } catch (error) {
+                console.error('Error loading blog posts:', error);
+                listEl.innerHTML = '<div class="empty-state"><p>Error loading blog posts</p></div>';
+            }
+        }
+
+        function displayBlogPosts(posts) {
+            const listEl = document.getElementById('blogPostsList');
+
+            if (posts.length === 0) {
+                listEl.innerHTML = `
+                    <div class="empty-state" style="padding: 3rem; text-align: center;">
+                        <h3 style="margin-bottom: 1rem;">No blog posts yet</h3>
+                        <p style="color: #666;">Click "New Post" to create your first blog post.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listEl.innerHTML = posts.map(post => {
+                const date = new Date(post.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+                const statusBadge = post.status === 'published'
+                    ? '<span class="badge-status badge-published">Published</span>'
+                    : '<span class="badge-status badge-draft">Draft</span>';
+
+                const publishBtn = post.status === 'published'
+                    ? `<button class="btn-icon btn-unpublish" onclick="unpublishPost('${post.slug}')" title="Unpublish">📝</button>`
+                    : `<button class="btn-icon btn-publish" onclick="publishPost('${post.slug}')" title="Publish">🚀</button>`;
+
+                return `
+                    <div class="blog-post-item">
+                        <div class="blog-post-info">
+                            <h3>${post.title}</h3>
+                            <div class="blog-post-meta">
+                                ${statusBadge}
+                                <span>${post.category}</span>
+                                <span>${date}</span>
+                                <span>${post.readTime}</span>
+                            </div>
+                        </div>
+                        <div class="blog-post-actions">
+                            <button class="btn-icon btn-edit" onclick="editPost('${post.slug}')" title="Edit">✏️</button>
+                            ${publishBtn}
+                            <button class="btn-icon btn-delete" onclick="deletePost('${post.slug}')" title="Delete">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openBlogEditor(post = null) {
+            initQuillEditor();
+
+            isEditingPost = !!post;
+            document.getElementById('blogEditorTitle').textContent = post ? 'Edit Blog Post' : 'New Blog Post';
+            document.getElementById('editingPostSlug').value = post ? post.slug : '';
+
+            // Reset or populate form
+            document.getElementById('postTitle').value = post ? post.title : '';
+            document.getElementById('postCategory').value = post ? post.category : 'Article';
+            document.getElementById('postAuthor').value = post ? post.author : 'Muleh Bisrat';
+            document.getElementById('postExcerpt').value = post ? post.excerpt : '';
+            document.getElementById('postHeroImage').value = post ? post.heroImage : '';
+
+            // Set Quill content
+            if (post && post.content) {
+                quillEditor.root.innerHTML = post.content;
+            } else {
+                quillEditor.root.innerHTML = '';
+            }
+
+            document.getElementById('blogEditorModal').classList.add('active');
+        }
+
+        function closeBlogEditor() {
+            document.getElementById('blogEditorModal').classList.remove('active');
+        }
+
+        async function editPost(slug) {
+            try {
+                const response = await fetch(`/api/blog-posts/${slug}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    openBlogEditor(data.post);
+                } else {
+                    alert('Error loading post');
+                }
+            } catch (error) {
+                console.error('Error loading post:', error);
+                alert('Error loading post');
+            }
+        }
+
+        async function saveBlogPost(action) {
+            const title = document.getElementById('postTitle').value.trim();
+            const content = quillEditor.root.innerHTML.trim();
+
+            if (!title) {
+                alert('Please enter a title');
+                return;
+            }
+
+            if (!content || content === '<p><br></p>') {
+                alert('Please enter some content');
+                return;
+            }
+
+            const postData = {
+                title,
+                content,
+                category: document.getElementById('postCategory').value,
+                author: document.getElementById('postAuthor').value.trim() || 'Muleh Bisrat',
+                excerpt: document.getElementById('postExcerpt').value.trim(),
+                heroImage: document.getElementById('postHeroImage').value.trim(),
+                status: 'draft'
+            };
+
+            const editingSlug = document.getElementById('editingPostSlug').value;
+
+            try {
+                let response;
+
+                if (editingSlug) {
+                    // Update existing post
+                    response = await fetch(`/api/blog-posts/${editingSlug}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(postData)
+                    });
+                } else {
+                    // Create new post
+                    response = await fetch('/api/blog-posts', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(postData)
+                    });
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // If action is publish, also publish the post
+                    if (action === 'publish') {
+                        const slug = editingSlug || data.post.slug;
+                        await publishPost(slug, false);
+                    }
+
+                    closeBlogEditor();
+                    loadBlogPosts();
+                    alert(editingSlug ? 'Post updated successfully!' : 'Post created successfully!');
+                } else {
+                    alert(data.message || 'Error saving post');
+                }
+            } catch (error) {
+                console.error('Error saving post:', error);
+                alert('Error saving post');
+            }
+        }
+
+        async function publishPost(slug, showAlert = true) {
+            try {
+                const response = await fetch(`/api/blog-posts/${slug}/publish`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    loadBlogPosts();
+                    if (showAlert) alert('Post published successfully!');
+                } else {
+                    alert(data.message || 'Error publishing post');
+                }
+            } catch (error) {
+                console.error('Error publishing post:', error);
+                alert('Error publishing post');
+            }
+        }
+
+        async function unpublishPost(slug) {
+            if (!confirm('Are you sure you want to unpublish this post? It will be removed from the blog.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/blog-posts/${slug}/unpublish`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    loadBlogPosts();
+                    alert('Post unpublished successfully');
+                } else {
+                    alert(data.message || 'Error unpublishing post');
+                }
+            } catch (error) {
+                console.error('Error unpublishing post:', error);
+                alert('Error unpublishing post');
+            }
+        }
+
+        async function deletePost(slug) {
+            if (!confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/blog-posts/${slug}`, {
+                    method: 'DELETE'
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    loadBlogPosts();
+                    alert('Post deleted successfully');
+                } else {
+                    alert(data.message || 'Error deleting post');
+                }
+            } catch (error) {
+                console.error('Error deleting post:', error);
+                alert('Error deleting post');
+            }
+        }
+
+        // Close blog modal when clicking outside
+        document.getElementById('blogEditorModal').addEventListener('click', (e) => {
+            if (e.target.id === 'blogEditorModal') {
+                closeBlogEditor();
             }
         });
 
