@@ -261,9 +261,10 @@ app.post('/api/submit-application', upload.array('files', 5), (req, res) => {
         });
 
     } catch (error) {
+        console.error('❌ Application submission error:', error);
         res.status(500).json({
             success: false,
-            message: 'Error saving submission',
+            message: `Error saving submission: ${error.message}`,
             error: error.message
         });
     }

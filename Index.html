@@ -2497,8 +2497,9 @@
                 }
             } catch (error) {
                 statusMessage.className = 'status-message status-error';
-                statusMessage.textContent = 'Error submitting application. Please try again.';
+                statusMessage.textContent = error.message || 'Error submitting application. Please try again.';
                 statusMessage.style.display = 'block';
+                console.error('Application submission error:', error);
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Submit Application';
