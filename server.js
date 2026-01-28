@@ -586,6 +586,40 @@ app.get('/api/email-signups', requireDashboardAuth, (req, res) => {
     }
 });
 
+// Get contact submissions (for dashboard) - protected
+app.get('/api/contacts', requireDashboardAuth, (req, res) => {
+    try {
+        const contactDir = path.join(submissionsDir, 'contacts');
+        if (!fs.existsSync(contactDir)) {
+            return res.json({ success: true, count: 0, contacts: [] });
+        }
+
+        const files = fs.readdirSync(contactDir)
+            .filter(file => file.endsWith('.json'))
+            .map(file => {
+                try {
+                    const filePath = path.join(contactDir, file);
+                    const content = fs.readFileSync(filePath, 'utf8');
+                    const data = JSON.parse(content);
+                    return {
+                        id: file.replace('.json', ''),
+                        ...data
+                    };
+                } catch (parseError) {
+                    console.error(`Error parsing contact ${file}:`, parseError);
+                    return null;
+                }
+            })
+            .filter(contact => contact !== null)
+            .sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+
+        res.json({ success: true, count: files.length, contacts: files });
+    } catch (error) {
+        console.error('Error reading contacts:', error);
+        res.status(500).json({ success: false, message: 'Error reading contacts' });
+    }
+});
+
 // ==========================================
 // TRAFFIC TRACKING ENDPOINTS
 // ==========================================
