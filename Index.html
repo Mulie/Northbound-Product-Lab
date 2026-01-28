@@ -2658,11 +2658,19 @@
             const form = document.getElementById('emailPopupForm');
             const popup = document.querySelector('.email-popup');
 
+            // Exit if elements not found
+            if (!overlay || !closeBtn || !skipBtn || !form || !popup) {
+                console.error('Email popup: Required elements not found');
+                return;
+            }
+
             const POPUP_DELAY = 8000;
             const STORAGE_KEY = 'emailPopupDismissed';
 
             function showPopup() {
-                if (localStorage.getItem(STORAGE_KEY)) return;
+                if (localStorage.getItem(STORAGE_KEY)) {
+                    return;
+                }
                 overlay.classList.add('active');
             }
 
@@ -2671,6 +2679,7 @@
                 localStorage.setItem(STORAGE_KEY, 'true');
             }
 
+            // Show popup after delay
             setTimeout(showPopup, POPUP_DELAY);
 
             closeBtn.addEventListener('click', hidePopup);
