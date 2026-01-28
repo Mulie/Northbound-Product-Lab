@@ -337,7 +337,7 @@
         }
 
         .cta-button {
-            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 50%, #9333ea 100%);
+            background: #0a0a0a;
             color: white;
             padding: 18px 42px;
             border: none;
@@ -352,29 +352,12 @@
             gap: 12px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-button::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(rgba(255, 255, 255, 0.2), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
         }
 
         .cta-button:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.4);
-        }
-
-        .cta-button:hover::after {
-            opacity: 1;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            background: #1a1a1a;
         }
 
         /* Footer */
