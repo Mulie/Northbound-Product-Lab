@@ -219,8 +219,14 @@
 
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 3rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .service-card {
@@ -230,6 +236,27 @@
             overflow: hidden;
             transition: all 0.4s ease;
             border: none;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .service-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Make the last card (AI Consulting) full width for balance */
+        .service-card.full-width {
+            grid-column: 1 / -1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 900px) {
+            .service-card.full-width {
+                grid-column: auto;
+                max-width: none;
+            }
         }
 
         .service-card::before {
@@ -378,6 +405,16 @@
         footer p {
             color: rgba(255, 255, 255, 0.5);
             font-size: 0.9rem;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: #ff6b35;
         }
 
         /* Animations */
@@ -604,10 +641,6 @@
                 padding: 0.75rem 1.5rem;
             }
 
-            .services-grid {
-                grid-template-columns: 1fr;
-            }
-
             .service-card {
                 padding: 1.5rem;
             }
@@ -794,7 +827,7 @@
                     </div>
                 </div>
 
-                <div class="service-card">
+                <div class="service-card full-width">
                     <div class="service-number">07</div>
                     <h3>AI Consulting & Strategy</h3>
                     <p class="service-description">Strategic guidance on integrating AI into your product. We help you identify high-impact AI opportunities, build practical roadmaps, and implement solutions that drive measurable results.</p>
@@ -831,10 +864,12 @@
                 <div>
                     <h4 style="font-size: 1rem; margin-bottom: 1rem; font-weight: 600;">Quick Links</h4>
                     <ul style="list-style: none; padding: 0;">
-                        <li style="margin-bottom: 0.5rem;"><a href="/" style="color: rgba(255,255,255,0.7); text-decoration: none;">Home</a></li>
-                        <li style="margin-bottom: 0.5rem;"><a href="/services.html" style="color: rgba(255,255,255,0.7); text-decoration: none;">Services</a></li>
-                        <li style="margin-bottom: 0.5rem;"><a href="/about.html" style="color: rgba(255,255,255,0.7); text-decoration: none;">About</a></li>
-                        <li style="margin-bottom: 0.5rem;"><a href="/#apply" style="color: rgba(255,255,255,0.7); text-decoration: none;">Apply for Review</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/" class="footer-link">Home</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/services.html" class="footer-link">Services</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/about.html" class="footer-link">About</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/blog.html" class="footer-link">Blog</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/contact.html" class="footer-link">Contact</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/#apply" class="footer-link">Apply for Review</a></li>
                     </ul>
                 </div>
                 <div>
@@ -973,6 +1008,28 @@
                 mobileMenuToggle.classList.remove('active');
                 navLinks.classList.remove('active');
             });
+        });
+
+        // Scroll animation for service cards
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    // Stagger the animation
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.service-card').forEach(card => {
+            observer.observe(card);
         });
     </script>
 
