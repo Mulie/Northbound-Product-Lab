@@ -1601,13 +1601,24 @@ function updateBlogListing(post, action = 'add') {
 // Get all blog posts (protected)
 app.get('/api/blog-posts', requireDashboardAuth, (req, res) => {
     try {
+        // Ensure directory exists
+        if (!fs.existsSync(blogDataDir)) {
+            fs.mkdirSync(blogDataDir, { recursive: true });
+        }
+
         const files = fs.readdirSync(blogDataDir)
             .filter(file => file.endsWith('.json'))
             .map(file => {
-                const filePath = path.join(blogDataDir, file);
-                const content = fs.readFileSync(filePath, 'utf8');
-                return JSON.parse(content);
+                try {
+                    const filePath = path.join(blogDataDir, file);
+                    const content = fs.readFileSync(filePath, 'utf8');
+                    return JSON.parse(content);
+                } catch (parseError) {
+                    console.error(`Error parsing blog post ${file}:`, parseError);
+                    return null;
+                }
             })
+            .filter(post => post !== null)
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
         res.json({ success: true, posts: files });
