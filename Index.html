@@ -2485,7 +2485,8 @@
                         step.style.display = 'none';
                     });
                     // Hide progress indicator
-                    document.querySelector('.progress-bar').style.display = 'none';
+                    const formProgress = document.querySelector('.form-progress');
+                    if (formProgress) formProgress.style.display = 'none';
                     // Show success message
                     statusMessage.className = 'status-message status-success';
                     statusMessage.innerHTML = '<h3 style="margin-bottom: 1rem; color: #10b981;">Application Submitted!</h3><p>Thank you for your application. We\'ll review it and get back to you within 48 hours.</p>';
