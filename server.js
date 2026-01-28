@@ -14,8 +14,12 @@ const HOST = '0.0.0.0';
 // Dashboard password from environment variable
 const DASHBOARD_PASSWORD = process.env.DASHBOARD_PASSWORD || 'admin123';
 
+// Data directory - use RAILWAY_VOLUME_MOUNT_PATH for Railway volumes, or local directory
+const DATA_DIR = process.env.RAILWAY_VOLUME_MOUNT_PATH || __dirname;
+console.log(`📁 Data directory: ${DATA_DIR}`);
+
 // Create uploads directory if it doesn't exist
-const uploadsDir = path.join(__dirname, 'uploads');
+const uploadsDir = path.join(DATA_DIR, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir, { recursive: true });
 }
@@ -129,14 +133,14 @@ app.get('/', (req, res) => {
 });
 
 // Create submissions directory if it doesn't exist
-const submissionsDir = path.join(__dirname, 'submissions');
+const submissionsDir = path.join(DATA_DIR, 'submissions');
 if (!fs.existsSync(submissionsDir)) {
     fs.mkdirSync(submissionsDir, { recursive: true });
     console.log('✅ Created submissions directory');
 }
 
 // Create traffic data directory
-const trafficDir = path.join(__dirname, 'traffic');
+const trafficDir = path.join(DATA_DIR, 'traffic');
 if (!fs.existsSync(trafficDir)) {
     fs.mkdirSync(trafficDir, { recursive: true });
     console.log('✅ Created traffic directory');
@@ -814,13 +818,13 @@ app.get('/api/traffic-stats', requireDashboardAuth, (req, res) => {
 });
 
 // Comments directory
-const commentsDir = path.join(__dirname, 'comments');
+const commentsDir = path.join(DATA_DIR, 'comments');
 if (!fs.existsSync(commentsDir)) {
     fs.mkdirSync(commentsDir, { recursive: true });
 }
 
 // Blog data directory
-const blogDataDir = path.join(__dirname, 'blog-data');
+const blogDataDir = path.join(DATA_DIR, 'blog-data');
 if (!fs.existsSync(blogDataDir)) {
     fs.mkdirSync(blogDataDir, { recursive: true });
     console.log('✅ Created blog-data directory');
